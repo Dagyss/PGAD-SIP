@@ -8,10 +8,31 @@ defineProps<{
   <div class="greetings">
     <h1 class="green">{{ msg }}</h1>
     <h3>
-      <button>Comprar curso</button>
+      <button @click="comprarCurso">Comprar curso</button>
     </h3>
   </div>
 </template>
+
+<script>
+  import axios from "axios";
+  export default {
+    data() {
+      return {
+        msg: "curso",
+      };
+    },
+
+    methods: {
+      async comprarCurso() {
+        try {
+          const response = await 
+        } catch (error) {
+          
+        }
+      }
+    }
+  }
+</script>
 
 <style scoped>
 h1 {
