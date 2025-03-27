@@ -7,9 +7,14 @@ import com.mercadopago.client.common.IdentificationRequest;
 import com.mercadopago.exceptions.MPApiException;
 import com.mercadopago.exceptions.MPException;
 import com.mercadopago.resources.payment.Payment;
+
 import java.math.BigDecimal;
 
-public class PagoService {
+import org.springframework.stereotype.Service;
+
+
+@Service
+public class PagoServ {
 
     public Payment procesarPago(PagoRequest request) throws MPException, MPApiException {
         PaymentClient client = new PaymentClient();
