@@ -39,11 +39,11 @@
           },
           callbacks: {
             onSubmit: (cardFormData) => {
-              return fetch("http://localhost:8080/payment/process", {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify(cardFormData),
-              })
+              return fetch("http://localhost:8080/api/v1/mercadopago/preference", {
+                  method: "POST",
+                  headers: { "Content-Type": "application/json" },
+                  body: JSON.stringify(cardFormData),
+                })
                 .then((response) => response.json())
                 .then((result) => {
                   console.log("Payment result:", result);
