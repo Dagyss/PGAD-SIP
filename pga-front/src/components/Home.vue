@@ -8,13 +8,14 @@ defineProps<{
   <div class="greetings">
     <h1 class="green">{{ msg }}</h1>
     <h3>
-      <button @click="comprarCurso">Comprar curso</button>
+      <!-- <button @click="comprarCurso">Comprar curso</button> -->
+      <PaypalButton />
     </h3>
   </div>
 </template>
 
-<script>
-  import axios from "axios";
+<script lang="ts">
+import PaypalButton from "./PaypalButton.vue";
   export default {
     data() {
       return {
@@ -24,12 +25,15 @@ defineProps<{
 
     methods: {
       async comprarCurso() {
-        try {
-          const response = await 
-        } catch (error) {
+        // try {
+        //   const response = await 
+        // } catch (error) {
           
-        }
+        // }
       }
+    },
+    components: {
+      PaypalButton,
     }
   }
 </script>
