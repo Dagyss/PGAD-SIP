@@ -31,3 +31,4 @@ coverage
 
 *.js
 !vue.config.js
+index.js
