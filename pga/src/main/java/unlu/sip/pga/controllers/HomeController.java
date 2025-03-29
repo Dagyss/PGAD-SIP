@@ -1,17 +1,16 @@
 package unlu.sip.pga.controllers;
 
+import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RestController;
 
 @CrossOrigin(origins = "http://localhost:5173") 
-@RestController  
-
+@Controller  
 public class HomeController {
 
-    @GetMapping("/api/home")  
+    @GetMapping("/")  
     public String home() {
-        return "home!";
+        return "forward:/index.html";
     }
 }
 

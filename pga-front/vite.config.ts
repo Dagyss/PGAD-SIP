@@ -21,5 +21,9 @@ export default defineConfig({
     proxy: {
       "/": "http://localhost:8080",
     }
+  },
+  build: {
+    emptyOutDir: true, 
+    write: true
   }
 })

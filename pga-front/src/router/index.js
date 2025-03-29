@@ -10,7 +10,7 @@ var routes = [
     }
 ];
 var router = (0, vue_router_1.createRouter)({
-    //   history: createWebHistory(import.meta.env.BASE_URL),
+    history: (0, vue_router_1.createWebHistory)(process.env.BASE_URL),
     routes: routes
 });
 exports.default = router;
