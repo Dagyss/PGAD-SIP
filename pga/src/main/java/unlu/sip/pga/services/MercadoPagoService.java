@@ -26,8 +26,8 @@ import com.mercadopago.resources.preference.Preference;
 @Service
 public class MercadoPagoService {
 
-    @Value("${meli.accesToken}")
-    private String accesToken;
+    @Value("${meli.accessToken}")
+    private String accessToken;
 
     private String urlMeli = "https://api.mercadopago.com/v1/payments/";
 
@@ -35,7 +35,7 @@ public class MercadoPagoService {
             BacksUrlDTO backsUrl, String notificationUrl) throws MPException, MPApiException {
 
         // Configura el token de acceso para MercadoPago con la variable 'accesToken'.
-        MercadoPagoConfig.setAccessToken(accesToken);
+        MercadoPagoConfig.setAccessToken(accessToken);
 
         // Crear un objeto 'PreferenceItemRequest' para definir el artículo de la
         // preferencia de pago.
@@ -83,7 +83,7 @@ public class MercadoPagoService {
         // Crear un objeto HttpHeaders para configurar los encabezados de la solicitud.
         HttpHeaders httpHeaders = new HttpHeaders();
         // Configurar el encabezado de autorización con el token de acceso.
-        httpHeaders.set("Authorization", "Bearer " + accesToken);
+        httpHeaders.set("Authorization", "Bearer " + accessToken);
 
         // Crear un objeto HttpEntity con los encabezados configurados.
         HttpEntity<String> entity = new HttpEntity<>(httpHeaders);
