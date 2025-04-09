@@ -22,10 +22,17 @@
     </properties>
 
 	<dependencies>
-		<dependency>
+
+        <dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter</artifactId>
 		</dependency>
+
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-configuration-processor</artifactId>
+            <optional>true</optional>
+        </dependency>
 
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
@@ -50,11 +57,7 @@
             <version>1.0.0</version>
         </dependency>
 
-		<dependency>
-    		<groupId>io.github.cdimascio</groupId>
-    		<artifactId>dotenv-java</artifactId>
-    		<version>3.2.0</version>
-		</dependency>
+
 
         <!-- MercadoPago SDK -->
         <dependency>
@@ -69,6 +72,34 @@
             <artifactId>jackson-databind</artifactId>
             <version>2.15.0</version>
         </dependency>
+
+        <!-- Dotenv -->
+        <dependency>
+            <groupId>io.github.cdimascio</groupId>
+            <artifactId>dotenv-java</artifactId>
+            <version>3.2.0</version>
+        </dependency>
+
+        <dependency>
+            <groupId>me.paulschwarz</groupId>
+            <artifactId>spring-dotenv</artifactId>
+            <version>4.0.0</version>
+        </dependency>
+
+        <!-- Okta (Auth0/Okta Integration) -->
+        <dependency>
+            <groupId>com.okta.spring</groupId>
+            <artifactId>okta-spring-boot-starter</artifactId>
+            <version>3.0.7</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <scope>provided</scope>
+        </dependency>
+
+
     </dependencies>
 
     <build>

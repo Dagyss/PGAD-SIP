@@ -1,4 +1,4 @@
-package unlu.sip.pga.controllers;
+/*package unlu.sip.pga.controllers;
 
 import java.util.Map;
 
@@ -43,4 +43,4 @@ public class PaypalController {
             return ResponseEntity.internalServerError().build();
         }
     }
-}
+}*/

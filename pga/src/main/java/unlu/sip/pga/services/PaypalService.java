@@ -1,4 +1,4 @@
-package unlu.sip.pga.services;
+/*package unlu.sip.pga.services;
 
 import java.io.IOException;
 import java.util.Arrays;
@@ -82,3 +82,4 @@ public Order captureOrders(String orderID) throws IOException, ApiException {
     return apiResponse.getResult();
 }
 }
+*/
