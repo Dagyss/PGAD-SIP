@@ -1,4 +1,4 @@
-/*package unlu.sip.pga.services;
+package unlu.sip.pga.services;
 
 import java.io.IOException;
 import java.util.Arrays;
@@ -72,14 +72,13 @@ public class PaypalService {
    return apiResponse.getResult();
 }
 
-public Order captureOrders(String orderID) throws IOException, ApiException {
-    CaptureOrderInput ordersCaptureInput = new CaptureOrderInput.Builder(
-            orderID,
-            null)
-            .build();
-    OrdersController ordersController = paypalClient.getOrdersController();
-    ApiResponse<Order> apiResponse = ordersController.captureOrder(ordersCaptureInput);
-    return apiResponse.getResult();
+    public Order captureOrders(String orderID) throws IOException, ApiException {
+        CaptureOrderInput ordersCaptureInput = new CaptureOrderInput.Builder(
+                orderID,
+                null)
+                .build();
+        OrdersController ordersController = paypalClient.getOrdersController();
+        ApiResponse<Order> apiResponse = ordersController.captureOrder(ordersCaptureInput);
+        return apiResponse.getResult();
+    }
 }
-}
-*/

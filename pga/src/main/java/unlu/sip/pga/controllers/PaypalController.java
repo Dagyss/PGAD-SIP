@@ -1,4 +1,4 @@
-/*package unlu.sip.pga.controllers;
+package unlu.sip.pga.controllers;
 
 import java.util.Map;
 
@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.paypal.sdk.models.Order;
 
 import unlu.sip.pga.services.PaypalService;
+
 
 @RestController
 @RequestMapping("/api/paypal")
@@ -43,4 +44,4 @@ public class PaypalController {
             return ResponseEntity.internalServerError().build();
         }
     }
-}*/
+}
