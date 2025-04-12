@@ -24,6 +24,7 @@ public class PaypalService {
 
     public Order createOrder(Map<String, Object> request) throws IOException, ApiException {
         String reqString = objectMapper.writeValueAsString(request);
+        System.out.println("Creando orden de PayPal...");
         CreateOrderInput createOrderInput = new CreateOrderInput.Builder(
          null,
          new OrderRequest.Builder(

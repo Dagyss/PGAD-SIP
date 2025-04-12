@@ -3,6 +3,8 @@ package unlu.sip.pga.controllers;
 import java.util.Map;
 
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -13,7 +15,7 @@ import com.paypal.sdk.models.Order;
 
 import unlu.sip.pga.services.PaypalService;
 
-
+@CrossOrigin(origins = "http://localhost:5173")
 @RestController
 @RequestMapping("/api/paypal")
 public class PaypalController {
@@ -23,6 +25,7 @@ public class PaypalController {
         this.paypalService = paypalService;
     }
 
+    @PreAuthorize("hasAuthority('create:order')")
     @PostMapping("/orders")
     public ResponseEntity<Order> createOrder(@RequestBody Map<String, Object> request) {
         try {

@@ -1,4 +1,4 @@
-/*package unlu.sip.pga.config;
+package unlu.sip.pga.config;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
@@ -24,4 +24,4 @@ public class PaypalConfig {
                 .clientCredentialsAuth(new ClientCredentialsAuthModel.Builder(clientId, clientSecret).build())
                 .build();
     }
-}*/
+}

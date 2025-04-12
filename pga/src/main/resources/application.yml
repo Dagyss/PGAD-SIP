@@ -1,0 +1,37 @@
+spring:
+  application:
+    name: pga
+  web:
+    resources:
+      add-mappings: false
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          issuer-uri: ${OKTA_OAUTH2_ISSUER}
+          audiences:
+            - ${OKTA_OAUTH2_AUDIENCE}
+
+meli:
+  accessToken: YOUR_ACCESS_TOKEN
+
+mercado:
+  pago:
+    url:
+      base: https://api.mercadopago.com/v1/payments
+
+
+application:
+  client-origin-url: ${CLIENT_ORIGIN_URL}
+
+server:
+  error:
+    whitelabel:
+      enabled: false
+  port: ${PORT}
+
+
+okta:
+  oauth2:
+    issuer: ${OKTA_OAUTH2_ISSUER}
+    audience: ${OKTA_OAUTH2_AUDIENCE}
