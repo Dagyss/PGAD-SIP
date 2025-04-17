@@ -37,6 +37,7 @@ public class PaypalController {
         }
     }
 
+    @PreAuthorize("hasAuthority('capture:order')")
     @PostMapping("/orders/{orderID}/capture")
     public ResponseEntity<Order> captureOrder(@PathVariable String orderID) {
         try {
