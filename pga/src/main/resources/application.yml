@@ -13,7 +13,7 @@ spring:
             - ${OKTA_OAUTH2_AUDIENCE}
 
 meli:
-  accessToken: YOUR_ACCESS_TOKEN
+  accessToken: ${MELI_ACCESS_TOKEN}
 
 mercado:
   pago:

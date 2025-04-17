@@ -66,7 +66,7 @@ public class MercadoPagoController {
         // Crear una instancia del logger
         Logger logger = LoggerFactory.getLogger(this.getClass());
         logger.info("Datos recibidos: {}", cardFormData);
-        String preferenceId = "ocurrio un error";
+        String preferenceId = "1234";
         String titulo = "curso";
         int cantidad = 1;
         BigDecimal precio = new BigDecimal("1000");
@@ -74,15 +74,15 @@ public class MercadoPagoController {
 
         try {
             BacksUrlDTO backsUrl = new BacksUrlDTO();
-            backsUrl.setSuccess("URL DEL FRONTEND /success");
-            backsUrl.setPending("URL DEL FRONTEND /pending");
-            backsUrl.setFailure("URL DEL FRONTEND /failed");
+            backsUrl.setSuccess("https://localhost:5173/success");
+            backsUrl.setPending("https://localhost:5173/pending");
+            backsUrl.setFailure("https://localhost:5173/failed");
 
             // Llamada al servicio de MercadoPago para crear una preferencia de pago
             preferenceId = this.mercadoPagoService.createPreference(
                 titulo, cantidad,currency,
                     precio, backsUrl,
-                    "https://95d8-2803-9800-9803-5091-9552-4a64-f4f0-b9e.ngrok-free.app/api/v1/mercadopago/notify");
+                    "https://localhost:6060/api/v1/mercadopago/notify");
 
             //Dentro de este metodo podemos recibir información para pasarle por params al controlador de notify una vew que se haya realizado el pago, ej:el username del usuario,
 

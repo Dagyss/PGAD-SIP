@@ -69,11 +69,20 @@ public class MercadoPagoService {
         PreferenceClient preferenceClient = new PreferenceClient();
 
         // Crear la preferencia de pago usando el cliente de preferencias.
-        Preference preference = preferenceClient.create(preferenceRequest);
+        try {
+            Preference preference = preferenceClient.create(preferenceRequest);
+            // Retornar el punto de inicio de la preferencia (URL de redirección para
+            // iniciar el pago).
+            return preference.getInitPoint();
+        } catch (MPApiException e) {
+            System.out.println("Status Code: " + e.getStatusCode());
+            System.out.println("Content: " + e.getApiResponse().getContent());
+            e.printStackTrace();
+            throw e;
+        }
 
-        // Retornar el punto de inicio de la preferencia (URL de redirección para
-        // iniciar el pago).
-        return preference.getInitPoint();
+
+
     }
 
     public PagoDTO getPago(String id_payment) {
