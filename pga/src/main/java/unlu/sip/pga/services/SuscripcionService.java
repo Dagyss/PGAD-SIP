@@ -1,0 +1,13 @@
+package unlu.sip.pga.services;
+
+import unlu.sip.pga.entities.Suscripcion;
+import java.util.List;
+import java.util.Optional;
+
+public interface SuscripcionService {
+    Suscripcion crearSuscripcion(Suscripcion suscripcion);
+    Optional<Suscripcion> obtenerSuscripcionPorId(Long id);
+    List<Suscripcion> listarSuscripcionesPorUsuario(Long usuarioId);
+    Suscripcion actualizarSuscripcion(Suscripcion suscripcion);
+    void eliminarSuscripcion(Long id);
+}

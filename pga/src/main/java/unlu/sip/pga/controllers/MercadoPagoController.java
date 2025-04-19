@@ -1,30 +1,19 @@
 package unlu.sip.pga.controllers;
 
-import java.math.BigDecimal;
-import java.util.Map;
-
+import com.mercadopago.exceptions.MPApiException;
+import com.mercadopago.exceptions.MPException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
-
+import org.springframework.web.bind.annotation.*;
 import unlu.sip.pga.dto.BacksUrlDTO;
 import unlu.sip.pga.dto.MpNotifyDTO;
 import unlu.sip.pga.services.MercadoPagoService;
 
-import com.mercadopago.client.common.IdentificationRequest;
-import com.mercadopago.client.payment.PaymentClient;
-import com.mercadopago.client.payment.PaymentCreateRequest;
-import com.mercadopago.client.payment.PaymentPayerRequest;
-import com.mercadopago.exceptions.MPApiException;
-import com.mercadopago.exceptions.MPException;
-
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
+import java.math.BigDecimal;
+import java.util.Map;
 
 @CrossOrigin(origins = "http://localhost:5173") 
 @RestController

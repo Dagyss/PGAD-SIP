@@ -1,19 +1,13 @@
 package unlu.sip.pga.controllers;
 
-import java.util.Map;
-
+import com.paypal.sdk.models.Order;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
-
-import com.paypal.sdk.models.Order;
-
+import org.springframework.web.bind.annotation.*;
 import unlu.sip.pga.services.PaypalService;
+
+
+import java.util.Map;
 
 @CrossOrigin(origins = "http://localhost:5173")
 @RestController

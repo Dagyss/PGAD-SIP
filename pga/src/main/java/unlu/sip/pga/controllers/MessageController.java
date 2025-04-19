@@ -1,14 +1,13 @@
 package unlu.sip.pga.controllers;
 
+import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-
 import unlu.sip.pga.models.Message;
 import unlu.sip.pga.services.MessageService;
 
-import lombok.RequiredArgsConstructor;
 
 @RestController
 @RequiredArgsConstructor
