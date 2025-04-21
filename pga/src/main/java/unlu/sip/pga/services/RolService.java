@@ -6,8 +6,8 @@ import java.util.Optional;
 
 public interface RolService {
     Rol crearRol(Rol rol);
-    Optional<Rol> obtenerRolPorId(Long id);
+    Optional<Rol> obtenerRolPorId(Integer id);
     List<Rol> listarRoles();
     Rol actualizarRol(Rol rol);
-    void eliminarRol(Long id);
+    void eliminarRol(Integer id);
 }

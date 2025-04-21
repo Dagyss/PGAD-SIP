@@ -13,8 +13,8 @@ import java.util.Optional;
 public class CursoServiceImpl implements CursoService {
     @Autowired private CursoRepository cursoRepository;
     public Curso crearCurso(Curso curso) { return cursoRepository.save(curso); }
-    public Optional<Curso> obtenerCursoPorId(Long id) { return cursoRepository.findById(id); }
+    public Optional<Curso> obtenerCursoPorId(Integer id) { return cursoRepository.findById(id); }
     public List<Curso> listarCursos() { return cursoRepository.findAll(); }
     public Curso actualizarCurso(Curso curso) { return cursoRepository.save(curso); }
-    public void eliminarCurso(Long id) { cursoRepository.deleteById(id); }
+    public void eliminarCurso(Integer id) { cursoRepository.deleteById(id); }
 }

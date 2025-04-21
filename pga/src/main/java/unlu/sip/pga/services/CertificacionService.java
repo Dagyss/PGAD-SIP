@@ -6,8 +6,8 @@ import java.util.Optional;
 
 public interface CertificacionService  {
     Certificacion crearCertificacion(Certificacion certificacion);
-    Optional<Certificacion> obtenerCertificacionPorId(Long id);
-    List<Certificacion> listarCertificacionesPorUsuario(Long usuarioId);
+    Optional<Certificacion> obtenerCertificacionPorId(Integer id);
+    List<Certificacion> listarCertificacionesPorUsuario(Integer usuarioId);
     Certificacion actualizarCertificacion(Certificacion certificacion);
-    void eliminarCertificacion(Long id);
+    void eliminarCertificacion(Integer id);
 }

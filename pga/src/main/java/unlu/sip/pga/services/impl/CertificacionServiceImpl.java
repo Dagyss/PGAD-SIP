@@ -13,8 +13,8 @@ import java.util.Optional;
 public class CertificacionServiceImpl implements CertificacionService {
     @Autowired private CertificacionRepository certificacionRepository;
     public Certificacion crearCertificacion(Certificacion c) { return certificacionRepository.save(c); }
-    public Optional<Certificacion> obtenerCertificacionPorId(Long id) { return certificacionRepository.findById(id); }
-    public List<Certificacion> listarCertificacionesPorUsuario(Long usuarioId) { return certificacionRepository.findByUsuarioId(usuarioId); }
+    public Optional<Certificacion> obtenerCertificacionPorId(Integer id) { return certificacionRepository.findById(id); }
+    public List<Certificacion> listarCertificacionesPorUsuario(Integer usuarioId) { return certificacionRepository.findByUsuarioId(usuarioId); }
     public Certificacion actualizarCertificacion(Certificacion c) { return certificacionRepository.save(c); }
-    public void eliminarCertificacion(Long id) { certificacionRepository.deleteById(id); }
+    public void eliminarCertificacion(Integer id) { certificacionRepository.deleteById(id); }
 }

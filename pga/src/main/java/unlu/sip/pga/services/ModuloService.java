@@ -6,8 +6,8 @@ import java.util.Optional;
 
 public interface ModuloService {
     Modulo crearModulo(Modulo modulo);
-    Optional<Modulo> obtenerModuloPorId(Long id);
-    List<Modulo> listarModulosPorCurso(Long cursoId);
+    Optional<Modulo> obtenerModuloPorId(Integer id);
+    List<Modulo> listarModulosPorCurso(Integer cursoId);
     Modulo actualizarModulo(Modulo modulo);
-    void eliminarModulo(Long id);
+    void eliminarModulo(Integer id);
 }

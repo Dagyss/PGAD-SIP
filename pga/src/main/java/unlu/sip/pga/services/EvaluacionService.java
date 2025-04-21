@@ -6,8 +6,8 @@ import java.util.Optional;
 
 public interface EvaluacionService {
     Evaluacion crearEvaluacion(Evaluacion evaluacion);
-    Optional<Evaluacion> obtenerEvaluacionPorId(Long id);
-    List<Evaluacion> listarEvaluacionesPorCurso(Long cursoId);
+    Optional<Evaluacion> obtenerEvaluacionPorId(Integer id);
+    List<Evaluacion> listarEvaluacionesPorCurso(Integer cursoId);
     Evaluacion actualizarEvaluacion(Evaluacion evaluacion);
-    void eliminarEvaluacion(Long id);
+    void eliminarEvaluacion(Integer id);
 }

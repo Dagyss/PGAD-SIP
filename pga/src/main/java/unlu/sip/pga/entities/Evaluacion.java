@@ -18,7 +18,7 @@ import java.util.Set;
 public class Evaluacion {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long idEvaluacion;
+    private Integer idEvaluacion;
 
     @ManyToOne
     @JoinColumn(name = "idCurso", nullable = false)

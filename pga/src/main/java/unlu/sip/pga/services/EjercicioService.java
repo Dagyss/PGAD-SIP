@@ -6,8 +6,8 @@ import java.util.Optional;
 
 public interface EjercicioService {
     Ejercicio crearEjercicio(Ejercicio ejercicio);
-    Optional<Ejercicio> obtenerEjercicioPorId(Long id);
-    List<Ejercicio> listarEjerciciosPorModulo(Long moduloId);
+    Optional<Ejercicio> obtenerEjercicioPorId(Integer id);
+    List<Ejercicio> listarEjerciciosPorModulo(Integer moduloId);
     Ejercicio actualizarEjercicio(Ejercicio ejercicio);
-    void eliminarEjercicio(Long id);
+    void eliminarEjercicio(Integer id);
 }

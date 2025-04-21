@@ -13,8 +13,8 @@ import java.util.Optional;
 public class RolServiceImpl implements RolService {
     @Autowired private RolRepository rolRepository;
     public Rol crearRol(Rol r) { return rolRepository.save(r); }
-    public Optional<Rol> obtenerRolPorId(Long id) { return rolRepository.findById(id); }
+    public Optional<Rol> obtenerRolPorId(Integer id) { return rolRepository.findById(id); }
     public List<Rol> listarRoles() { return rolRepository.findAll(); }
     public Rol actualizarRol(Rol r) { return rolRepository.save(r); }
-    public void eliminarRol(Long id) { rolRepository.deleteById(id); }
+    public void eliminarRol(Integer id) { rolRepository.deleteById(id); }
 }

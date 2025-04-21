@@ -5,9 +5,10 @@ import java.util.List;
 import java.util.Optional;
 
 public interface PagoService {
-    Pago crearPago(Pago pago);
-    Optional<Pago> obtenerPagoPorId(Long id);
-    List<Pago> listarPagosPorUsuario(Long usuarioId);
-    Pago actualizarPago(Pago pago);
-    void eliminarPago(Long id);
+    Pago crearPago(Pago p);
+    Optional<Pago> obtenerPagoPorId(String paymentId);
+    List<Pago> listarPagos();
+    List<Pago> listarPagosPorUsuario(Integer usuarioId);
+    Pago actualizarPago(Pago p);
+    void eliminarPago(String paymentId);
 }

@@ -4,11 +4,11 @@ import java.time.OffsetDateTime;
 
 public class MpNotifyDTO {
     
-    private Long id;
+    private Integer id;
     private Boolean liveMode;
     private String type;
     private OffsetDateTime dateCreated;
-    private Long userID;
+    private Integer userID;
     private String apiVersion;
     private String action;
     private DataMpDTO data;
@@ -16,11 +16,11 @@ public class MpNotifyDTO {
     public MpNotifyDTO() {
     }
 
-    public Long getId() {
+    public Integer getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 
@@ -48,11 +48,11 @@ public class MpNotifyDTO {
         this.dateCreated = dateCreated;
     }
 
-    public Long getUserID() {
+    public Integer getUserID() {
         return userID;
     }
 
-    public void setUserID(Long userID) {
+    public void setUserID(Integer userID) {
         this.userID = userID;
     }
 

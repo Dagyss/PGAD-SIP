@@ -13,8 +13,8 @@ import java.util.Optional;
 public class EjercicioServiceImpl implements EjercicioService {
     @Autowired private EjercicioRepository ejercicioRepository;
     public Ejercicio crearEjercicio(Ejercicio ejercicio) { return ejercicioRepository.save(ejercicio); }
-    public Optional<Ejercicio> obtenerEjercicioPorId(Long id) { return ejercicioRepository.findById(id); }
-    public List<Ejercicio> listarEjerciciosPorModulo(Long moduloId) { return ejercicioRepository.findByModuloId(moduloId); }
+    public Optional<Ejercicio> obtenerEjercicioPorId(Integer id) { return ejercicioRepository.findById(id); }
+    public List<Ejercicio> listarEjerciciosPorModulo(Integer moduloId) { return ejercicioRepository.findByModuloId(moduloId); }
     public Ejercicio actualizarEjercicio(Ejercicio ejercicio) { return ejercicioRepository.save(ejercicio); }
-    public void eliminarEjercicio(Long id) { ejercicioRepository.deleteById(id); }
+    public void eliminarEjercicio(Integer id) { ejercicioRepository.deleteById(id); }
 }

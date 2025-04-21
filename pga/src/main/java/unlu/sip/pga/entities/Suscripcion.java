@@ -18,7 +18,7 @@ import java.util.Set;
 public class Suscripcion {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long idSuscripcion;
+    private Integer idSuscripcion;
 
     @ManyToOne
     @JoinColumn(name = "idUsuario", nullable = false)

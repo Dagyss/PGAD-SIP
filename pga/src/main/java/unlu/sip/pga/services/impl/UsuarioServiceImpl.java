@@ -13,8 +13,8 @@ import java.util.Optional;
 public class UsuarioServiceImpl implements UsuarioService {
     @Autowired private UsuarioRepository usuarioRepository;
     public Usuario crearUsuario(Usuario usuario) { return usuarioRepository.save(usuario); }
-    public Optional<Usuario> obtenerUsuarioPorId(Long id) { return usuarioRepository.findById(id); }
+    public Optional<Usuario> obtenerUsuarioPorId(Integer id) { return usuarioRepository.findById(id); }
     public List<Usuario> listarUsuarios() { return usuarioRepository.findAll(); }
     public Usuario actualizarUsuario(Usuario usuario) { return usuarioRepository.save(usuario); }
-    public void eliminarUsuario(Long id) { usuarioRepository.deleteById(id); }
+    public void eliminarUsuario(Integer id) { usuarioRepository.deleteById(id); }
 }

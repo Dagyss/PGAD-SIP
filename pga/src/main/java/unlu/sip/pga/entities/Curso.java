@@ -18,7 +18,7 @@ import java.util.Set;
 public class Curso {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long idCurso;
+    private Integer idCurso;
 
     @Column(length = 100, nullable = false)
     private String titulo;
