@@ -6,8 +6,8 @@ import java.util.Optional;
 
 public interface PermisoService {
     Permiso crearPermiso(Permiso permiso);
-    Optional<Permiso> obtenerPermisoPorId(Long id);
+    Optional<Permiso> obtenerPermisoPorId(Integer id);
     List<Permiso> listarPermisos();
     Permiso actualizarPermiso(Permiso permiso);
-    void eliminarPermiso(Long id);
+    void eliminarPermiso(Integer id);
 }

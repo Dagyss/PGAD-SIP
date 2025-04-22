@@ -13,8 +13,8 @@ import java.util.Optional;
 public class PermisoServiceImpl implements PermisoService {
     @Autowired private PermisoRepository permisoRepository;
     public Permiso crearPermiso(Permiso p) { return permisoRepository.save(p); }
-    public Optional<Permiso> obtenerPermisoPorId(Long id) { return permisoRepository.findById(id); }
+    public Optional<Permiso> obtenerPermisoPorId(Integer id) { return permisoRepository.findById(id); }
     public List<Permiso> listarPermisos() { return permisoRepository.findAll(); }
     public Permiso actualizarPermiso(Permiso p) { return permisoRepository.save(p); }
-    public void eliminarPermiso(Long id) { permisoRepository.deleteById(id); }
+    public void eliminarPermiso(Integer id) { permisoRepository.deleteById(id); }
 }

@@ -13,8 +13,8 @@ import java.util.Optional;
 public class ProgresoServiceImpl implements ProgresoService {
     @Autowired private ProgresoRepository progresoRepository;
     public Progreso crearProgreso(Progreso p) { return progresoRepository.save(p); }
-    public Optional<Progreso> obtenerProgresoPorId(Long id) { return progresoRepository.findById(id); }
-    public List<Progreso> listarProgresosPorUsuarioCurso(Long usuarioId, Long cursoId) { return progresoRepository.findByUsuarioIdAndCursoId(usuarioId, cursoId); }
+    public Optional<Progreso> obtenerProgresoPorId(Integer id) { return progresoRepository.findById(id); }
+    public List<Progreso> listarProgresosPorUsuarioCurso(Integer usuarioId, Integer cursoId) { return progresoRepository.findByUsuarioIdAndCursoId(usuarioId, cursoId); }
     public Progreso actualizarProgreso(Progreso p) { return progresoRepository.save(p); }
-    public void eliminarProgreso(Long id) { progresoRepository.deleteById(id); }
+    public void eliminarProgreso(Integer id) { progresoRepository.deleteById(id); }
 }

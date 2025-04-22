@@ -5,6 +5,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;
 
-public interface ProgresoRepository extends JpaRepository<Progreso, Long> {
-    List<Progreso> findByUsuarioIdAndCursoId(Long idUsuario, Long idCurso);
+public interface ProgresoRepository extends JpaRepository<Progreso, Integer> {
+    List<Progreso> findByUsuarioIdAndCursoId(Integer idUsuario, Integer idCurso);
 }

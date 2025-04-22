@@ -13,8 +13,8 @@ import java.util.Optional;
 public class ContenidoModuloServiceImpl implements ContenidoModuloService {
     @Autowired private ContenidoModuloRepository contenidoRepository;
     public ContenidoModulo crearContenido(ContenidoModulo contenido) { return contenidoRepository.save(contenido); }
-    public Optional<ContenidoModulo> obtenerContenidoPorId(Long id) { return contenidoRepository.findById(id); }
-    public List<ContenidoModulo> listarContenidosPorModulo(Long moduloId) { return contenidoRepository.findByModuloId(moduloId); }
+    public Optional<ContenidoModulo> obtenerContenidoPorId(Integer id) { return contenidoRepository.findById(id); }
+    public List<ContenidoModulo> listarContenidosPorModulo(Integer moduloId) { return contenidoRepository.findByModuloId(moduloId); }
     public ContenidoModulo actualizarContenido(ContenidoModulo contenido) { return contenidoRepository.save(contenido); }
-    public void eliminarContenido(Long id) { contenidoRepository.deleteById(id); }
+    public void eliminarContenido(Integer id) { contenidoRepository.deleteById(id); }
 }

@@ -6,8 +6,8 @@ import java.util.Optional;
 
 public interface ContenidoModuloService {
     ContenidoModulo crearContenido(ContenidoModulo contenido);
-    Optional<ContenidoModulo> obtenerContenidoPorId(Long id);
-    List<ContenidoModulo> listarContenidosPorModulo(Long moduloId);
+    Optional<ContenidoModulo> obtenerContenidoPorId(Integer id);
+    List<ContenidoModulo> listarContenidosPorModulo(Integer moduloId);
     ContenidoModulo actualizarContenido(ContenidoModulo contenido);
-    void eliminarContenido(Long id);
+    void eliminarContenido(Integer id);
 }

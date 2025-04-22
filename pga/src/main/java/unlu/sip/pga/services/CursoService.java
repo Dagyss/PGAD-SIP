@@ -6,8 +6,8 @@ import java.util.Optional;
 
 public interface CursoService {
     Curso crearCurso(Curso curso);
-    Optional<Curso> obtenerCursoPorId(Long id);
+    Optional<Curso> obtenerCursoPorId(Integer id);
     List<Curso> listarCursos();
     Curso actualizarCurso(Curso curso);
-    void eliminarCurso(Long id);
+    void eliminarCurso(Integer id);
 }

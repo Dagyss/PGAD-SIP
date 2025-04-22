@@ -18,7 +18,7 @@ import java.util.Set;
 public class Certificacion {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long idCertificacion;
+    private Integer idCertificacion;
 
     @ManyToOne
     @JoinColumn(name = "idUsuario", nullable = false)

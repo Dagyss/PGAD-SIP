@@ -13,8 +13,8 @@ import java.util.Optional;
 public class ModuloServiceImpl implements ModuloService {
     @Autowired private ModuloRepository moduloRepository;
     public Modulo crearModulo(Modulo modulo) { return moduloRepository.save(modulo); }
-    public Optional<Modulo> obtenerModuloPorId(Long id) { return moduloRepository.findById(id); }
-    public List<Modulo> listarModulosPorCurso(Long cursoId) { return moduloRepository.findByCursoId(cursoId); }
+    public Optional<Modulo> obtenerModuloPorId(Integer id) { return moduloRepository.findById(id); }
+    public List<Modulo> listarModulosPorCurso(Integer cursoId) { return moduloRepository.findByCursoId(cursoId); }
     public Modulo actualizarModulo(Modulo modulo) { return moduloRepository.save(modulo); }
-    public void eliminarModulo(Long id) { moduloRepository.deleteById(id); }
+    public void eliminarModulo(Integer id) { moduloRepository.deleteById(id); }
 }
