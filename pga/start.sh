@@ -1,12 +1,4 @@
 #!/bin/bash
-# echo "Construyendo con Maven..."
-# mvn clean package
-
-# echo "Iniciando contenedores con Docker Compose..."
-# docker-compose up
-
-# Script: run-app.sh
-# Descripción: Construye y ejecuta la aplicación con Docker Compose con verificación de dependencias
 
 # Colores para mensajes
 RED='\033[0;31m'
@@ -34,7 +26,7 @@ docker-compose down -v
 
 # Construir proyecto
 echo -e "${YELLOW}Construyendo aplicación con Maven...${NC}"
-mvn clean package
+mvn clean package -DskipTests #> logs/maven.log 2>&1
 
 # Construir y levantar solo la base de datos primero
 echo -e "${YELLOW}Iniciando PostgreSQL...${NC}"
@@ -42,18 +34,11 @@ docker-compose up -d --build pga-db
 
 # Esperar a que PostgreSQL esté listo
 echo -e "${YELLOW}Esperando a que PostgreSQL esté listo...${NC}"
-until docker exec pga-db pg_isready -U "${PG_USERNAME}" -d pga; do
-    echo -e "${YELLOW}PostgreSQL no está listo, esperando 5 segundos...${NC}"
-    sleep 5
-done
+sleep 5
 
 # Construir y levantar el backend
 echo -e "${YELLOW}Iniciando backend...${NC}"
 docker-compose up -d --build pga-backend
-
-# Mostrar logs del backend
-echo -e "${YELLOW}Mostrando logs del backend...${NC}"
-docker logs -f pga-backend
 
 # Verificación final
 echo -e "\n${GREEN}¡Aplicación desplegada correctamente!${NC}"

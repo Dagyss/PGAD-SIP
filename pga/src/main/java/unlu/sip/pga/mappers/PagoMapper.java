@@ -11,6 +11,6 @@ public interface PagoMapper {
     @Mapping(target = "usuario", expression = "java(usuarioService.obtenerUsuarioPorId(dto.getUsuarioId()).orElse(null))")
     Pago toEntity(PagoDTO dto);
 
-    @Mapping(source = "usuario.idUsuario", target = "usuarioId")
+    @Mapping(source = "usuario.id", target = "usuarioId")
     PagoDTO toDto(Pago entity);
 }
