@@ -14,7 +14,7 @@ public class ContenidoModuloServiceImpl implements ContenidoModuloService {
     @Autowired private ContenidoModuloRepository contenidoRepository;
     public ContenidoModulo crearContenido(ContenidoModulo contenido) { return contenidoRepository.save(contenido); }
     public Optional<ContenidoModulo> obtenerContenidoPorId(Integer id) { return contenidoRepository.findById(id); }
-    public List<ContenidoModulo> listarContenidosPorModulo(Integer moduloId) { return contenidoRepository.findByModuloId(moduloId); }
+    public List<ContenidoModulo> listarContenidosPorModulo(Integer moduloId) { return contenidoRepository.findByModulo_IdModulo(moduloId); }
     public ContenidoModulo actualizarContenido(ContenidoModulo contenido) { return contenidoRepository.save(contenido); }
     public void eliminarContenido(Integer id) { contenidoRepository.deleteById(id); }
 }
