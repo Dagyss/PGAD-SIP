@@ -5,5 +5,5 @@ import unlu.sip.pga.entities.Certificacion;
 import java.util.List;
 
 public interface CertificacionRepository extends JpaRepository<Certificacion, Integer> {
-    List<Certificacion> findByUsuarioId(Integer idUsuario);
+    List<Certificacion> findByUsuario_IdUsuario(Integer idUsuario);
 }

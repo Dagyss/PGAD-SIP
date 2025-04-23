@@ -13,8 +13,8 @@ import java.util.Optional;
 public class EvaluacionServiceImpl implements EvaluacionService {
     @Autowired private EvaluacionRepository evaluacionRepository;
     public Evaluacion crearEvaluacion(Evaluacion ev) { return evaluacionRepository.save(ev); }
-    public Optional<Evaluacion> obtenerEvaluacionPorId(Integer id) { return evaluacionRepository.findById(id); }
-    public List<Evaluacion> listarEvaluacionesPorCurso(Integer cursoId) { return evaluacionRepository.findByCursoId(cursoId); }
+    public Optional<Evaluacion> obtenerEvaluacionPorId(Integer idEvaluacion) { return evaluacionRepository.findById(idEvaluacion); }
+    public List<Evaluacion> listarEvaluacionesPorCurso(Integer idCurso) { return evaluacionRepository.findByCurso_IdCurso(idCurso); }
     public Evaluacion actualizarEvaluacion(Evaluacion ev) { return evaluacionRepository.save(ev); }
     public void eliminarEvaluacion(Integer id) { evaluacionRepository.deleteById(id); }
 }
