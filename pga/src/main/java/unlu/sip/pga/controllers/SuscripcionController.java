@@ -17,9 +17,9 @@ public class SuscripcionController {
     @Autowired private SuscripcionMapper suscripcionMapper;
 
     @GetMapping
-    public List<SuscripcionDTO> listar(@RequestParam(required=false) Integer usuarioId) {
-        return (usuarioId == null ? suscripcionService.listarSuscripcionesPorUsuario(null)
-                : suscripcionService.listarSuscripcionesPorUsuario(usuarioId)).stream()
+    public List<SuscripcionDTO> listar(@RequestParam(required=false) Integer idUsuario) {
+        return (idUsuario == null ? suscripcionService.listarSuscripcionesPorUsuario(null)
+                : suscripcionService.listarSuscripcionesPorUsuario(idUsuario)).stream()
                 .map(suscripcionMapper::toDto)
                 .collect(Collectors.toList());
     }

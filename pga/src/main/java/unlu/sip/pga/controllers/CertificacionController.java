@@ -17,9 +17,9 @@ public class CertificacionController {
     @Autowired private CertificacionMapper certificacionMapper;
 
     @GetMapping
-    public List<CertificacionDTO> listar(@RequestParam(required=false) Integer usuarioId) {
-        return (usuarioId == null ? certificacionService.listarCertificacionesPorUsuario(null)
-                : certificacionService.listarCertificacionesPorUsuario(usuarioId)).stream()
+    public List<CertificacionDTO> listar(@RequestParam(required=false) Integer idUsuario) {
+        return (idUsuario == null ? certificacionService.listarCertificacionesPorUsuario(null)
+                : certificacionService.listarCertificacionesPorUsuario(idUsuario)).stream()
                 .map(certificacionMapper::toDto)
                 .collect(Collectors.toList());
     }

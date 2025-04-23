@@ -16,5 +16,5 @@ public class PagoDTO {
     private String status;
     private String status_detail;
     private TransactionDetailsDTO transaction_details;
-    private Integer usuarioId;
+    private Integer idUsuario;
 }

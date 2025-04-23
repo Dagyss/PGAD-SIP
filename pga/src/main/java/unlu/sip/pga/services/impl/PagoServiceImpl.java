@@ -17,7 +17,7 @@ public class PagoServiceImpl implements PagoService {
     public Pago crearPago(Pago p) {return pagoRepository.save(p);}
     public Optional<Pago> obtenerPagoPorId(String paymentId) {return pagoRepository.findById(paymentId);}
     public List<Pago> listarPagos() {return pagoRepository.findAll();}
-    public List<Pago> listarPagosPorUsuario(Integer usuarioId) {return pagoRepository.findByUsuario_Id(usuarioId);}
+    public List<Pago> listarPagosPorUsuario(Integer idUsuario) {return pagoRepository.findByUsuario_Id(idUsuario);}
     public Pago actualizarPago(Pago p) {return pagoRepository.save(p);}
     public void eliminarPago(String paymentId) { pagoRepository.deleteById(paymentId);}
 }

@@ -7,7 +7,7 @@ import java.util.Optional;
 public interface SuscripcionService {
     Suscripcion crearSuscripcion(Suscripcion suscripcion);
     Optional<Suscripcion> obtenerSuscripcionPorId(Integer id);
-    List<Suscripcion> listarSuscripcionesPorUsuario(Integer usuarioId);
+    List<Suscripcion> listarSuscripcionesPorUsuario(Integer idUsuario);
     Suscripcion actualizarSuscripcion(Suscripcion suscripcion);
     void eliminarSuscripcion(Integer id);
 }

@@ -9,7 +9,7 @@ import lombok.AllArgsConstructor;
 public class EvaluacionDTO {
     private Integer idEvaluacion;
     private Integer cursoId;
-    private Integer usuarioId;
+    private Integer idUsuario;
     private Date fecha;
     private Float puntaje;
 }
