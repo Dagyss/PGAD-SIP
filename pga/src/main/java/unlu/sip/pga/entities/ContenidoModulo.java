@@ -18,7 +18,7 @@ import java.util.Set;
 public class ContenidoModulo {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer idContenido;
+    private Integer id;
 
     @ManyToOne
     @JoinColumn(name = "idModulo", nullable = false)

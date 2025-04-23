@@ -5,9 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
 import java.util.Date;
-import java.util.Set;
 
 @Data
 @AllArgsConstructor
@@ -18,7 +16,7 @@ import java.util.Set;
 public class Progreso {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer idProgreso;
+    private Integer id;
 
     @ManyToOne
     @JoinColumn(name = "idCurso", nullable = false)

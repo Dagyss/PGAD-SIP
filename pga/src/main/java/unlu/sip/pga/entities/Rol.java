@@ -1,7 +1,6 @@
 package unlu.sip.pga.entities;
 
 import jakarta.persistence.*;
-import java.util.Date;
 import java.util.Set;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -17,7 +16,7 @@ import lombok.NoArgsConstructor;
 public class Rol {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer idRol;
+    private Integer id;
 
     @Column(nullable = false, length = 100)
     private String nombre;

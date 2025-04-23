@@ -5,9 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
 import java.util.Date;
-import java.util.Set;
 
 @Data
 @AllArgsConstructor
@@ -18,7 +16,7 @@ import java.util.Set;
 public class Suscripcion {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer idSuscripcion;
+    private Integer id;
 
     @ManyToOne
     @JoinColumn(name = "idUsuario", nullable = false)

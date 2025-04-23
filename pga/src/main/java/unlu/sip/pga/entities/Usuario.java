@@ -5,8 +5,6 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
-import java.util.Date;
 import java.util.Set;
 
 @Data
@@ -18,7 +16,7 @@ import java.util.Set;
 public class Usuario {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer idUsuario;
+    private Integer id;
 
     @Column(length = 50, nullable = false)
     private String nombre;
