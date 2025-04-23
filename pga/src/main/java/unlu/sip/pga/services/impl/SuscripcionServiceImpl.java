@@ -14,7 +14,7 @@ public class SuscripcionServiceImpl implements SuscripcionService {
     @Autowired private SuscripcionRepository suscripcionRepository;
     public Suscripcion crearSuscripcion(Suscripcion s) { return suscripcionRepository.save(s); }
     public Optional<Suscripcion> obtenerSuscripcionPorId(Integer id) { return suscripcionRepository.findById(id); }
-    public List<Suscripcion> listarSuscripcionesPorUsuario(Integer usuarioId) { return suscripcionRepository.findByUsuarioId(usuarioId); }
+    public List<Suscripcion> listarSuscripcionesPorUsuario(Integer idUsuario) { return suscripcionRepository.findByUsuarioId(idUsuario); }
     public Suscripcion actualizarSuscripcion(Suscripcion s) { return suscripcionRepository.save(s); }
     public void eliminarSuscripcion(Integer id) { suscripcionRepository.deleteById(id); }
 }

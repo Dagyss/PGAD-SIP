@@ -18,9 +18,9 @@ public class ProgresoController {
 
     @GetMapping
     public List<ProgresoDTO> listar(
-            @RequestParam(required=false) Integer usuarioId,
+            @RequestParam(required=false) Integer idUsuario,
             @RequestParam(required=false) Integer cursoId) {
-        return progresoService.listarProgresosPorUsuarioCurso(usuarioId, cursoId).stream()
+        return progresoService.listarProgresosPorUsuarioCurso(idUsuario, cursoId).stream()
                 .map(progresoMapper::toDto)
                 .collect(Collectors.toList());
     }

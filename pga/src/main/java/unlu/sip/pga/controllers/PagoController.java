@@ -25,10 +25,10 @@ public class PagoController {
 
 
     @GetMapping
-    public List<PagoDTO> listar(@RequestParam(required = false) Integer usuarioId) {
-        return (usuarioId == null
+    public List<PagoDTO> listar(@RequestParam(required = false) Integer idUsuario) {
+        return (idUsuario == null
                 ? pagoService.listarPagos()
-                : pagoService.listarPagosPorUsuario(usuarioId)
+                : pagoService.listarPagosPorUsuario(idUsuario)
         ).stream()
                 .map(pagoMapper::toDto)
                 .collect(Collectors.toList());
@@ -46,7 +46,7 @@ public class PagoController {
 
     @PostMapping
     public ResponseEntity<PagoDTO> crear(@RequestBody PagoDTO dto) {
-        // dto debe incluir el campo usuarioId para la relación
+        // dto debe incluir el campo idUsuario para la relación
         PagoDTO creado = pagoMapper.toDto(
                 pagoService.crearPago(pagoMapper.toEntity(dto))
         );

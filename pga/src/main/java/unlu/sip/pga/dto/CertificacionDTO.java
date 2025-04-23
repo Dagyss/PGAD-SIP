@@ -8,7 +8,7 @@ import lombok.AllArgsConstructor;
 @Data @NoArgsConstructor @AllArgsConstructor
 public class CertificacionDTO {
     private Integer idCertificacion;
-    private Integer usuarioId;
+    private Integer idUsuario;
     private Integer cursoId;
     private Date fechaEmision;
 }

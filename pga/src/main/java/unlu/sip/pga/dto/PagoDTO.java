@@ -14,7 +14,7 @@ public class PagoDTO {
     private String dateApproved;
     private String moneyReleaseDate;
     private String status;
-    private String statusDetail;
-    private TransactionDetailsDTO transactionDetails;
-    private Integer usuarioId;
+    private String status_detail;
+    private TransactionDetailsDTO transaction_details;
+    private Integer idUsuario;
 }
