@@ -8,7 +8,6 @@ import lombok.AllArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class PagoDTO {
-    
     private String id;
     private String date_created;
     private String date_approved;
