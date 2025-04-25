@@ -40,7 +40,7 @@ public class PermisoController {
 
     @PutMapping("/{id}")
     public ResponseEntity<PermisoDTO> actualizar(@PathVariable Integer id, @RequestBody PermisoDTO dto) {
-        dto.setIdPermiso(id);
+        dto.setId(id);
         PermisoDTO actualizado = permisoMapper.toDto(
                 permisoService.actualizarPermiso(permisoMapper.toEntity(dto)));
         return ResponseEntity.ok(actualizado);

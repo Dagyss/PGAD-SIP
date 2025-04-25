@@ -41,7 +41,7 @@ public class ContenidoModuloController {
 
     @PutMapping("/{id}")
     public ResponseEntity<ContenidoModuloDTO> actualizar(@PathVariable Integer id, @RequestBody ContenidoModuloDTO dto) {
-        dto.setIdContenido(id);
+        dto.setId(id);
         ContenidoModuloDTO actualizado = contenidoMapper.toDto(
                 contenidoService.actualizarContenido(contenidoMapper.toEntity(dto)));
         return ResponseEntity.ok(actualizado);

@@ -41,7 +41,7 @@ public class CertificacionController {
 
     @PutMapping("/{id}")
     public ResponseEntity<CertificacionDTO> actualizar(@PathVariable Integer id, @RequestBody CertificacionDTO dto) {
-        dto.setIdCertificacion(id);
+        dto.setId(id);
         CertificacionDTO actualizado = certificacionMapper.toDto(
                 certificacionService.actualizarCertificacion(certificacionMapper.toEntity(dto)));
         return ResponseEntity.ok(actualizado);

@@ -58,7 +58,7 @@ public class PagoController {
             @PathVariable String paymentId,
             @RequestBody PagoDTO dto
     ) {
-        dto.setPayment_id(paymentId);
+        dto.setId(paymentId);
         PagoDTO actualizado = pagoMapper.toDto(
                 pagoService.actualizarPago(pagoMapper.toEntity(dto))
         );

@@ -5,5 +5,5 @@ import unlu.sip.pga.entities.Suscripcion;
 import java.util.List;
 
 public interface SuscripcionRepository extends JpaRepository<Suscripcion, Integer> {
-    List<Suscripcion> findByUsuario_IdUsuario(Integer idUsuario);
+    List<Suscripcion> findByUsuarioId(Integer idUsuario);
 }

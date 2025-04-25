@@ -41,7 +41,7 @@ public class SuscripcionController {
 
     @PutMapping("/{id}")
     public ResponseEntity<SuscripcionDTO> actualizar(@PathVariable Integer id, @RequestBody SuscripcionDTO dto) {
-        dto.setIdSuscripcion(id);
+        dto.setId(id);
         SuscripcionDTO actualizado = suscripcionMapper.toDto(
                 suscripcionService.actualizarSuscripcion(suscripcionMapper.toEntity(dto)));
         return ResponseEntity.ok(actualizado);

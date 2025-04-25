@@ -7,7 +7,7 @@ import lombok.AllArgsConstructor;
 
 @Data @NoArgsConstructor @AllArgsConstructor
 public class ProgresoDTO {
-    private Integer idProgreso;
+    private Integer id;
     private CursoDTO curso;
     private UsuarioDTO Usuario;
     private Float porcentajeCompletado;

@@ -17,7 +17,7 @@ import java.util.Date;
 public class Pago {
     @Id
     @Column(name = "payment_id", length = 100, nullable = false, unique = true)
-    private String paymentId;
+    private String id;
 
     @Column(name = "date_created", nullable = false)
     @Temporal(TemporalType.TIMESTAMP)

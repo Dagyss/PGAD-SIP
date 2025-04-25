@@ -6,7 +6,7 @@ import lombok.AllArgsConstructor;
 
 @Data @NoArgsConstructor @AllArgsConstructor
 public class ContenidoModuloDTO {
-    private Integer idContenido;
+    private Integer id;
     private ModuloDTO modulo;
     private String tipo;
     private String recurso;

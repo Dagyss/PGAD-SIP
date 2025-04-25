@@ -14,7 +14,7 @@ public class EjercicioServiceImpl implements EjercicioService {
     @Autowired private EjercicioRepository ejercicioRepository;
     public Ejercicio crearEjercicio(Ejercicio ejercicio) { return ejercicioRepository.save(ejercicio); }
     public Optional<Ejercicio> obtenerEjercicioPorId(Integer id) { return ejercicioRepository.findById(id); }
-    public List<Ejercicio> listarEjerciciosPorModulo(Integer moduloId) { return ejercicioRepository.findByModulo_IdModulo(moduloId); }
+    public List<Ejercicio> listarEjerciciosPorModulo(Integer moduloId) { return ejercicioRepository.findByModuloId(moduloId); }
     public Ejercicio actualizarEjercicio(Ejercicio ejercicio) { return ejercicioRepository.save(ejercicio); }
     public void eliminarEjercicio(Integer id) { ejercicioRepository.deleteById(id); }
 }

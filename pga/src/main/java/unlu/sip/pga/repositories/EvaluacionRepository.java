@@ -6,10 +6,10 @@ import java.util.List;
 
 public interface EvaluacionRepository extends JpaRepository<Evaluacion, Integer> {
     List<Evaluacion>
-    findByUsuario_IdUsuarioAndCurso_IdCurso(
+    findByUsuarioIdAndCursoId(
             Integer idUsuario,
             Integer idCurso
     );
 
-    List<Evaluacion> findByCurso_IdCurso(Integer idCurso);
+    List<Evaluacion> findByCursoId(Integer id);
 }

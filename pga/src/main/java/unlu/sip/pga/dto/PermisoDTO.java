@@ -9,7 +9,7 @@ import java.util.Set;
 
 @Data @NoArgsConstructor @AllArgsConstructor
 public class PermisoDTO {
-    private Integer idPermiso;
+    private Integer id;
     private String nombre;
     private Set<RolDTO> roles;
 }

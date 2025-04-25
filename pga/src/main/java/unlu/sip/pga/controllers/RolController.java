@@ -40,7 +40,7 @@ public class RolController {
 
     @PutMapping("/{id}")
     public ResponseEntity<RolDTO> actualizar(@PathVariable Integer id, @RequestBody RolDTO dto) {
-        dto.setIdRol(id);
+        dto.setId(id);
         RolDTO actualizado = rolMapper.toDto(
                 rolService.actualizarRol(rolMapper.toEntity(dto)));
         return ResponseEntity.ok(actualizado);

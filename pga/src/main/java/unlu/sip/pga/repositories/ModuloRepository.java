@@ -5,5 +5,5 @@ import unlu.sip.pga.entities.Modulo;
 import java.util.List;
 
 public interface ModuloRepository extends JpaRepository<Modulo, Integer> {
-     List<Modulo> findByCurso_IdCurso(Integer idCurso);
+     List<Modulo> findByCursoId(Integer id);
 }

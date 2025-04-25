@@ -10,7 +10,7 @@ import unlu.sip.pga.entities.Modulo;
 
 @Data @NoArgsConstructor @AllArgsConstructor
 public class CursoDTO {
-    private Integer idCurso;
+    private Integer id;
     private String titulo;
     private String descripcion;
     private Float duracion;

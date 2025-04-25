@@ -9,7 +9,7 @@ import lombok.AllArgsConstructor;
 @AllArgsConstructor
 public class PagoDTO {
     
-    private String payment_id;
+    private String id;
     private String date_created;
     private String date_approved;
     private String money_release_date;

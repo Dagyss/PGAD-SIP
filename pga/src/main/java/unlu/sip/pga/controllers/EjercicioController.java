@@ -41,7 +41,7 @@ public class EjercicioController {
 
     @PutMapping("/{id}")
     public ResponseEntity<EjercicioDTO> actualizar(@PathVariable Integer id, @RequestBody EjercicioDTO dto) {
-        dto.setIdEjercicio(id);
+        dto.setId(id);
         EjercicioDTO actualizado = ejercicioMapper.toDto(
                 ejercicioService.actualizarEjercicio(ejercicioMapper.toEntity(dto)));
         return ResponseEntity.ok(actualizado);

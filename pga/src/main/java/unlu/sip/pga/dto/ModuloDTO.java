@@ -8,7 +8,7 @@ import java.util.Set;
 
 @Data @NoArgsConstructor @AllArgsConstructor
 public class ModuloDTO {
-    private Integer idModulo;
+    private Integer id;
     private CursoDTO curso;
     private String titulo;
     private String descripcion;
