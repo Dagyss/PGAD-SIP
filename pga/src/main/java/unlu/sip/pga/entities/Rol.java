@@ -23,7 +23,7 @@ public class Rol {
     private String nombre;
 
     @Column(nullable = false, length = 15)
-    private String estado; // Activo/Inactivo
+    private Boolean estado; // Activo/Inactivo
 
     @ManyToMany(mappedBy = "roles")
     private Set<Usuario> usuarios;

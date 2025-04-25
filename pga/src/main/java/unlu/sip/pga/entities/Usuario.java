@@ -27,13 +27,13 @@ public class Usuario {
     private String correo;
 
     @Column(length = 100, nullable = false)
-    private String contraseña;
+    private String password;
 
     @Column(length = 10)
     private String tipoUsuario; // free/premium
 
     @Column
-    private Integer nivelConocimiento;
+    private String nivelConocimiento;
 
     @Column
     private Boolean estadoCuenta;

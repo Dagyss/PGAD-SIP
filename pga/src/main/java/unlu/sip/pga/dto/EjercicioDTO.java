@@ -8,7 +8,7 @@ import lombok.AllArgsConstructor;
 @Data @NoArgsConstructor @AllArgsConstructor
 public class EjercicioDTO {
     private Integer idEjercicio;
-    private Integer moduloId;
+    private ModuloDTO modulo;
     private String titulo;
     private String descripcion;
     private Integer dificultad;

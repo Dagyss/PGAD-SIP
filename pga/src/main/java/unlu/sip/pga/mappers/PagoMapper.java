@@ -13,9 +13,9 @@ public abstract class PagoMapper {
     @Autowired
     protected UsuarioService usuarioService;
 
-    @Mapping(target = "usuario", expression = "java(usuarioService.obtenerUsuarioPorId(dto.getIdUsuario()).orElse(null))")
+    @Mapping(target = "usuario", expression = "java(usuarioService.obtenerUsuarioPorId(dto.getUsuario().getIdUsuario()).orElse(null))")
     public abstract Pago toEntity(PagoDTO dto);
 
-    @Mapping(source = "usuario.idUsuario", target = "idUsuario")
+    @Mapping(source = "usuario", target = "usuario")
     public abstract PagoDTO toDto(Pago entity);
 }
