@@ -41,7 +41,7 @@ public class ModuloController {
 
     @PutMapping("/{id}")
     public ResponseEntity<ModuloDTO> actualizar(@PathVariable Integer id, @RequestBody ModuloDTO dto) {
-        dto.setIdModulo(id);
+        dto.setId(id);
         ModuloDTO actualizado = moduloMapper.toDto(
                 moduloService.actualizarModulo(moduloMapper.toEntity(dto)));
         return ResponseEntity.ok(actualizado);

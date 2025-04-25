@@ -5,5 +5,5 @@ import unlu.sip.pga.entities.ContenidoModulo;
 import java.util.List;
 
 public interface ContenidoModuloRepository extends JpaRepository<ContenidoModulo, Integer> {
-    List<ContenidoModulo> findByModulo_IdModulo(Integer idModulo);
+    List<ContenidoModulo> findByModuloId(Integer id);
 }

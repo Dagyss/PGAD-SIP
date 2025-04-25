@@ -14,7 +14,7 @@ public class ModuloServiceImpl implements ModuloService {
     @Autowired private ModuloRepository moduloRepository;
     public Modulo crearModulo(Modulo modulo) { return moduloRepository.save(modulo); }
     public Optional<Modulo> obtenerModuloPorId(Integer id) { return moduloRepository.findById(id); }
-    public List<Modulo> listarModulosPorCurso(Integer cursoId) { return moduloRepository.findByCurso_IdCurso(cursoId); }
+    public List<Modulo> listarModulosPorCurso(Integer cursoId) { return moduloRepository.findByCursoId(cursoId); }
     public Modulo actualizarModulo(Modulo modulo) { return moduloRepository.save(modulo); }
     public void eliminarModulo(Integer id) { moduloRepository.deleteById(id); }
 }

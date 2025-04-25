@@ -19,8 +19,8 @@ public class ProgresoController {
     @GetMapping
     public List<ProgresoDTO> listar(
             @RequestParam(required=false) Integer idUsuario,
-            @RequestParam(required=false) Integer cursoId) {
-        return progresoService.listarProgresosPorUsuarioCurso(idUsuario, cursoId).stream()
+            @RequestParam(required=false) Integer idCurso) {
+        return progresoService.listarProgresosPorUsuarioCurso(idUsuario, idCurso).stream()
                 .map(progresoMapper::toDto)
                 .collect(Collectors.toList());
     }
@@ -42,7 +42,7 @@ public class ProgresoController {
 
     @PutMapping("/{id}")
     public ResponseEntity<ProgresoDTO> actualizar(@PathVariable Integer id, @RequestBody ProgresoDTO dto) {
-        dto.setIdProgreso(id);
+        dto.setId(id);
         ProgresoDTO actualizado = progresoMapper.toDto(
                 progresoService.actualizarProgreso(progresoMapper.toEntity(dto)));
         return ResponseEntity.ok(actualizado);

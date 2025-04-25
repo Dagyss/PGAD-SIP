@@ -35,3 +35,6 @@ build/
 .env
 bin/
 logs/
+
+# Volumen de datos de Postgres
+pgdata/

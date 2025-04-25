@@ -13,14 +13,13 @@ import unlu.sip.pga.services.UsuarioService;
 @Named("pagoMapper")
 public abstract class PagoMapper {
     @Autowired
-    UsuarioService usuarioService;
-    
-    @Mapping(target = "usuario", source = "usuarioId", qualifiedByName = "mapUsuarioIdToUsuario")
+    protected UsuarioService usuarioService;
+
+    @Mapping(target = "usuario", expression = "java(usuarioService.obtenerUsuarioPorId(dto.getUsuario().getId()).orElse(null))")
     public abstract Pago toEntity(PagoDTO dto);
 
-    @Mapping(source = "usuario.id", target = "usuarioId")
+    @Mapping(source = "usuario", target = "usuario")
     public abstract PagoDTO toDto(Pago entity);
-
 
     @Named("mapUsuarioIdToUsuario")
     Usuario mapUsuarioIdToUsuario(Integer usuarioId) {

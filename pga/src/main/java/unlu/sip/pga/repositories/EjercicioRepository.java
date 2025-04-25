@@ -5,5 +5,5 @@ import unlu.sip.pga.entities.Ejercicio;
 import java.util.List;
 
 public interface EjercicioRepository extends JpaRepository<Ejercicio, Integer> {
-    List<Ejercicio> findByModulo_IdModulo(Integer idModulo);
+    List<Ejercicio> findByModuloId(Integer id);
 }

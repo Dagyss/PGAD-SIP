@@ -8,13 +8,12 @@ import lombok.AllArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class PagoDTO {
-    
-    private String paymentId;
-    private String dateCreated;
-    private String dateApproved;
-    private String moneyReleaseDate;
+    private String id;
+    private String date_created;
+    private String date_approved;
+    private String money_release_date;
     private String status;
-    private String statusDetail;
-    private TransactionDetailsDTO transactionDetails;
-    private Integer usuarioId;
+    private String status_detail;
+    private TransactionDetailsDTO transaction_details;
+    private UsuarioDTO usuario;
 }

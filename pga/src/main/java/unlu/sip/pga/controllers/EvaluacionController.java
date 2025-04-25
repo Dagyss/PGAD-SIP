@@ -41,7 +41,7 @@ public class EvaluacionController {
 
     @PutMapping("/{id}")
     public ResponseEntity<EvaluacionDTO> actualizar(@PathVariable Integer id, @RequestBody EvaluacionDTO dto) {
-        dto.setIdEvaluacion(id);
+        dto.setId(id);
         EvaluacionDTO actualizado = evaluacionMapper.toDto(
                 evaluacionService.actualizarEvaluacion(evaluacionMapper.toEntity(dto)));
         return ResponseEntity.ok(actualizado);

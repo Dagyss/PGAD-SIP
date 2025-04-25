@@ -16,7 +16,7 @@ import java.util.Date;
 @Table(name = "pago")
 public class Pago {
     @Id
-    @Column(length = 100, nullable = false, unique = true)
+    @Column(name = "payment_id", length = 100, nullable = false, unique = true)
     private String id;
 
     @Column(name = "date_created", nullable = false)
