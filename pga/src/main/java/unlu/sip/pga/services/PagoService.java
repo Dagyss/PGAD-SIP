@@ -8,7 +8,7 @@ public interface PagoService {
     Pago crearPago(Pago p);
     Optional<Pago> obtenerPagoPorId(String paymentId);
     List<Pago> listarPagos();
-    List<Pago> listarPagosPorUsuario(Integer idUsuario);
+    List<Pago> listarPagosPorUsuario(String idUsuario);
     Pago actualizarPago(Pago p);
     void eliminarPago(String paymentId);
 }

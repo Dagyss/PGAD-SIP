@@ -1,7 +1,9 @@
 package unlu.sip.pga.mappers;
 
 import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
 import org.mapstruct.factory.Mappers;
+import unlu.sip.pga.dto.Auth0UserDTO;
 import unlu.sip.pga.entities.Usuario;
 import unlu.sip.pga.dto.UsuarioDTO;
 
@@ -10,4 +12,10 @@ public interface UsuarioMapper {
     UsuarioMapper INSTANCE = Mappers.getMapper(UsuarioMapper.class);
     Usuario toEntity(UsuarioDTO dto);
     UsuarioDTO toDto(Usuario entity);
+
+    @Mapping(source = "userId",        target = "id")
+    @Mapping(source = "name",          target = "nombre")
+    @Mapping(source = "email",         target = "correo")
+    @Mapping(source = "emailVerified", target = "estadoCuenta")
+    Usuario fromAuth0(Auth0UserDTO auth0);
 }

@@ -14,7 +14,7 @@ public class CertificacionServiceImpl implements CertificacionService {
     @Autowired private CertificacionRepository certificacionRepository;
     public Certificacion crearCertificacion(Certificacion c) { return certificacionRepository.save(c); }
     public Optional<Certificacion> obtenerCertificacionPorId(Integer id) { return certificacionRepository.findById(id); }
-    public List<Certificacion> listarCertificacionesPorUsuario(Integer idUsuario) { return certificacionRepository.findByUsuarioId(idUsuario); }
+    public List<Certificacion> listarCertificacionesPorUsuario(String idUsuario) { return certificacionRepository.findByUsuarioId(idUsuario); }
     public Certificacion actualizarCertificacion(Certificacion c) { return certificacionRepository.save(c); }
     public void eliminarCertificacion(Integer id) { certificacionRepository.deleteById(id); }
 }

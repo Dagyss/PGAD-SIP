@@ -6,6 +6,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import java.util.Set;
+import java.util.UUID;
 
 @Data
 @AllArgsConstructor
@@ -15,17 +16,20 @@ import java.util.Set;
 @Table(name = "usuario")
 public class Usuario {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
+    private String id;
+
+    @PrePersist
+    public void prePersist() {
+        if (id == null) {
+            id = UUID.randomUUID().toString();
+        }
+    }
 
     @Column(length = 50, nullable = false)
     private String nombre;
 
     @Column(length = 50, nullable = false, unique = true)
     private String correo;
-
-    @Column(length = 100, nullable = false)
-    private String password;
 
     @Column(length = 10)
     private String tipoUsuario; // free/premium
