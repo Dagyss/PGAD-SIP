@@ -1,6 +1,7 @@
 package unlu.sip.pga.controllers;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import unlu.sip.pga.dto.UsuarioDTO;
@@ -24,7 +25,7 @@ public class UsuarioController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<UsuarioDTO> obtener(@PathVariable Integer id) {
+    public ResponseEntity<UsuarioDTO> obtener(@PathVariable String id) {
         return usuarioService.obtenerUsuarioPorId(id)
                 .map(usuarioMapper::toDto)
                 .map(ResponseEntity::ok)
@@ -39,7 +40,7 @@ public class UsuarioController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<UsuarioDTO> actualizar(@PathVariable Integer id, @RequestBody UsuarioDTO dto) {
+    public ResponseEntity<UsuarioDTO> actualizar(@PathVariable String id, @RequestBody UsuarioDTO dto) {
         dto.setId(id);
         UsuarioDTO actualizado = usuarioMapper.toDto(
                 usuarioService.actualizarUsuario(usuarioMapper.toEntity(dto)));
@@ -47,8 +48,20 @@ public class UsuarioController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> eliminar(@PathVariable Integer id) {
+    public ResponseEntity<Void> eliminar(@PathVariable String id) {
         usuarioService.eliminarUsuario(id);
         return ResponseEntity.noContent().build();
     }
+
+    @GetMapping("/sincronizar")
+    public ResponseEntity<?> sincronizarUsuarios() {
+        try {
+            usuarioService.syncAllUsuarios();
+            return ResponseEntity.ok("Sincronización completada");
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("Error sincronizando usuarios: " + e.getMessage());
+        }
+    }
+
 }

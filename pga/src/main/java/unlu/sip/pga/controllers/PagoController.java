@@ -25,7 +25,7 @@ public class PagoController {
 
 
     @GetMapping
-    public List<PagoDTO> listar(@RequestParam(required = false) Integer idUsuario) {
+    public List<PagoDTO> listar(@RequestParam(required = false) String idUsuario) {
         return (idUsuario == null
                 ? pagoService.listarPagos()
                 : pagoService.listarPagosPorUsuario(idUsuario)

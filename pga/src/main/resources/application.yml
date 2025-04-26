@@ -42,6 +42,10 @@ server:
       enabled: false
   port: ${PORT}
 
+auth0:
+  domain: ${TESTAPP_AUTH0_DOMAIN}
+  clientId: ${TESTAPP_AUTH0_CLIENT_ID}
+  clientSecret: ${TESTAPP_AUTH0_CLIENT_SECRET}
 
 okta:
   oauth2:

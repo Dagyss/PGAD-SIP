@@ -8,7 +8,7 @@ import java.util.Optional;
 public interface ProgresoService {
     Progreso crearProgreso(Progreso progreso);
     Optional<Progreso> obtenerProgresoPorId(Integer id);
-    List<Progreso> listarProgresosPorUsuarioCurso(Integer idUsuario, Integer cursoId);
+    List<Progreso> listarProgresosPorUsuarioCurso(String idUsuario, Integer cursoId);
     Progreso actualizarProgreso(Progreso progreso);
     void eliminarProgreso(Integer id);
 }
