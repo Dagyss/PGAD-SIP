@@ -31,8 +31,9 @@ public class Usuario {
     @Column(length = 50, nullable = false, unique = true)
     private String correo;
 
+    @OneToMany(mappedBy = "usuario")
     @Column(length = 10)
-    private String tipoUsuario; // free/premium
+    private Suscripcion tipoUsuario; // free/premium
 
     @Column
     private String nivelConocimiento;
