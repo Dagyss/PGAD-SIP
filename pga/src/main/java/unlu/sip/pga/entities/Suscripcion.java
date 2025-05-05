@@ -32,4 +32,7 @@ public class Suscripcion {
     @Column
     @Temporal(TemporalType.DATE)
     private Date fechaFin;
+
+    @Column
+    private float precio;
 }
