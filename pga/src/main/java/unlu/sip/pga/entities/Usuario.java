@@ -40,11 +40,4 @@ public class Usuario {
     @Column
     private Boolean estadoCuenta;
 
-    @ManyToMany
-    @JoinTable(
-            name = "usuario_rol",
-            joinColumns = @JoinColumn(name = "idUsuario"),
-            inverseJoinColumns = @JoinColumn(name = "idRol")
-    )
-    private Set<Rol> roles;
 }

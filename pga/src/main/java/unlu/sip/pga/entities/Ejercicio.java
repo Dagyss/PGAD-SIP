@@ -36,4 +36,6 @@ public class Ejercicio {
     @Column
     @Temporal(TemporalType.DATE)
     private Date fechaCreacion;
+
+
 }
