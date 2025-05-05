@@ -1,38 +1,29 @@
 package unlu.sip.pga.entities;
 
-import java.util.Date;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.Table;
-import jakarta.persistence.Temporal;
-import jakarta.persistence.TemporalType;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import java.util.Date;
 
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-@Table(name = "suscripcion")
+@Builder
 @Entity
+@Table(name = "suscripcion")
 public class Suscripcion {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
     @ManyToOne
-    @JoinColumn(name = "id", nullable = false)
+    @JoinColumn(name = "idUsuario", nullable = false)
     private Usuario usuario;
 
-    @ManyToOne
-    @JoinColumn(name = "id", nullable = false)
-    private TipoSuscripcion suscripcion;
+    @Column(length = 15)
+    private String tipoSuscripcion;
 
     @Column
     @Temporal(TemporalType.DATE)
@@ -42,4 +33,6 @@ public class Suscripcion {
     @Temporal(TemporalType.DATE)
     private Date fechaFin;
 
+    @Column
+    private float precio;
 }

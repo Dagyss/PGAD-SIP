@@ -13,8 +13,8 @@ spring:
             - ${OKTA_OAUTH2_AUDIENCE}
   datasource:
     url: jdbc:postgresql://pga-db:5432/pga
-    username: ${POSTGRES_USER}
-    password: ${POSTGRES_PASSWORD}
+    username: ${PG_USERNAME}
+    password: ${PG_PASSWORD}
     driver-class-name: org.postgresql.Driver
   jpa:
     hibernate:

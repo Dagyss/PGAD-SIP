@@ -3,6 +3,7 @@ package unlu.sip.pga.dto;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.AllArgsConstructor;
+import unlu.sip.pga.entities.Rol;
 
 import java.util.Set;
 
@@ -12,7 +13,7 @@ public class UsuarioDTO {
     private String nombre;
     private String correo;
     private String nivelConocimiento;
-    private SuscripcionDTO tipoUsuario;
+    private String tipoUsuario;
     private Boolean estadoCuenta;
     private Set<RolDTO> roles;
 }

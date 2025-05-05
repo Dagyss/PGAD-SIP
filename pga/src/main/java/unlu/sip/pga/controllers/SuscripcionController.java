@@ -3,10 +3,12 @@ package unlu.sip.pga.controllers;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
 import unlu.sip.pga.dto.SuscripcionDTO;
 import unlu.sip.pga.mappers.SuscripcionMapper;
 import unlu.sip.pga.services.SuscripcionService;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/suscripciones")
@@ -14,13 +16,13 @@ public class SuscripcionController {
     @Autowired private SuscripcionService suscripcionService;
     @Autowired private SuscripcionMapper suscripcionMapper;
 
-    // @GetMapping
-    // public List<TipoSuscripcionDTO> listar(@RequestParam(required=false) String idUsuario) {
-    //     return (idUsuario == null ? suscripcionService.listarSuscripcionesPorUsuario(null)
-    //             : suscripcionService.listarSuscripcionesPorUsuario(idUsuario)).stream()
-    //             .map(suscripcionMapper::toDto)
-    //             .collect(Collectors.toList());
-    // }
+    @GetMapping
+    public List<SuscripcionDTO> listar(@RequestParam(required=false) String idUsuario) {
+        return (idUsuario == null ? suscripcionService.listarSuscripcionesPorUsuario(null)
+                : suscripcionService.listarSuscripcionesPorUsuario(idUsuario)).stream()
+                .map(suscripcionMapper::toDto)
+                .collect(Collectors.toList());
+    }
 
     @GetMapping("/{id}")
     public ResponseEntity<SuscripcionDTO> obtener(@PathVariable Integer id) {

@@ -2,7 +2,6 @@ package unlu.sip.pga.mappers;
 
 import org.mapstruct.Mapper;
 import org.mapstruct.factory.Mappers;
-
 import unlu.sip.pga.entities.Suscripcion;
 import unlu.sip.pga.dto.SuscripcionDTO;
 
