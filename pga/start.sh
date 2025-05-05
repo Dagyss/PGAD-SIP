@@ -42,3 +42,4 @@ docker-compose up -d --build pga-backend
 
 # Verificación final
 echo -e "\n${GREEN}¡Aplicación desplegada correctamente!${NC}"
+echo -e "Accede a la aplicación en: http://localhost:${PORT}"

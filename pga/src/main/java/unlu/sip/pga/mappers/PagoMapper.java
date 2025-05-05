@@ -22,7 +22,7 @@ public abstract class PagoMapper {
     public abstract PagoDTO toDto(Pago entity);
 
     @Named("mapUsuarioIdToUsuario")
-    Usuario mapUsuarioIdToUsuario(String usuarioId) {
+    Usuario mapUsuarioIdToUsuario(Integer usuarioId) {
         return usuarioService.obtenerUsuarioPorId(usuarioId).orElse(null);
     }
 }

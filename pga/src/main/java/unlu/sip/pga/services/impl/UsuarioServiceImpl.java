@@ -11,6 +11,7 @@ import unlu.sip.pga.repositories.UsuarioRepository;
 import unlu.sip.pga.mappers.UsuarioMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -25,7 +26,6 @@ public class UsuarioServiceImpl implements UsuarioService {
     private UsuarioMapper usuarioMapper;
     @Autowired
     private ObjectMapper objectMapper;
-    
     @Value("${auth0.domain}")
     private String auth0Domain;
     @Value("${auth0.clientId}")

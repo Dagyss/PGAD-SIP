@@ -28,13 +28,13 @@ services:
     ports:
       - "5432:5432"
     volumes:
-      - ./data.sql:/docker-entrypoint-initdb.d/data.sql
-      - postgres-data:/var/lib/postgresql/data
+    - postgres-data:/var/lib/postgresql/data
     networks:
-      - pga-network
+    - pga-network
 
 volumes:
   postgres-data:
+    external: true
 
 networks:
   pga-network:
