@@ -5,8 +5,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import unlu.sip.pga.services.PaypalService;
-
-
 import java.util.Map;
 
 @CrossOrigin(origins = "http://localhost:5173")

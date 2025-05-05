@@ -3,6 +3,7 @@ package unlu.sip.pga;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.context.properties.ConfigurationPropertiesScan;
+import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 
 import io.github.cdimascio.dotenv.Dotenv;
 import lombok.extern.log4j.Log4j2;
@@ -12,6 +13,7 @@ import static java.util.Arrays.stream;
 @Log4j2
 @SpringBootApplication
 @ConfigurationPropertiesScan
+@EnableJpaRepositories(basePackages = "unlu.sip.pga.repositories")
 public class PgaApplication {
 
 	enum DotEnv {

@@ -12,6 +12,6 @@ public class UsuarioDTO {
     private String nombre;
     private String correo;
     private String nivelConocimiento;
-    private String tipoUsuario;
+    private SuscripcionDTO tipoUsuario;
     private Boolean estadoCuenta;
 }

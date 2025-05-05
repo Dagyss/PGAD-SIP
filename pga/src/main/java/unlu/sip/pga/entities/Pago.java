@@ -6,6 +6,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDateTime;
 import java.util.Date;
 
 @Data
@@ -19,13 +20,13 @@ public class Pago {
     @Column(name = "payment_id", length = 100, nullable = false, unique = true)
     private String id;
 
-    @Column(name = "date_created", nullable = false)
+    @Column(name = "date_time_created", nullable = false)
     @Temporal(TemporalType.TIMESTAMP)
-    private Date dateCreated;
+    private LocalDateTime dateTimeCreated;
 
-    @Column(name = "date_approved")
+    @Column(name = "date_time_approved")
     @Temporal(TemporalType.TIMESTAMP)
-    private Date dateApproved;
+    private LocalDateTime dateTimeApproved;
 
     @Column(name = "money_release_date")
     @Temporal(TemporalType.TIMESTAMP)
