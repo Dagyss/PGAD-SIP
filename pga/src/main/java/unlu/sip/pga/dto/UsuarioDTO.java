@@ -15,5 +15,4 @@ public class UsuarioDTO {
     private String nivelConocimiento;
     private String tipoUsuario;
     private Boolean estadoCuenta;
-    private Set<RolDTO> roles;
 }
