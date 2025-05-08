@@ -1,13 +1,11 @@
 package unlu.sip.pga.entities;
 
-
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import unlu.sip.pga.models.UsuarioSuscripcionId;
-
 import java.time.LocalDate;
 
 @Data
