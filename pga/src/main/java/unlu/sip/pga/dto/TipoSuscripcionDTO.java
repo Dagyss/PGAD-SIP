@@ -7,6 +7,6 @@ import lombok.AllArgsConstructor;
 @Data @NoArgsConstructor @AllArgsConstructor
 public class TipoSuscripcionDTO {
     private Integer id;
-    private UsuarioDTO usuario;
+    private float precio;
     private String tipoSuscripcion;
 }

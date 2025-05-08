@@ -27,11 +27,11 @@ public class Suscripcion {
     private Integer id;
 
     @ManyToOne
-    @JoinColumn(name = "id", nullable = false)
+    @JoinColumn(name = "idUsuario", nullable = false)
     private Usuario usuario;
 
     @ManyToOne
-    @JoinColumn(name = "id", nullable = false)
+    @JoinColumn(name = "idTipoSuscripcion", nullable = false)
     private TipoSuscripcion suscripcion;
 
     @Column

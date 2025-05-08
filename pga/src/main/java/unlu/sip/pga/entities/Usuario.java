@@ -5,6 +5,8 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
+import java.util.List;
 import java.util.Set;
 import java.util.UUID;
 
@@ -33,7 +35,7 @@ public class Usuario {
 
     @OneToMany(mappedBy = "usuario")
     @Column(length = 10)
-    private Suscripcion tipoUsuario; // free/premium
+    private List<Suscripcion> suscripciones; // free/premium
 
     @Column
     private String nivelConocimiento;
