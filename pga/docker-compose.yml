@@ -22,6 +22,7 @@ services:
 
 volumes:
   postgres-data:
+    external: true
 
 networks:
   pga-network:
