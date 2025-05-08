@@ -4,8 +4,6 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.AllArgsConstructor;
 
-import java.util.Set;
-
 @Data @NoArgsConstructor @AllArgsConstructor
 public class UsuarioDTO {
     private String id;
@@ -14,5 +12,4 @@ public class UsuarioDTO {
     private String nivelConocimiento;
     private SuscripcionDTO tipoUsuario;
     private Boolean estadoCuenta;
-    private Set<RolDTO> roles;
 }
