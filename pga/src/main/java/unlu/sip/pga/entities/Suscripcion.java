@@ -22,8 +22,9 @@ public class Suscripcion {
     @JoinColumn(name = "idUsuario", nullable = false)
     private Usuario usuario;
 
-    @Column(length = 15)
-    private String tipoSuscripcion;
+    @ManyToOne
+    @JoinColumn(name = "idTipoSuscripcion", nullable = false)
+    private TipoSuscripcion suscripcion;
 
     @Column
     @Temporal(TemporalType.DATE)
@@ -32,7 +33,4 @@ public class Suscripcion {
     @Column
     @Temporal(TemporalType.DATE)
     private Date fechaFin;
-
-    @Column
-    private float precio;
 }
