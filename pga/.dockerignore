@@ -1,0 +1,6 @@
+#ignora todo
+**
+#incluye solo esto
+!target/plataforma-aprendizaje-ai-1.0-SNAPSHOT.jar
+!Dockerfile
+!.env

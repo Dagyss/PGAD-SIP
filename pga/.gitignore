@@ -38,3 +38,5 @@ logs/
 
 # Volumen de datos de Postgres
 pgdata/
+
+.last_jar_hash
