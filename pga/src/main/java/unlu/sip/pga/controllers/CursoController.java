@@ -5,7 +5,6 @@ import org.springframework.web.bind.annotation.*;
 import unlu.sip.pga.dto.CursoDTO;
 import unlu.sip.pga.mappers.CursoMapper;
 import unlu.sip.pga.services.CursoService;
-
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -32,9 +31,13 @@ public class CursoController {
 
     @PostMapping
     public ResponseEntity<CursoDTO> crear(@RequestBody CursoDTO dto) {
-        CursoDTO creado = cursoMapper.toDto(
+        System.out.println(dto.getTitulo());
+        System.out.println(dto.getDescripcion());
+        System.out.println(dto.getDuracion());
+        System.out.println(dto.getNivel());
+        CursoDTO curso = cursoMapper.toDto(
                 cursoService.crearCurso(cursoMapper.toEntity(dto)));
-        return ResponseEntity.ok(creado);
+        return ResponseEntity.ok(curso);
     }
 
     @PutMapping("/{id}")
