@@ -5,7 +5,6 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
 import java.util.Date;
 import java.util.Set;
 
@@ -27,7 +26,7 @@ public class Curso {
     private String descripcion;
 
     @Column
-    private Float duracion; // en horas
+    private String duracion;
 
     @Column(length = 15)
     private String nivel;
