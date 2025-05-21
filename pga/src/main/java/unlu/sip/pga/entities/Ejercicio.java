@@ -37,7 +37,7 @@ public class Ejercicio {
     @Temporal(TemporalType.DATE)
     private Date fechaCreacion;
 
-    @ManyToMany(cascade = { CascadeType.PERSIST, CascadeType.MERGE })
+    @ManyToMany(cascade = { CascadeType.MERGE })
     @JoinTable(
             name = "ejercicio_categoria",
             joinColumns = @JoinColumn(name = "ejercicio_id"),

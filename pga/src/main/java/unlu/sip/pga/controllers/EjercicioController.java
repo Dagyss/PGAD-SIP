@@ -10,6 +10,7 @@ import unlu.sip.pga.mappers.EjercicioMapper;
 import unlu.sip.pga.services.EjercicioService;
 
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 @RestController
@@ -36,12 +37,14 @@ public class EjercicioController {
     }
 
     @PostMapping("/generate")
-    public ResponseEntity<EjercicioDTO> generar(@RequestBody GenerateEjercicioRequestDTO req) {
+    public ResponseEntity<?> generar(@RequestBody GenerateEjercicioRequestDTO req) {
         try {
             EjercicioDTO dto = ejercicioService.generarEjercicio(req);
             return ResponseEntity.ok(dto);
         } catch(Exception e) {
-            return ResponseEntity.badRequest().body(null);
+            e.printStackTrace();
+            return ResponseEntity.badRequest()
+                    .body(Map.of("error", e.getMessage()));
         }
     }
 

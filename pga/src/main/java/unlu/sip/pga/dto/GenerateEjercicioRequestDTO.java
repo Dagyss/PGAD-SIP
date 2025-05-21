@@ -1,6 +1,8 @@
+// 1. DTO para petición de generación
 package unlu.sip.pga.dto;
 
-import java.util.Set;
+import java.util.Date;
+import java.util.List;
 import lombok.*;
 
 @Data
@@ -9,5 +11,6 @@ import lombok.*;
 public class GenerateEjercicioRequestDTO {
     private Integer moduloId;
     private Integer dificultad;
-    private Set<Integer> categoriaIds;
+    private List<Integer> categoriaIds;
 }
+
