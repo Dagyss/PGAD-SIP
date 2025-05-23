@@ -42,7 +42,7 @@ ensure_volume_exists "ollama-data"
 
 # Limpiar ambiente previo
 echo -e "${YELLOW}Limpiando ambiente previo...${NC}"
-#docker-compose down -v
+docker-compose down -v
 docker-compose stop pga-backend
 
 # Construir proyecto

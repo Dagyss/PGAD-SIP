@@ -1,5 +1,6 @@
 package unlu.sip.pga.dto;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.AllArgsConstructor;
@@ -13,6 +14,8 @@ public class ModuloDTO {
     private String titulo;
     private String descripcion;
     private Integer orden;
+    @JsonIgnore
     private Set<ContenidoModuloDTO> contenidos;
+    @JsonIgnore
     private Set<EjercicioDTO> ejercicios;
 }

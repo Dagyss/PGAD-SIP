@@ -29,20 +29,43 @@ public class EjercicioServiceImpl implements EjercicioService {
     @Override
     @Transactional
     public EjercicioDTO generarEjercicio(GenerateEjercicioRequestDTO req) throws Exception {
+        List<String> catNombres = req.getCategoriaIds().stream()
+                .map(id -> categoriaRepo.findById(id)
+                        .orElseThrow(() -> new IllegalArgumentException("Categoría no encontrada: " + id))
+                        .getNombre()
+                )
+                .toList();
         // Construir prompt para el modelo
         String prompt = String.format(
-                "Genera un ejercicio de dificultad %d para el módulo %d y categorías %s.\n" +
-                        "Limitandote a un maximo de 1000 caracteres.\n",
+                "Eres un generador de ejercicios formativos para una plataforma educativa.\n" +
+                        "**IMPORTANTE**: Responde **única y exclusivamente** con un objeto JSON válido y nada más.\n" +
+                        "- El objeto JSON debe tener exactamente dos campos: \"titulo\" (String) y \"descripcion\" (String).\n" +
+                        "- No incluyas comillas tipográficas, ni símbolos extra, ni texto explicativo.\n" +
+                        "- Tu respuesta debe ajustarse al siguiente formato de ejemplo:\n" +
+                        "{\"titulo\":\"Aquí va el título\",\"descripcion\":\"Aquí va la descripción\"}\n\n" +
+                        "Ahora, genera un ejercicio de dificultad %d para el módulo %d y las categorías %s.\n" +
+                        "Límite: máximo 1000 caracteres en el campo \"descripcion\".\n",
                 req.getDificultad(),
                 req.getModuloId(),
-                req.getCategoriaIds().toString()
+                catNombres
         );
 
-        String respuesta = llama.generarTextoEjercicio(prompt);
+        String respuestaRaw = llama.generarTextoEjercicio(prompt);
+
+        System.out.println("RAW Llama response: «" + respuestaRaw + "»");
+
+        // Saneamiento
+
+        String raw = respuestaRaw.trim();
+        int start = raw.indexOf('{');
+        int end   = raw.lastIndexOf('}');
+        if (start < 0 || end < 0 || start > end) {
+            throw new RuntimeException("Respuesta de Llama no contiene un objeto JSON válido: «" + raw + "»");
+        }
+        String json = raw.substring(start, end + 1);
 
         // Parsear JSON de respuesta
-        ObjectMapper om = new ObjectMapper();
-        JsonNode node = om.readTree(respuesta);
+        JsonNode node = new ObjectMapper().readTree(json);
         String titulo = node.get("titulo").asText();
         String descripcion = node.get("descripcion").asText();
 

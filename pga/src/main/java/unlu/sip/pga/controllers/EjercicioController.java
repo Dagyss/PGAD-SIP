@@ -9,6 +9,7 @@ import unlu.sip.pga.dto.GenerateEjercicioRequestDTO;
 import unlu.sip.pga.mappers.EjercicioMapper;
 import unlu.sip.pga.services.EjercicioService;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -43,8 +44,14 @@ public class EjercicioController {
             return ResponseEntity.ok(dto);
         } catch(Exception e) {
             e.printStackTrace();
-            return ResponseEntity.badRequest()
-                    .body(Map.of("error", e.getMessage()));
+            Map<String,String> errorBody = new HashMap<>();
+            errorBody.put("error",
+                    e.getMessage() != null
+                            ? e.getMessage()
+                            : "Ocurrió un error inesperado al generar el ejercicio");
+            return ResponseEntity
+                    .badRequest()
+                    .body(errorBody);
         }
     }
 
