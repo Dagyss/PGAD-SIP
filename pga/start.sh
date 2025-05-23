@@ -17,12 +17,28 @@ check_command() {
     fi
 }
 
+# Función para verificar y crear volúmenes si no existen
+ensure_volume_exists() {
+    VOLUME_NAME=$1
+    if ! docker volume ls --format '{{.Name}}' | grep -q "^${VOLUME_NAME}$"; then
+        echo -e "${YELLOW}El volumen '${VOLUME_NAME}' no existe. Creándolo...${NC}"
+        docker volume create "$VOLUME_NAME" > /dev/null
+        echo -e "${GREEN}Volumen '${VOLUME_NAME}' creado.${NC}"
+    else
+        echo -e "${GREEN}Volumen '${VOLUME_NAME}' ya existe.${NC}"
+    fi
+}
+
 # Verificar dependencias
 echo -e "${YELLOW}Verificando dependencias...${NC}"
 check_command docker
 check_command docker-compose
 check_command mvn
 check_command sha256sum
+
+# Verificar volúmenes
+ensure_volume_exists "postgres-data"
+ensure_volume_exists "ollama-data"
 
 # Limpiar ambiente previo
 echo -e "${YELLOW}Limpiando ambiente previo...${NC}"
@@ -69,6 +85,9 @@ else
     echo -e "${GREEN}No hubo cambios en el JAR. Usando imagen del backend en caché.${NC}"
     docker-compose up -d pga-backend
 fi
+
+# Levantar servicio de Ollama
+docker-compose up -d ollama
 
 # Verificación final
 echo -e "\n${GREEN}¡Aplicación desplegada correctamente!${NC}"

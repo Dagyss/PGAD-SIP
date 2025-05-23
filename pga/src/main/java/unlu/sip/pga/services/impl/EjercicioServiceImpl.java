@@ -32,7 +32,7 @@ public class EjercicioServiceImpl implements EjercicioService {
         // Construir prompt para el modelo
         String prompt = String.format(
                 "Genera un ejercicio de dificultad %d para el módulo %d y categorías %s.\n" +
-                        "Debes responder en formato JSON con campos: titulo, descripcion.\n",
+                        "Limitandote a un maximo de 1000 caracteres.\n",
                 req.getDificultad(),
                 req.getModuloId(),
                 req.getCategoriaIds().toString()

@@ -1,0 +1,9 @@
+FROM ollama/ollama:latest
+
+RUN apt-get update && apt-get install -y curl
+
+COPY /model.sh /model.sh
+
+RUN chmod +x /model.sh
+
+ENTRYPOINT ["/model.sh"]

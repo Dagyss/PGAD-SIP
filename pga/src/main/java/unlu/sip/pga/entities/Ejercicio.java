@@ -27,7 +27,7 @@ public class Ejercicio {
     @Column(length = 100, nullable = false)
     private String titulo;
 
-    @Column(length = 200)
+    @Column(length = 1000)
     private String descripcion;
 
     @Column
