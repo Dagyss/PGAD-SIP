@@ -31,7 +31,7 @@ services:
     ports:
       - "11434:11434"
     volumes:
-      - ollama-data:/root/.ollama/data
+      - ollama-data:/root/.ollama
     networks:
       - pga-network
 
