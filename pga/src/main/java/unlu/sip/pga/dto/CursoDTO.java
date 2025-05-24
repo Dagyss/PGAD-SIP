@@ -11,7 +11,7 @@ public class CursoDTO {
     private Integer id;
     private String titulo;
     private String descripcion;
-    private Float duracion;
+    private String duracion;
     private String nivel;
     private Date fechaInicio;
     private Float calificacion;
