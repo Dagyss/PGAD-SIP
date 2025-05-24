@@ -1,6 +1,8 @@
 package unlu.sip.pga.dto;
 
 import java.util.Date;
+import java.util.Set;
+
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.AllArgsConstructor;
@@ -13,4 +15,5 @@ public class EjercicioDTO {
     private String descripcion;
     private Integer dificultad;
     private Date fechaCreacion;
+    private Set<CategoriaDTO> categorias;
 }

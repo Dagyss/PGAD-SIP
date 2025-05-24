@@ -1,20 +1,25 @@
 package unlu.sip.pga.controllers;
 
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import unlu.sip.pga.dto.EjercicioDTO;
+import unlu.sip.pga.dto.GenerateEjercicioRequestDTO;
 import unlu.sip.pga.mappers.EjercicioMapper;
 import unlu.sip.pga.services.EjercicioService;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/ejercicios")
+@RequiredArgsConstructor
 public class EjercicioController {
-    @Autowired private EjercicioService ejercicioService;
-    @Autowired private EjercicioMapper ejercicioMapper;
+    private final EjercicioService ejercicioService;
+    private final EjercicioMapper ejercicioMapper;
 
     @GetMapping
     public List<EjercicioDTO> listar(@RequestParam(required=false) Integer moduloId) {
@@ -32,11 +37,22 @@ public class EjercicioController {
                 .orElse(ResponseEntity.notFound().build());
     }
 
-    @PostMapping
-    public ResponseEntity<EjercicioDTO> crear(@RequestBody EjercicioDTO dto) {
-        EjercicioDTO creado = ejercicioMapper.toDto(
-                ejercicioService.crearEjercicio(ejercicioMapper.toEntity(dto)));
-        return ResponseEntity.ok(creado);
+    @PostMapping("/generate")
+    public ResponseEntity<?> generar(@RequestBody GenerateEjercicioRequestDTO req) {
+        try {
+            EjercicioDTO dto = ejercicioService.generarEjercicio(req);
+            return ResponseEntity.ok(dto);
+        } catch(Exception e) {
+            e.printStackTrace();
+            Map<String,String> errorBody = new HashMap<>();
+            errorBody.put("error",
+                    e.getMessage() != null
+                            ? e.getMessage()
+                            : "Ocurrió un error inesperado al generar el ejercicio");
+            return ResponseEntity
+                    .badRequest()
+                    .body(errorBody);
+        }
     }
 
     @PutMapping("/{id}")

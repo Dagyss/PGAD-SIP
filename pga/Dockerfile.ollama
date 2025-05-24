@@ -1,0 +1,7 @@
+FROM ollama/ollama:latest
+
+COPY /model.sh /model.sh
+
+RUN chmod +x /model.sh
+
+ENTRYPOINT ["/model.sh"]

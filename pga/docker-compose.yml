@@ -21,8 +21,24 @@ services:
     networks:
       - pga-network
 
+  ollama:
+    build:
+      context: .
+      dockerfile: Dockerfile.ollama
+    image: pga-ollama-model
+    container_name: ollama
+    restart: unless-stopped
+    ports:
+      - "11434:11434"
+    volumes:
+      - ollama-data:/root/.ollama
+    networks:
+      - pga-network
+
 volumes:
   postgres-data:
+    external: true
+  ollama-data:
     external: true
 
 networks:

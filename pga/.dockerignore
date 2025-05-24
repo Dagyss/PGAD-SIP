@@ -4,3 +4,4 @@
 !target/plataforma-aprendizaje-ai-1.0-SNAPSHOT.jar
 !Dockerfile
 !.env
+!model.sh

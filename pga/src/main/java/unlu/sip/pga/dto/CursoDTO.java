@@ -16,4 +16,5 @@ public class CursoDTO {
     private Date fechaInicio;
     private Float calificacion;
     private Set<ModuloDTO> modulos;
+    private Set<CategoriaDTO> categorias;
 }
