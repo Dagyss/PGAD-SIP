@@ -1,0 +1,31 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: pga-backend
+  namespace: pga-backend
+  labels:
+    app: pga-backend
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: pga-backend
+  template:
+    metadata:
+      labels:
+        app: pga-backend
+    spec:
+      containers:
+        - name: pga-backend
+          image: dagyss/pga-backend:latest
+          ports:
+            - containerPort: 6060
+          envFrom:
+            - secretRef:
+                name: pga-secrets
+          env:
+            - name: GEMINI_API_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: gemini-api-key
+                  key: GEMINI_API_KEY
