@@ -35,8 +35,8 @@ public class Ejercicio {
     @Column(length = 1000)
     private String descripcion;
 
-    @Column
-    private Integer dificultad;
+    @Column(length = 50)
+    private String dificultad;
 
     @Column
     @Temporal(TemporalType.DATE)

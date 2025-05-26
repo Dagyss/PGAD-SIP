@@ -10,7 +10,7 @@ import lombok.*;
 @AllArgsConstructor
 public class GenerateEjercicioRequestDTO {
     private Integer moduloId;
-    private Integer dificultad;
+    private String dificultad;
     private List<Integer> categoriaIds;
 }
 

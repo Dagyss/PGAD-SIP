@@ -13,7 +13,7 @@ public class EjercicioDTO {
     private ModuloDTO modulo;
     private String titulo;
     private String descripcion;
-    private Integer dificultad;
+    private String dificultad;
     private Date fechaCreacion;
     private Set<CategoriaDTO> categorias;
 }
