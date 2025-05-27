@@ -1,6 +1,16 @@
 FROM ollama/ollama:latest
 
-COPY /model.sh /model.sh
+RUN apt-get update && apt-get install -y curl
+
+# pull del modelo solo una vez y no cada vez que se ejecuta el script
+RUN ollama serve & \
+    sleep 3 && \
+    curl -s http://localhost:11434 && \
+    ollama pull tinyllama && \
+    #ollama pull mistral:7b-instruct && \
+    pkill ollama
+
+COPY model.sh /model.sh
 
 RUN chmod +x /model.sh
 
