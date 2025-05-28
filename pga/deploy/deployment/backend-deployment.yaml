@@ -15,6 +15,7 @@ spec:
       labels:
         app: pga-backend
     spec:
+      serviceAccountName: pga-sa
       containers:
         - name: pga-backend
           image: dagyss/pga-backend:latest
@@ -23,9 +24,8 @@ spec:
           envFrom:
             - secretRef:
                 name: pga-secrets
+            - configMapRef:
+                name: genai-config
           env:
-            - name: GEMINI_API_KEY
-              valueFrom:
-                secretKeyRef:
-                  name: gemini-api-key
-                  key: GEMINI_API_KEY
+            - name: SPRING_DATASOURCE_URL
+              value: jdbc:postgresql://pga-db-0.pga-db-headless.pga-db.svc.cluster.local:5432/${POSTGRES_DB}
