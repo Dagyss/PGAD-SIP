@@ -1,0 +1,42 @@
+name: Terraform Plan & Apply
+
+on:
+  workflow_dispatch:
+
+jobs:
+  terraform:
+    name: Plan & Apply
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: terraform
+
+    env:
+      # Inyecta las credenciales GCP
+      GOOGLE_CREDENTIALS: ${{ secrets.GCP_CREDENTIALS }}
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v3
+
+      - name: Setup Terraform CLI
+        uses: hashicorp/setup-terraform@v1
+        with:
+          terraform_version: latest
+
+      - name: Terraform Init
+        run: terraform init -backend-config="bucket=${{ secrets.TF_BACKEND_BUCKET }}" -backend-config="prefix=${{ secrets.TF_BACKEND_PREFIX }}"
+
+      - name: Terraform Plan
+        run: terraform plan -out=tfplan
+
+      - name: Upload Plan (PRs)
+        if: github.event_name == 'pull_request'
+        uses: actions/upload-artifact@v4
+        with:
+          name: tfplan
+          path: terraform/tfplan
+
+      - name: Terraform Apply (main)
+        if: github.event_name == 'push'
+        run: terraform apply -auto-approve tfplan
