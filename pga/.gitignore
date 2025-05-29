@@ -36,6 +36,11 @@ build/
 bin/
 logs/
 
+deploy/secrets/secrets-backend.yaml
+deploy/secrets/secrets-db.yaml
+terraform/*
+!terraform/main.tf
+!terraform/terraform.tfvars
 # Volumen de datos de Postgres
 pgdata/
 
