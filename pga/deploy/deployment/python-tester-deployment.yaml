@@ -1,0 +1,23 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: python-tester
+  namespace: pga-testers
+spec:
+  replicas: 0 # inicialmente 0, se levantan a demanda
+  selector:
+    matchLabels:
+      app: python-tester
+  template:
+    metadata:
+      labels:
+        app: python-tester
+    spec:
+      containers:
+      - name: python-tester
+        image: bautista222221/python-tester:latest
+        env:
+          - name: RABBITMQ_HOST
+            value: "rabbitmq"  # nombre del servicio RabbitMQ
+          - name: REDIS_HOST
+            value: "redis"  # nombre del servicio Redis
