@@ -55,3 +55,6 @@ okta:
 logging:
   file:
     name: logs/app.log
+
+gemini:
+  apiKey: ${GEMINI_API_KEY}

@@ -1,0 +1,31 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: pga-backend
+  namespace: pga-backend
+  labels:
+    app: pga-backend
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: pga-backend
+  template:
+    metadata:
+      labels:
+        app: pga-backend
+    spec:
+      serviceAccountName: pga-sa
+      containers:
+        - name: pga-backend
+          image: dagyss/pga-backend:v1.0.2
+          ports:
+            - containerPort: 6060
+          envFrom:
+            - secretRef:
+                name: pga-secrets
+            - configMapRef:
+                name: genai-config
+          env:
+            - name: SPRING_DATASOURCE_URL
+              value: jdbc:postgresql://pga-db-0.pga-db-headless.pga-db.svc.cluster.local:5432/${POSTGRES_DB}

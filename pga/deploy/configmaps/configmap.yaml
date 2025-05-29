@@ -1,0 +1,11 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: genai-config
+  namespace: pga-backend
+  labels:
+    app: pga-backend
+data:
+  GOOGLE_CLOUD_PROJECT: ""
+  GOOGLE_CLOUD_LOCATION: ""
+  GOOGLE_GENAI_USE_VERTEXAI: "True"

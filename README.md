@@ -176,6 +176,6 @@ curl -X POST http://localhost:6060/api/usuarios \
 ```bash
 curl -X POST http://localhost:6060/api/ejercicios/generate \
   -H "Content-Type: application/json" \
-  -d '{"moduloId": 1, "dificultad": 3, "categoriaIds": [2, 3]}'
+  -d '{"moduloId": 1, "dificultad": Principiante, "categoriaIds": [2, 3]}'
 ```
 
