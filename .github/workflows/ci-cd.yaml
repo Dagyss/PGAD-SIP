@@ -27,6 +27,7 @@ jobs:
           password: ${{ secrets.DOCKER_PASSWORD }}
 
       - name: Build and Push Docker Image
+        working-directory: PGAD-SIP/pga
         run: |
           docker build -t $IMAGE_NAME:${{ steps.vars.outputs.TAG }} .
           docker push $IMAGE_NAME:${{ steps.vars.outputs.TAG }}
