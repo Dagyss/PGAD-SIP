@@ -29,7 +29,10 @@ jobs:
       - name: Build and Push Docker Image
         working-directory: pga/
         run: |
-          docker build -t $IMAGE_NAME:${{ steps.vars.outputs.TAG }} .
+          docker build \
+            -f Dockerfile.github \
+            --build-arg ENV_CONTENT="${{ secrets.DOTENV_FILE }}" \
+            -t $IMAGE_NAME:${{ steps.vars.outputs.TAG }} .
           docker push $IMAGE_NAME:${{ steps.vars.outputs.TAG }}
 
       - name: Update Kubernetes Manifests
