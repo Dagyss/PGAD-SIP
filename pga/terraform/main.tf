@@ -260,3 +260,15 @@ resource "local_file" "ssh_private_key_pem" {
   filename        = ".ssh/google_compute_engine"
   file_permission = "0600"
 }
+
+# IP estática externa
+resource "google_compute_address" "pga_backend_ip" {
+  name   = "${var.cluster_name}-backend-ip"
+  region = var.region
+  project = var.project_id
+}
+
+output "pga_backend_static_ip" {
+  description = "IP externa estática reservada para el servicio PGA-Backend"
+  value       = google_compute_address.pga_backend_ip.address
+}
