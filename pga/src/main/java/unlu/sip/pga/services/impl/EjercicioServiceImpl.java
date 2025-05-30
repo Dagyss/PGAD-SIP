@@ -49,7 +49,7 @@ public class EjercicioServiceImpl implements EjercicioService {
                 "- No incluyas comillas tipográficas, ni símbolos extra, ni texto explicativo.\n" +
                 "- Tu respuesta debe ajustarse al siguiente formato de ejemplo:\n" +
                 "{\"titulo\":\"Aquí va el título\",\"descripcion\":\"Aquí va la descripción\",\"tests\":[{\"entrada\":\"valor de entrada 1\",\"salidaEsperada\":\"resultado esperado 1\"},{\"entrada\":\"valor de entrada 2\",\"salidaEsperada\":\"resultado esperado 2\"}]}\n\n" +
-                "Ahora, genera un ejercicio de dificultad %s para el módulo %d y las categorías %s.\n" +
+                "Ahora, genera un ejercicio de dificultad %s para el módulo %s y las categorías %s.\n" +
                 "Límite: máximo 1000 caracteres en el campo \"descripcion\".\n",
                 req.getDificultad(),
                 moduloTitulo,

@@ -18,7 +18,8 @@ spec:
       serviceAccountName: pga-sa
       containers:
         - name: pga-backend
-          image: bautista222221/pga-backend:latest
+          image: bautista222221/pga-backend:1.2
+          imagePullPolicy: Always
           ports:
             - containerPort: 6060
           envFrom:

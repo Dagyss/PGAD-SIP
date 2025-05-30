@@ -22,8 +22,10 @@ public class TestEjercicio {
     private Ejercicio ejercicio;
 
     @Column(nullable = false, length = 200)
-    private String entrada;  // ejemplo: "2"
+    @EqualsAndHashCode.Include
+    private String entrada;
 
     @Column(nullable = false, length = 200)
-    private String salidaEsperada; // ejemplo: "4"
+    @EqualsAndHashCode.Include
+    private String salidaEsperada;
 }
