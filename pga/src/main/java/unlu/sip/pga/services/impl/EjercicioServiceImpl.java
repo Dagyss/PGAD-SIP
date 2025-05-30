@@ -2,6 +2,7 @@ package unlu.sip.pga.services.impl;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.core.type.TypeReference;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -35,20 +36,23 @@ public class EjercicioServiceImpl implements EjercicioService {
                         .getNombre()
                 )
                 .toList();
+
         // Construir prompt para el modelo
         String prompt = String.format(
                 "Eres un generador de ejercicios formativos para una plataforma educativa.\n" +
-                        "**IMPORTANTE**: Responde **única y exclusivamente** con un objeto JSON válido y nada más.\n" +
-                        "- El objeto JSON debe tener exactamente dos campos: \"titulo\" (String) y \"descripcion\" (String).\n" +
-                        "- No incluyas comillas tipográficas, ni símbolos extra, ni texto explicativo.\n" +
-                        "- Tu respuesta debe ajustarse al siguiente formato de ejemplo:\n" +
-                        "{\"titulo\":\"Aquí va el título\",\"descripcion\":\"Aquí va la descripción\"}\n\n" +
-                        "Ahora, genera un ejercicio de dificultad %s para el módulo %d y las categorías %s.\n" +
-                        "Límite: máximo 1000 caracteres en el campo \"descripcion\".\n",
+                "**IMPORTANTE**: Responde **única y exclusivamente** con un objeto JSON válido y nada más.\n" +
+                "- El objeto JSON debe tener exactamente tres campos: \"titulo\" (String), \"descripcion\" (String) y \"tests\" (Array de objetos).\n" +
+                "- Cada objeto en \"tests\" debe tener dos campos: \"entrada\" (String) y \"salidaEsperada\" (String).\n" +
+                "- No incluyas comillas tipográficas, ni símbolos extra, ni texto explicativo.\n" +
+                "- Tu respuesta debe ajustarse al siguiente formato de ejemplo:\n" +
+                "{\"titulo\":\"Aquí va el título\",\"descripcion\":\"Aquí va la descripción\",\"tests\":[{\"entrada\":\"valor de entrada 1\",\"salidaEsperada\":\"resultado esperado 1\"},{\"entrada\":\"valor de entrada 2\",\"salidaEsperada\":\"resultado esperado 2\"}]}\n\n" +
+                "Ahora, genera un ejercicio de dificultad %s para el módulo %d y las categorías %s.\n" +
+                "Límite: máximo 1000 caracteres en el campo \"descripcion\".\n",
                 req.getDificultad(),
                 req.getModuloId(),
                 catNombres
         );
+
 
         String respuestaRaw = llama.generarTextoEjercicio(prompt);
 
@@ -68,7 +72,11 @@ public class EjercicioServiceImpl implements EjercicioService {
         JsonNode node = new ObjectMapper().readTree(json);
         String titulo = node.get("titulo").asText();
         String descripcion = node.get("descripcion").asText();
-
+        ObjectMapper objectMapper = new ObjectMapper();
+        List<TestEjercicioDTO> testDTOs = objectMapper.readValue(
+                node.get("tests").toString(),
+                new TypeReference<List<TestEjercicioDTO>>() {}
+        );
         // Obtener entidad Modulo
         Modulo mod = moduloRepo.findById(req.getModuloId())
                 .orElseThrow(() -> new IllegalArgumentException("Módulo no encontrado"));
@@ -91,6 +99,21 @@ public class EjercicioServiceImpl implements EjercicioService {
 
         // Guardar y mapear
         Ejercicio saved = ejercicioRepository.save(entity);
+
+        Set<TestEjercicio> testEntities = testDTOs.stream()
+        .map(dto -> TestEjercicio.builder()
+                .entrada(dto.getEntrada())
+                .esperado(dto.getSalidaEsperada())
+                .ejercicio(entity)
+                .build())
+        .collect(Collectors.toSet());
+
+        // Asociarlos al ejercicio
+        entity.setTests(testEntities);
+
+        // Guardar la relación completa
+        ejercicioRepository.save(entity);
+
         return mapper.toDto(saved);
     }
     public Optional<Ejercicio> obtenerEjercicioPorId(Integer id) { return ejercicioRepository.findById(id); }

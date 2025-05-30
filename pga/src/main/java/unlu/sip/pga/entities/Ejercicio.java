@@ -49,4 +49,7 @@ public class Ejercicio {
             inverseJoinColumns = @JoinColumn(name = "categoria_id")
     )
     private Set<Categoria> categorias;
+
+    @OneToMany(mappedBy = "ejercicio", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Set<TestEjercicio> tests;
 }
