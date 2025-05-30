@@ -24,7 +24,7 @@ public class EjercicioServiceImpl implements EjercicioService {
     private final EjercicioRepository ejercicioRepository;
     private final ModuloRepository moduloRepo;
     private final CategoriaRepository categoriaRepo;
-    private final LlamaService llama;
+    private final GeminiService gemini;
     private final EjercicioMapper mapper;
     
     @Override
@@ -54,7 +54,7 @@ public class EjercicioServiceImpl implements EjercicioService {
         );
 
 
-        String respuestaRaw = llama.generarTextoEjercicio(prompt);
+        String respuestaRaw = gemini.generarTextoEjercicio(prompt);
 
         System.out.println("RAW IA response: «" + respuestaRaw + "»");
 

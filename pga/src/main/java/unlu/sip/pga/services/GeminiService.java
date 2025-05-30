@@ -1,5 +1,5 @@
 package unlu.sip.pga.services;
 
-public interface LlamaService {
+public interface GeminiService {
     String generarTextoEjercicio(String prompt) throws Exception;
 }

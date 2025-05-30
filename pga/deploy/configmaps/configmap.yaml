@@ -6,6 +6,6 @@ metadata:
   labels:
     app: pga-backend
 data:
-  GOOGLE_CLOUD_PROJECT: ""
-  GOOGLE_CLOUD_LOCATION: ""
+  GOOGLE_CLOUD_PROJECT: "pgad-sip"
+  GOOGLE_CLOUD_LOCATION: "us-central1"
   GOOGLE_GENAI_USE_VERTEXAI: "True"
