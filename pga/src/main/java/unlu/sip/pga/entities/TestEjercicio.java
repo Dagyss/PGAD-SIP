@@ -25,5 +25,5 @@ public class TestEjercicio {
     private String entrada;  // ejemplo: "2"
 
     @Column(nullable = false, length = 200)
-    private String esperado; // ejemplo: "4"
+    private String salidaEsperada; // ejemplo: "4"
 }

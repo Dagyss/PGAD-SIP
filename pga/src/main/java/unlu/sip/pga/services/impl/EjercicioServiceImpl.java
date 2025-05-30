@@ -37,6 +37,9 @@ public class EjercicioServiceImpl implements EjercicioService {
                 )
                 .toList();
 
+        String moduloTitulo = moduloRepo.findById(req.getModuloId())
+                .orElseThrow(() -> new IllegalArgumentException("Módulo no encontrado"))
+                .getTitulo();
         // Construir prompt para el modelo
         String prompt = String.format(
                 "Eres un generador de ejercicios formativos para una plataforma educativa.\n" +
@@ -49,7 +52,7 @@ public class EjercicioServiceImpl implements EjercicioService {
                 "Ahora, genera un ejercicio de dificultad %s para el módulo %d y las categorías %s.\n" +
                 "Límite: máximo 1000 caracteres en el campo \"descripcion\".\n",
                 req.getDificultad(),
-                req.getModuloId(),
+                moduloTitulo,
                 catNombres
         );
 
@@ -97,27 +100,46 @@ public class EjercicioServiceImpl implements EjercicioService {
                 .categorias(cats)
                 .build();
 
-        // Guardar y mapear
-        Ejercicio saved = ejercicioRepository.save(entity);
-
+        // Crear tests
         Set<TestEjercicio> testEntities = testDTOs.stream()
-        .map(dto -> TestEjercicio.builder()
+        .map(dto -> {
+                TestEjercicio test = TestEjercicio.builder()
                 .entrada(dto.getEntrada())
-                .esperado(dto.getSalidaEsperada())
-                .ejercicio(entity)
-                .build())
+                .salidaEsperada(dto.getSalidaEsperada())
+                .build();
+                test.setEjercicio(entity); // aseguramos que apunte al ejercicio
+                return test;
+        })
         .collect(Collectors.toSet());
 
-        // Asociarlos al ejercicio
+        // Asociar los tests al ejercicio
         entity.setTests(testEntities);
 
-        // Guardar la relación completa
-        ejercicioRepository.save(entity);
+        System.out.println("Cantidad de tests a guardar: " + entity.getTests().size());
+        entity.getTests().forEach(t -> System.out.println(t.getEntrada() + " -> " + t.getSalidaEsperada()));
 
+
+        // Guardar ejercicio con los tests ya asociados
+        Ejercicio saved = ejercicioRepository.save(entity);
+
+        // Mapear a DTO
         return mapper.toDto(saved);
+
     }
     public Optional<Ejercicio> obtenerEjercicioPorId(Integer id) { return ejercicioRepository.findById(id); }
     public List<Ejercicio> listarEjerciciosPorModulo(Integer moduloId) { return ejercicioRepository.findByModuloId(moduloId); }
     public Ejercicio actualizarEjercicio(Ejercicio ejercicio) { return ejercicioRepository.save(ejercicio); }
     public void eliminarEjercicio(Integer id) { ejercicioRepository.deleteById(id); }
+        public String obtenerTestsPorEjercicioId(Integer idEjercicio) throws Exception {
+                Ejercicio ejercicio = ejercicioRepository.findById(idEjercicio)
+                        .orElseThrow(() -> new IllegalArgumentException("Ejercicio no encontrado con ID: " + idEjercicio));
+                
+                Set<TestEjercicio> tests = ejercicio.getTests();
+                if (tests.isEmpty()) {
+                throw new IllegalArgumentException("No hay tests asociados al ejercicio con ID: " + idEjercicio);
+                }
+        
+                ObjectMapper mapper = new ObjectMapper();
+                return mapper.writeValueAsString(tests);
+        }
 }

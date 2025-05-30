@@ -34,6 +34,9 @@ public class CorregirEjercicioServiceImpl implements CorregirEjercicioService {
             throw new IllegalArgumentException("ID de ejercicio inválido");
         }
 
+        // Traer de la bd los tests bajo el id de ejercicio
+        String testsJson = ejercicioService.obtenerTestsPorEjercicioId(idEjercicio);
+
         Ejercicio ejercicio = ejercicioService.obtenerEjercicioPorId(idEjercicio)
                 .orElseThrow(() -> new IllegalArgumentException("Ejercicio no encontrado con ID: " + idEjercicio));
 
