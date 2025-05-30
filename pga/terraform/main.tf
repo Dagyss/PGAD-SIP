@@ -97,15 +97,6 @@ provider "google" {
   zone        = var.zone
 }
 
-resource "google_project_service" "container" {
-  service = "container.googleapis.com"
-}
-resource "google_project_service" "iam" {
-  service = "iam.googleapis.com"
-}
-resource "google_project_service" "iamcredentials" {
-  service = "iamcredentials.googleapis.com"
-}
 
 # VPC and Subnet
 resource "google_compute_network" "vpc" {
