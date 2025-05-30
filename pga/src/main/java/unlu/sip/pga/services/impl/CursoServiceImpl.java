@@ -106,11 +106,11 @@ public class CursoServiceImpl implements CursoService {
     @Override
     @Transactional(readOnly = true)
     public List<CursoDTO> listarCursos() {
-        // avoid N+1 by loading modules/exercises in batch if needed, or use a custom query
-        return cursoRepository.findAll().stream()
+        return cursoRepository.findAllWithModulesAndExercises().stream()
                 .map(cursoMapper::toDto)
                 .collect(Collectors.toList());
     }
+
 
 
     public Curso actualizarCurso(Curso curso) { return cursoRepository.save(curso); }
