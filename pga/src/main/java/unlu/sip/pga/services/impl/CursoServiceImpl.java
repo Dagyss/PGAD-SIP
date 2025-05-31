@@ -12,7 +12,7 @@ import unlu.sip.pga.entities.Curso;
 import unlu.sip.pga.entities.Modulo;
 import unlu.sip.pga.mappers.CursoMapper;
 import unlu.sip.pga.services.CursoService;
-import unlu.sip.pga.services.GeminiService;
+import unlu.sip.pga.services.LlamaService;
 import unlu.sip.pga.services.ModuloService;
 import unlu.sip.pga.services.EjercicioService;
 import java.util.*;
@@ -26,7 +26,7 @@ public class CursoServiceImpl implements CursoService {
     @Autowired private CursoRepository cursoRepository;
     @Autowired private ModuloService moduloService;
     @Autowired private EjercicioService ejercicioService;
-    @Autowired private GeminiService gemini;
+    @Autowired private LlamaService llama;
     @Autowired private CursoMapper cursoMapper;
     private final ObjectMapper mapper = new ObjectMapper();
     @Override
@@ -45,7 +45,9 @@ public class CursoServiceImpl implements CursoService {
                         .map(cats -> cats.stream().map(Categoria::getNombre).toList())
                         .orElse(Collections.emptyList())
         );
-        String rawResponse = gemini.generarTextoEjercicio(prompt);
+
+        String rawResponse = llama.generarTextoEjercicio(prompt);
+
         // Saneamiento de la respuesta IA: eliminar backticks, markdown, texto extra
         String trimmed = rawResponse.trim();
         // Si viene envuelto en code fences ```json

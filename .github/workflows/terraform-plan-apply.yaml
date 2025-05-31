@@ -1,17 +1,18 @@
-name: Terraform Destroy
+name: Terraform Plan & Apply
 
 on:
   workflow_dispatch:
 
 jobs:
-  destroy:
-    name: Destroy infrastructure
+  terraform:
+    name: Plan & Apply
     runs-on: ubuntu-latest
     defaults:
       run:
-        working-directory: terraform
+        working-directory: pga/terraform
 
     env:
+      # Inyecta las credenciales GCP
       GOOGLE_CREDENTIALS: ${{ secrets.GCP_CREDENTIALS }}
 
     steps:
@@ -26,5 +27,14 @@ jobs:
       - name: Terraform Init
         run: terraform init -backend-config="bucket=${{ secrets.TF_BACKEND_BUCKET }}" -backend-config="prefix=${{ secrets.TF_BACKEND_PREFIX }}"
 
-      - name: Terraform Destroy
-        run: terraform destroy -auto-approve
+      - name: Terraform Plan
+        run: terraform plan -out=tfplan
+
+      - name: Upload Plan (PRs)
+        uses: actions/upload-artifact@v4
+        with:
+          name: tfplan
+          path: terraform/tfplan
+
+      - name: Terraform Apply (main)
+        run: terraform apply -auto-approve tfplan

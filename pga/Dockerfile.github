@@ -1,0 +1,14 @@
+FROM openjdk:17
+
+WORKDIR /app
+
+ARG ENV_CONTENT
+
+RUN printf '%s\n' "$ENV_CONTENT" > .env
+
+
+COPY target/plataforma-aprendizaje-ai-1.0-SNAPSHOT.jar pga.jar
+
+EXPOSE 6060
+
+ENTRYPOINT ["java", "-jar", "pga.jar"]
