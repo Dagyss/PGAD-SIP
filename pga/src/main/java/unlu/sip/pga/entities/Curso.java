@@ -31,7 +31,7 @@ public class Curso {
     @Column(length = 200)
     private String descripcion;
 
-    @Column
+    @Column(length = 50)
     private String duracion;
 
     @Column(length = 15)
