@@ -46,15 +46,18 @@ public class EjercicioServiceImpl implements EjercicioService {
                 "**IMPORTANTE**: Responde **única y exclusivamente** con un objeto JSON válido y nada más.\n" +
                 "- El objeto JSON debe tener exactamente tres campos: \"titulo\" (String), \"descripcion\" (String) y \"tests\" (Array de objetos).\n" +
                 "- Cada objeto en \"tests\" debe tener dos campos: \"entrada\" (String) y \"salidaEsperada\" (String).\n" +
+                "- Si la función espera múltiples números como entrada, deben estar separados por comas (por ejemplo: \"3,5\" o \"10,-2,7\").\n" +
+                "- Si la entrada es un array (lista), debe expresarse como un array válido de Python (por ejemplo: \"[1, 2, 3]\").\n" +
                 "- No incluyas comillas tipográficas, ni símbolos extra, ni texto explicativo.\n" +
                 "- Tu respuesta debe ajustarse al siguiente formato de ejemplo:\n" +
-                "{\"titulo\":\"Aquí va el título\",\"descripcion\":\"Aquí va la descripción\",\"tests\":[{\"entrada\":\"valor de entrada 1\",\"salidaEsperada\":\"resultado esperado 1\"},{\"entrada\":\"valor de entrada 2\",\"salidaEsperada\":\"resultado esperado 2\"}]}\n\n" +
+                "{\"titulo\":\"Aquí va el título\",\"descripcion\":\"Aquí va la descripción\",\"tests\":[{\"entrada\":\"valor1,valor2\",\"salidaEsperada\":\"resultado1\"},{\"entrada\":\"[1,2,3]\",\"salidaEsperada\":\"resultado2\"}]}\n\n" +
                 "Ahora, genera un ejercicio de dificultad %s para el módulo %s y las categorías %s.\n" +
                 "Límite: máximo 1000 caracteres en el campo \"descripcion\".\n",
                 req.getDificultad(),
                 moduloTitulo,
                 catNombres
         );
+
 
 
         String respuestaRaw = gemini.generarTextoEjercicio(prompt);
