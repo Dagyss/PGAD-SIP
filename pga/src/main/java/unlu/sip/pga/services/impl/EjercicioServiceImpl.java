@@ -130,16 +130,21 @@ public class EjercicioServiceImpl implements EjercicioService {
     public List<Ejercicio> listarEjerciciosPorModulo(Integer moduloId) { return ejercicioRepository.findByModuloId(moduloId); }
     public Ejercicio actualizarEjercicio(Ejercicio ejercicio) { return ejercicioRepository.save(ejercicio); }
     public void eliminarEjercicio(Integer id) { ejercicioRepository.deleteById(id); }
-        public String obtenerTestsPorEjercicioId(Integer idEjercicio) throws Exception {
-                Ejercicio ejercicio = ejercicioRepository.findById(idEjercicio)
-                        .orElseThrow(() -> new IllegalArgumentException("Ejercicio no encontrado con ID: " + idEjercicio));
-                
-                Set<TestEjercicio> tests = ejercicio.getTests();
-                if (tests.isEmpty()) {
+    public String obtenerTestsPorEjercicioId(Integer idEjercicio) throws Exception {
+        Ejercicio ejercicio = ejercicioRepository.findById(idEjercicio)
+                .orElseThrow(() -> new IllegalArgumentException("Ejercicio no encontrado con ID: " + idEjercicio));
+
+        Set<TestEjercicio> tests = ejercicio.getTests();
+        if (tests.isEmpty()) {
                 throw new IllegalArgumentException("No hay tests asociados al ejercicio con ID: " + idEjercicio);
-                }
-        
-                ObjectMapper mapper = new ObjectMapper();
-                return mapper.writeValueAsString(tests);
+        }
+
+        // Convertir a DTOs planos
+        List<TestEjercicioDTO> testDtos = tests.stream()
+                .map(TestEjercicioDTO::new)
+                .toList();
+
+        ObjectMapper mapper = new ObjectMapper();
+        return mapper.writeValueAsString(testDtos);
         }
 }

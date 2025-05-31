@@ -29,46 +29,48 @@ public class CorregirEjercicioServiceImpl implements CorregirEjercicioService {
     public String enviarTarea(CodigoUsuarioDTO request) throws Exception {
         String taskId = UUID.randomUUID().toString();
 
-        Integer idEjercicio = request.getIdEjercicio();
-        if (idEjercicio == null || idEjercicio <= 0) {
-            throw new IllegalArgumentException("ID de ejercicio inválido");
-        }
+        Ejercicio ejercicio = ejercicioService.obtenerEjercicioPorId(request.getIdEjercicio())
+                .orElseThrow(() -> new IllegalArgumentException("Ejercicio no encontrado"));
 
-        // Traer de la bd los tests bajo el id de ejercicio
-        String testsJson = ejercicioService.obtenerTestsPorEjercicioId(idEjercicio);
-
-        Ejercicio ejercicio = ejercicioService.obtenerEjercicioPorId(idEjercicio)
-                .orElseThrow(() -> new IllegalArgumentException("Ejercicio no encontrado con ID: " + idEjercicio));
-
-        String categoria = ejercicio.getCategorias().stream()
-                .map(c -> c.getNombre())
+        String lenguaje = ejercicio.getCategorias().stream()
+                .map(c -> c.getNombre().toLowerCase())
                 .findFirst()
-                .orElse("Sin categoría");
+                .orElse("python");
 
-        String mensaje = request.getCodigo();
-        String qName = "python_tests";
-        if (!"python".equalsIgnoreCase(categoria)) {
-            qName = "java_tests";
-        }
+        String queue = lenguaje.equals("java") ? "java_tests" : "python_tests";
+
+        // Armar mensaje con código y taskId
+        var payload = mapper.writeValueAsString(new Mensaje(request.getCodigo(), request.getIdEjercicio(), taskId));
 
         // Enviar a RabbitMQ
-        ConnectionFactory factory = new ConnectionFactory();
-        factory.setHost("rabbitmq");
-        try (Connection conn = factory.newConnection();
+        try (Connection conn = new ConnectionFactory() {{ setHost("rabbitmq"); }}.newConnection();
              Channel channel = conn.createChannel()) {
-            channel.queueDeclare(qName, false, false, false, null);
-            channel.basicPublish("", qName, null, mensaje.getBytes());
+            channel.queueDeclare(queue, false, false, false, null);
+            channel.basicPublish("", queue, null, payload.getBytes());
         }
 
         // Esperar resultado en Redis
         for (int i = 0; i < 50; i++) {
-            String resultado = redis.opsForValue().get(taskId);
-            if (resultado != null && !resultado.equals("running")) {
-                return resultado;
+            String result = redis.opsForValue().get(taskId);
+            if (result != null && !result.equalsIgnoreCase("running")) {
+                return result;
             }
             Thread.sleep(100);
         }
 
         return "{\"success\":false,\"error\":\"Timeout esperando resultado\"}";
+    }
+
+    // DTO interno simple
+    static class Mensaje {
+        public String codigo;
+        public Integer ejercicioId;
+        public String taskId;
+
+        public Mensaje(String codigo, Integer ejercicioId, String taskId) {
+            this.codigo = codigo;
+            this.ejercicioId = ejercicioId;
+            this.taskId = taskId;
+        }
     }
 }
