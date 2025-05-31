@@ -15,7 +15,7 @@ spec:
     spec:
       containers:
       - name: python-tester
-        image: bautista222221/python-tester:1.0
+        image: bautista222221/python-tester:1.4
         env:
           - name: RABBITMQ_HOST
             value: "rabbitmq"  # nombre del servicio RabbitMQ
