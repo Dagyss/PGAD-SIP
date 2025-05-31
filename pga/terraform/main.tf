@@ -92,21 +92,11 @@ variable "subnetwork" {
 
 # Provider
 provider "google" {
-  credentials = file(var.credentials_file)
   project     = var.project_id
   region      = var.region
   zone        = var.zone
 }
 
-resource "google_project_service" "container" {
-  service = "container.googleapis.com"
-}
-resource "google_project_service" "iam" {
-  service = "iam.googleapis.com"
-}
-resource "google_project_service" "iamcredentials" {
-  service = "iamcredentials.googleapis.com"
-}
 
 # VPC and Subnet
 resource "google_compute_network" "vpc" {
@@ -260,4 +250,16 @@ resource "local_file" "ssh_private_key_pem" {
   content         = tls_private_key.ssh_key.private_key_pem
   filename        = ".ssh/google_compute_engine"
   file_permission = "0600"
+}
+
+# IP estática externa
+resource "google_compute_address" "pga_backend_ip" {
+  name   = "${var.cluster_name}-backend-ip"
+  region = var.region
+  project = var.project_id
+}
+
+output "pga_backend_static_ip" {
+  description = "IP externa estática reservada para el servicio PGA-Backend"
+  value       = google_compute_address.pga_backend_ip.address
 }

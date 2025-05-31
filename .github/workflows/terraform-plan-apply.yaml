@@ -9,7 +9,7 @@ jobs:
     runs-on: ubuntu-latest
     defaults:
       run:
-        working-directory: terraform
+        working-directory: pga/terraform
 
     env:
       # Inyecta las credenciales GCP
@@ -31,12 +31,10 @@ jobs:
         run: terraform plan -out=tfplan
 
       - name: Upload Plan (PRs)
-        if: github.event_name == 'pull_request'
         uses: actions/upload-artifact@v4
         with:
           name: tfplan
           path: terraform/tfplan
 
       - name: Terraform Apply (main)
-        if: github.event_name == 'push'
         run: terraform apply -auto-approve tfplan
