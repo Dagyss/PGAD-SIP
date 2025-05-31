@@ -45,7 +45,9 @@ public class CursoServiceImpl implements CursoService {
                         .map(cats -> cats.stream().map(Categoria::getNombre).toList())
                         .orElse(Collections.emptyList())
         );
+
         String rawResponse = llama.generarTextoEjercicio(prompt);
+
         // Saneamiento de la respuesta IA: eliminar backticks, markdown, texto extra
         String trimmed = rawResponse.trim();
         // Si viene envuelto en code fences ```json

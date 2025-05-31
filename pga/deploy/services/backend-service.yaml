@@ -4,7 +4,8 @@ metadata:
   name: pga-backend
   namespace: pga-backend
 spec:
-  type: ClusterIP
+  type: LoadBalancer
+  loadBalancerIP: 34.10.144.139
   selector:
     app: pga-backend
   ports:
