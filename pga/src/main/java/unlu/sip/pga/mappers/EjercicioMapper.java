@@ -12,12 +12,9 @@ import unlu.sip.pga.mappers.ModuloMapper;
         uses = { ModuloMapper.class, CategoriaMapper.class }
 )
 public interface EjercicioMapper {
-    // Al mapear a DTO, delego en ModuloMapper, pero ignoro explícitamente sus colecciones:
-    @Mapping(target = "modulo.contenidos", ignore = true)
-    @Mapping(target = "modulo.ejercicios", ignore = true)
+    @Mapping(source = "modulo.id", target = "moduloId")
     EjercicioDTO toDto(Ejercicio entity);
 
     // Para toEntity, como antes
-    @Mapping(target = "modulo", ignore = true)
     Ejercicio toEntity(EjercicioDTO dto);
 }

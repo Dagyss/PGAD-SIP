@@ -11,11 +11,9 @@ public interface ModuloMapper {
     ModuloMapper INSTANCE = Mappers.getMapper(ModuloMapper.class);
 
     @Mapping(source = "curso.id", target = "cursoId")
-    @Mapping(target = "contenidos", ignore = true)
+
     ModuloDTO toDto(Modulo entity);
 
-    @Mapping(target = "curso", ignore = true)
-    @Mapping(target = "contenidos", ignore = true)
-    @Mapping(target = "ejercicios", ignore = true)
+
     Modulo toEntity(ModuloDTO dto);
 }

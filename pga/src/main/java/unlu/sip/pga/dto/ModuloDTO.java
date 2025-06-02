@@ -16,6 +16,5 @@ public class ModuloDTO {
     private Integer orden;
     @JsonIgnore
     private Set<ContenidoModuloDTO> contenidos;
-    @JsonIgnore
     private Set<EjercicioDTO> ejercicios;
 }

@@ -12,7 +12,7 @@ import unlu.sip.pga.entities.Curso;
 import unlu.sip.pga.entities.Modulo;
 import unlu.sip.pga.mappers.CursoMapper;
 import unlu.sip.pga.services.CursoService;
-import unlu.sip.pga.services.LlamaService;
+import unlu.sip.pga.services.GeminiService;
 import unlu.sip.pga.services.ModuloService;
 import unlu.sip.pga.services.EjercicioService;
 import java.util.*;
@@ -26,7 +26,7 @@ public class CursoServiceImpl implements CursoService {
     @Autowired private CursoRepository cursoRepository;
     @Autowired private ModuloService moduloService;
     @Autowired private EjercicioService ejercicioService;
-    @Autowired private LlamaService llama;
+    @Autowired private GeminiService gemini;
     @Autowired private CursoMapper cursoMapper;
     private final ObjectMapper mapper = new ObjectMapper();
     @Override
@@ -39,14 +39,14 @@ public class CursoServiceImpl implements CursoService {
         String prompt = String.format(
                 "**IMPORTANTE**: Responde única y exclusivamente con un objeto JSON válido y nada más. " +
                         "El objeto JSON debe tener exactamente dos campos por módulo: \"titulo\" (50 caracteres max) y \"descripcion\" (150 caracteres max). " +
-                        "Genera una serie de 3 titulos de módulos de dificultad %s que suban progresivamente para el curso %s y las categorías %s. y una minima descripcion",
+                        "Genera una serie de 3 titulos de módulos de dificultad %s que aumente progresivamente y no se repitan para el curso %s y las categorías %s. y una minima descripcion",
                 curso.getNivel(), cursoGuardado.getTitulo(),
                 Optional.ofNullable(cursoGuardado.getCategorias())
                         .map(cats -> cats.stream().map(Categoria::getNombre).toList())
                         .orElse(Collections.emptyList())
         );
 
-        String rawResponse = llama.generarTextoEjercicio(prompt);
+        String rawResponse = gemini.generarTextoEjercicio(prompt);
 
         // Saneamiento de la respuesta IA: eliminar backticks, markdown, texto extra
         String trimmed = rawResponse.trim();

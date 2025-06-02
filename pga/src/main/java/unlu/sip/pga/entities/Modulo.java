@@ -31,7 +31,7 @@ public class Modulo {
     @Column(length = 100, nullable = false)
     private String titulo;
 
-    @Column(length = 200)
+    @Column(length = 500)
     private String descripcion;
 
     @Column
