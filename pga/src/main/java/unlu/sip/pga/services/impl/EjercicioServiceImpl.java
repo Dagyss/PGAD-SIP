@@ -39,10 +39,11 @@ public class EjercicioServiceImpl implements EjercicioService {
                 .collect(Collectors.toSet());
 
         List<String> catNombres = req.getCategoriaIds().stream()
-                .map(id -> categoriaRepo.findById(id)
-                        .orElseThrow(() -> new IllegalArgumentException("Categoría no encontrada: " + id))
-                        .getNombre()
-                )
+                .map(id -> {
+                    Categoria c = categoriaRepo.findById(id)
+                            .orElseThrow(() -> new IllegalArgumentException("Categoría no encontrada: " + id));
+                    return c.getNombre() + " (" + c.getTipo().name().toLowerCase() + ")";
+                })
                 .toList();
 
         String moduloTitulo = moduloRepo.findById(moduloId)
