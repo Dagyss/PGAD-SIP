@@ -89,5 +89,35 @@ public class UsuarioServiceImpl implements UsuarioService {
         return usuarioMapper.fromAuth0(auth0dto);
     }
 
+    @Override
+    public Usuario syncUsuarioPorId(String auth0Id) {
+        // 1) Obtengo el token de Auth0 Management API
+        String token = obtenerTokenManagementApi();
 
+        // 2) Preparo headers con Bearer token
+        HttpHeaders headers = new HttpHeaders();
+        headers.setBearerAuth(token);
+        HttpEntity<Void> entity = new HttpEntity<>(headers);
+
+        // 3) Construyo la URL para traer el user puntual
+        String url = String.format("https://%s/api/v2/users/%s", auth0Domain, auth0Id);
+
+        // 4) Hago la llamada GET y espero un Map (JSON -> Map)
+        ResponseEntity<Map> response = restTemplate.exchange(url, HttpMethod.GET, entity, Map.class);
+
+        // 5) Si no está el body o viene vacío, lanzo excepción
+        Map userMap = response.getBody();
+        if (userMap == null || userMap.isEmpty()) {
+            throw new RuntimeException("No se encontró el usuario en Auth0 o la respuesta fue vacía");
+        }
+
+        // 6) Mapeo el Map a Auth0UserDTO usando ObjectMapper
+        Auth0UserDTO auth0dto = objectMapper.convertValue(userMap, Auth0UserDTO.class);
+
+        // 7) Convierto el DTO a mi entidad Usuario
+        Usuario u = usuarioMapper.fromAuth0(auth0dto);
+
+        // 8) Guardo en la base local y devuelvo el Usuario guardado
+        return usuarioRepository.save(u);
+    }
 }

@@ -17,4 +17,5 @@ public interface UsuarioService {
     void syncAllUsuarios();
     String obtenerTokenManagementApi();
     Usuario mapearUsuarioAuth0aEntidad(Map userMap);
+    Usuario syncUsuarioPorId(String auth0Id) throws RuntimeException;
 }
