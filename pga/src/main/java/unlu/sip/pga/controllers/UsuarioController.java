@@ -5,6 +5,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import unlu.sip.pga.dto.UsuarioDTO;
+import unlu.sip.pga.entities.Usuario;
 import unlu.sip.pga.mappers.UsuarioMapper;
 import unlu.sip.pga.services.UsuarioService;
 
@@ -64,4 +65,20 @@ public class UsuarioController {
         }
     }
 
+    @GetMapping("/sincronizar/{auth0Id}")
+    public ResponseEntity<?> syncUsuarioPorId(@PathVariable String auth0Id) {
+        try {
+            Usuario u = usuarioService.syncUsuarioPorId(auth0Id);
+            UsuarioDTO dto = usuarioMapper.toDto(u);
+            return ResponseEntity.ok(dto);
+        } catch (RuntimeException ex) {
+            String msg = ex.getMessage();
+            if (msg != null && msg.toLowerCase().contains("404")) {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                        .body("Usuario Auth0 no encontrado: " + auth0Id);
+            }
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("Error sincronizando usuario: " + ex.getMessage());
+        }
+    }
 }

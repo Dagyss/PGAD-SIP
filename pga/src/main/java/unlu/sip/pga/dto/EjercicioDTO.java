@@ -10,7 +10,7 @@ import lombok.AllArgsConstructor;
 @Data @NoArgsConstructor @AllArgsConstructor
 public class EjercicioDTO {
     private Integer id;
-    private ModuloDTO modulo;
+    private Integer moduloId;
     private String titulo;
     private String descripcion;
     private String dificultad;

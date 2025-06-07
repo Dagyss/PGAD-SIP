@@ -30,35 +30,64 @@ public class EjercicioServiceImpl implements EjercicioService {
     @Override
     @Transactional
     public EjercicioDTO generarEjercicio(GenerateEjercicioRequestDTO req) throws Exception {
+        Integer moduloId = req.getModuloId();
+        String dificultad = req.getDificultad();
+
+        List<Ejercicio> ejerciciosExistentes = ejercicioRepository.findByModuloId(moduloId);
+        Set<String> titulosExistentes = ejerciciosExistentes.stream()
+                .map(e -> e.getTitulo().trim().toLowerCase())
+                .collect(Collectors.toSet());
+
         List<String> catNombres = req.getCategoriaIds().stream()
-                .map(id -> categoriaRepo.findById(id)
-                        .orElseThrow(() -> new IllegalArgumentException("Categoría no encontrada: " + id))
-                        .getNombre()
-                )
+                .map(id -> {
+                    Categoria c = categoriaRepo.findById(id)
+                            .orElseThrow(() -> new IllegalArgumentException("Categoría no encontrada: " + id));
+                    return c.getNombre() + " (" + c.getTipo().name().toLowerCase() + ")";
+                })
                 .toList();
 
-        String moduloTitulo = moduloRepo.findById(req.getModuloId())
+        String moduloTitulo = moduloRepo.findById(moduloId)
                 .orElseThrow(() -> new IllegalArgumentException("Módulo no encontrado"))
                 .getTitulo();
-        // Construir prompt para el modelo
+
+        StringBuilder sbTitulos = new StringBuilder();
+        if (!titulosExistentes.isEmpty()) {
+            sbTitulos.append("Títulos de ejercicios ya existentes en este módulo:\n");
+            int idx = 1;
+            for (String t : titulosExistentes) {
+                sbTitulos.append(String.format("%d) \"%s\"\n", idx++, t));
+            }
+            sbTitulos.append("\n");
+        } else {
+            sbTitulos.append("No hay ejercicios previos en este módulo.\n\n");
+        }
+
+        // 5) Construir el prompt completo
         String prompt = String.format(
                 "Eres un generador de ejercicios formativos para una plataforma educativa.\n" +
-                "**IMPORTANTE**: Responde **única y exclusivamente** con un objeto JSON válido y nada más.\n" +
-                "- El objeto JSON debe tener exactamente tres campos: \"titulo\" (String), \"descripcion\" (String) y \"tests\" (Array de objetos).\n" +
-                "- Cada objeto en \"tests\" debe tener dos campos: \"entrada\" (String) y \"salidaEsperada\" (String).\n" +
-                "- Si la función espera múltiples números como entrada, deben estar separados por comas (por ejemplo: \"3,5\" o \"10,-2,7\").\n" +
-                "- Si la entrada es un array (lista), debe expresarse como un array válido de Python (por ejemplo: \"[1, 2, 3]\").\n" +
-                "- No incluyas comillas tipográficas, ni símbolos extra, ni texto explicativo.\n" +
-                "- Tu respuesta debe ajustarse al siguiente formato de ejemplo:\n" +
-                "{\"titulo\":\"Aquí va el título\",\"descripcion\":\"Aquí va la descripción\",\"tests\":[{\"entrada\":\"valor1,valor2\",\"salidaEsperada\":\"resultado1\"},{\"entrada\":\"[1,2,3]\",\"salidaEsperada\":\"resultado2\"}]}\n\n" +
-                "Ahora, genera un ejercicio de dificultad %s para el módulo %s y las categorías %s.\n" +
-                "Límite: máximo 1000 caracteres en el campo \"descripcion\".\n",
-                req.getDificultad(),
+                        "**IMPORTANTE**: Responde **única y exclusivamente** con un objeto JSON válido y nada más. " +
+                        "El objeto JSON debe tener exactamente estos campos:\n" +
+                        "  - \"titulo\" (String)\n" +
+                        "  - \"descripcion\" (String)\n" +
+                        "  - \"tests\" (Array de objetos con {\"entrada\":String, \"salidaEsperada\":String}).\n" +
+                        "Cada objeto en \"tests\" debe:\n" +
+                        "  • Tener entre 3 y 5 casos de prueba.\n" +
+                        "  • Si la función espera múltiplos números como entrada, sepáralos con comas (ej: \"3,5\" o \"10,-2,7\").\n" +
+                        "  • Si la entrada es un arreglo (lista), exprésalo como array válido de Python (ej: \"[1, 2, 3]\").\n" +
+                        "No incluyas comillas tipográficas ni texto explicativo adicional.\n" +
+                        "\n" +
+                        // Aquí insertamos la lista (o aviso) de títulos existentes:
+                        sbTitulos.toString() +
+                        "\n" +
+                        "Ahora, genera UN SOLO ejercicio de dificultad \"%s\" para el módulo \"%s\" y las categorías %s. " +
+                        "Asegúrate de que el título y la descripción de este ejercicio **no coincidan ni sean muy parecidos** " +
+                        "a ninguno de los que ya existen. Límite: 1000 caracteres en el campo \"descripcion\".\n",
+                dificultad,
                 moduloTitulo,
                 catNombres
         );
 
-
+        System.out.println("Prompt enviado: «" + prompt + "»");
 
         String respuestaRaw = gemini.generarTextoEjercicio(prompt);
 
@@ -95,7 +124,7 @@ public class EjercicioServiceImpl implements EjercicioService {
 
         // Construir entidad Ejercicio
         Ejercicio entity = Ejercicio.builder()
-                .modulo(mod)
+                .modulo(moduloRepo.getReferenceById(req.getModuloId()))
                 .dificultad(req.getDificultad())
                 .titulo(titulo)
                 .descripcion(descripcion)

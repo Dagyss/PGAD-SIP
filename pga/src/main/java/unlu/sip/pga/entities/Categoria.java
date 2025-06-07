@@ -2,6 +2,7 @@ package unlu.sip.pga.entities;
 
 import jakarta.persistence.*;
 import lombok.*;
+import unlu.sip.pga.models.enumerados.TipoCategoria;
 
 @Data
 @AllArgsConstructor
@@ -17,4 +18,7 @@ public class Categoria {
     @Column(length = 50, nullable = false, unique = true)
     private String nombre;
 
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private TipoCategoria tipo;  // LENGUAJE o TEMA
 }
