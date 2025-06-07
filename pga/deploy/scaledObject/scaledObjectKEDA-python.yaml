@@ -1,0 +1,18 @@
+apiVersion: keda.sh/v1alpha1
+kind: ScaledObject
+metadata:
+  name: python-tester-scaledobject
+  namespace: pga-backend
+spec:
+  scaleTargetRef:
+    name: python-tester
+  minReplicaCount: 0
+  maxReplicaCount: 3
+  cooldownPeriod: 600  # 10 minutos
+  triggers:
+    - type: rabbitmq
+      metadata:
+        queueName: python_tests
+        queueLength: "1"
+        host: "amqp://guest:guest@rabbitmq.pga-backend.svc.cluster.local:5672/"
+

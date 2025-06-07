@@ -4,7 +4,7 @@ metadata:
   name: python-tester
   namespace: pga-backend
 spec:
-  replicas: 1
+  replicas: 0
   selector:
     matchLabels:
       app: python-tester
