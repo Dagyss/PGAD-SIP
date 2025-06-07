@@ -1,21 +1,21 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: python-tester
+  name: java-tester
   namespace: pga-backend
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: python-tester
+      app: java-tester
   template:
     metadata:
       labels:
-        app: python-tester
+        app: java-tester
     spec:
       containers:
-      - name: python-tester
-        image: bautista222221/python-tester:1.6
+      - name: java-tester
+        image: bautista222221/java-tester:1.5
         env:
           - name: RABBITMQ_HOST
             value: "rabbitmq"  # nombre del servicio RabbitMQ
