@@ -58,3 +58,6 @@ logging:
   level:
     "[org.springframework.security]": DEBUG
     '[org.springframework.boot.autoconfigure.security]': DEBUG
+
+gemini:
+  apiKey: ${GEMINI_API_KEY}

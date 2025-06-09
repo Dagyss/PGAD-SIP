@@ -43,7 +43,7 @@ public class EjercicioServiceImpl implements EjercicioService {
                         "- No incluyas comillas tipográficas, ni símbolos extra, ni texto explicativo.\n" +
                         "- Tu respuesta debe ajustarse al siguiente formato de ejemplo:\n" +
                         "{\"titulo\":\"Aquí va el título\",\"descripcion\":\"Aquí va la descripción\"}\n\n" +
-                        "Ahora, genera un ejercicio de dificultad %d para el módulo %d y las categorías %s.\n" +
+                        "Ahora, genera un ejercicio de dificultad %s para el módulo %d y las categorías %s.\n" +
                         "Límite: máximo 1000 caracteres en el campo \"descripcion\".\n",
                 req.getDificultad(),
                 req.getModuloId(),
@@ -52,7 +52,7 @@ public class EjercicioServiceImpl implements EjercicioService {
 
         String respuestaRaw = llama.generarTextoEjercicio(prompt);
 
-        System.out.println("RAW Llama response: «" + respuestaRaw + "»");
+        System.out.println("RAW IA response: «" + respuestaRaw + "»");
 
         // Saneamiento
 
@@ -60,7 +60,7 @@ public class EjercicioServiceImpl implements EjercicioService {
         int start = raw.indexOf('{');
         int end   = raw.lastIndexOf('}');
         if (start < 0 || end < 0 || start > end) {
-            throw new RuntimeException("Respuesta de Llama no contiene un objeto JSON válido: «" + raw + "»");
+            throw new RuntimeException("Respuesta de IA no contiene un objeto JSON válido: «" + raw + "»");
         }
         String json = raw.substring(start, end + 1);
 

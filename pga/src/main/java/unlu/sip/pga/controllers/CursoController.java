@@ -17,22 +17,19 @@ public class CursoController {
 
     @GetMapping
     public List<CursoDTO> listar() {
-        return cursoService.listarCursos().stream()
-                .map(cursoMapper::toDto)
-                .collect(Collectors.toList());
+        return cursoService.listarCursos();
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<CursoDTO> obtener(@PathVariable Integer id) {
         return cursoService.obtenerCursoPorId(id)
-                .map(cursoMapper::toDto)
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
     }
 
     @PostMapping
     @PreAuthorize("hasAuthority('create:course')")
-    public ResponseEntity<CursoDTO> crear(@RequestBody CursoDTO dto) {
+    public ResponseEntity<CursoDTO> crear(@RequestBody CursoDTO dto) throws Exception {
         CursoDTO curso = cursoMapper.toDto(
                 cursoService.crearCurso(cursoMapper.toEntity(dto)));
         return ResponseEntity.ok(curso);

@@ -87,7 +87,7 @@ else
 fi
 
 # Levantar servicio de Ollama
-docker-compose up -d ollama
+# docker-compose up -d ollama
 
 # Verificación final
 echo -e "\n${GREEN}¡Aplicación desplegada correctamente!${NC}"

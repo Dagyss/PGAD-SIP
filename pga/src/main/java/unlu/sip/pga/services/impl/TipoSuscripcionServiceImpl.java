@@ -15,5 +15,10 @@ public class TipoSuscripcionServiceImpl implements TipoSuscripcionService {
     public List<TipoSuscripcion> listarTiposSuscripcion() {
         return repo.findAll();
     }
+
+    @Override
+    public TipoSuscripcion createTipoSuscripcion(TipoSuscripcion tipoSuscripcion) {
+        return repo.save(tipoSuscripcion);
+    }
     
 }
