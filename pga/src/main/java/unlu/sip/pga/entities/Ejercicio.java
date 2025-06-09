@@ -8,17 +8,20 @@ import lombok.NoArgsConstructor;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Setter;
+import lombok.experimental.SuperBuilder;
 
 import java.util.Date;
 import java.util.Set;
 
+
 @Getter @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@Builder
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
 @Entity
 @Table(name = "ejercicio")
+@Inheritance(strategy = InheritanceType.JOINED)
+@SuperBuilder
 public class Ejercicio {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

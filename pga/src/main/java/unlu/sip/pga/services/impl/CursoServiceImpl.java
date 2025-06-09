@@ -4,17 +4,15 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import unlu.sip.pga.dto.CursoDTO;
-import unlu.sip.pga.dto.ModuloDTO;
-import unlu.sip.pga.dto.GenerateEjercicioRequestDTO;
+import unlu.sip.pga.dto.*;
 import unlu.sip.pga.entities.Categoria;
 import unlu.sip.pga.entities.Curso;
+import unlu.sip.pga.entities.Evaluacion;
 import unlu.sip.pga.entities.Modulo;
 import unlu.sip.pga.mappers.CursoMapper;
-import unlu.sip.pga.services.CursoService;
-import unlu.sip.pga.services.GeminiService;
-import unlu.sip.pga.services.ModuloService;
-import unlu.sip.pga.services.EjercicioService;
+import unlu.sip.pga.mappers.EvaluacionMapper;
+import unlu.sip.pga.services.*;
+
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -28,6 +26,7 @@ public class CursoServiceImpl implements CursoService {
     @Autowired private EjercicioService ejercicioService;
     @Autowired private GeminiService gemini;
     @Autowired private CursoMapper cursoMapper;
+    @Autowired private EvaluacionService evaluacionService;
     private final ObjectMapper mapper = new ObjectMapper();
     @Override
     @Transactional
@@ -90,6 +89,14 @@ public class CursoServiceImpl implements CursoService {
                 ejercicioService.generarEjercicio(req);
             }
         }
+
+        GenerateEvaluacionRequestDTO evalReq =
+                new GenerateEvaluacionRequestDTO(cursoGuardado.getId(), cursoGuardado.getNivel());
+        EvaluacionDTO evalDto = evaluacionService.crearEvaluacion(evalReq);
+
+        Evaluacion ev = EvaluacionMapper.INSTANCE.toEntity(evalDto);
+        ev.setCurso(cursoGuardado);
+        cursoGuardado.getEvaluaciones().add(ev);
 
         return cursoGuardado;
     }

@@ -81,7 +81,7 @@ public class CorregirEjercicioServiceImpl implements CorregirEjercicioService {
                 if (result != null && !result.equalsIgnoreCase("running")) {
                     return result;
                 }
-                Thread.sleep(100);
+                Thread.sleep(1000);
             }
         } catch (Exception e) {
             System.err.println("[ERROR] No se pudo conectar o leer de Redis: " + e.getMessage());

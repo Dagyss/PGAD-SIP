@@ -55,22 +55,16 @@ public class UsuarioController {
     }
 
     @GetMapping("/sincronizar")
-    public ResponseEntity<?> sincronizarUsuarios() {
+    public ResponseEntity<?> sincronizarUsuarios(@RequestParam(required = false) String auth0Id) {
         try {
-            usuarioService.syncAllUsuarios();
-            return ResponseEntity.ok("Sincronización completada");
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body("Error sincronizando usuarios: " + e.getMessage());
-        }
-    }
-
-    @GetMapping("/sincronizar/{auth0Id}")
-    public ResponseEntity<?> syncUsuarioPorId(@PathVariable String auth0Id) {
-        try {
-            Usuario u = usuarioService.syncUsuarioPorId(auth0Id);
-            UsuarioDTO dto = usuarioMapper.toDto(u);
-            return ResponseEntity.ok(dto);
+            if (auth0Id != null && !auth0Id.isEmpty()) {
+                Usuario u = usuarioService.syncUsuarioPorId(auth0Id);
+                UsuarioDTO dto = usuarioMapper.toDto(u);
+                return ResponseEntity.ok(dto);
+            } else {
+                usuarioService.syncAllUsuarios();
+                return ResponseEntity.ok("Sincronización completada");
+            }
         } catch (RuntimeException ex) {
             String msg = ex.getMessage();
             if (msg != null && msg.toLowerCase().contains("404")) {
@@ -78,7 +72,7 @@ public class UsuarioController {
                         .body("Usuario Auth0 no encontrado: " + auth0Id);
             }
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body("Error sincronizando usuario: " + ex.getMessage());
+                    .body("Error sincronizando usuario(s): " + ex.getMessage());
         }
     }
 }

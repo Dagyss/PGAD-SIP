@@ -54,4 +54,7 @@ public class Curso {
             inverseJoinColumns = @JoinColumn(name = "categoria_id")
     )
     private Set<Categoria> categorias;
+
+    @OneToMany(mappedBy = "curso", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Set<Evaluacion> evaluaciones;
 }

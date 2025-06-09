@@ -1,11 +1,7 @@
 package unlu.sip.pga.entities;
 
-
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import unlu.sip.pga.models.enumerados.EstadoResolucion;
 
 import java.time.LocalDate;
@@ -15,23 +11,21 @@ import java.time.LocalDate;
 @NoArgsConstructor
 @Builder
 @Entity
-@Table(name = "resolucion")
-public class Resolucion {
-
+@Table(name = "resolucion_evaluacion")
+public class ResolucionEvaluacion {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "idResolucion")
-    private Integer idResolucion;
+    private Integer id;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "idEjercicio", nullable = false)
-    private Ejercicio ejercicio;
+    @JoinColumn(name = "idEvaluacion", nullable = false)
+    private Evaluacion evaluacion;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "idUsuario", nullable = false)
     private Usuario usuario;
 
-    @Column(nullable = false)
+    @Column(name = "fechaResolucion", nullable = false)
     private LocalDate fechaResolucion;
 
     @Lob
@@ -41,5 +35,4 @@ public class Resolucion {
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private EstadoResolucion estado;  //CORRECTO, INCORRECTO
-
 }
