@@ -1,17 +1,13 @@
 package unlu.sip.pga.services.impl;
 
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
-import org.springframework.http.*;
-import java.util.Map;
-import java.util.List;
-import unlu.sip.pga.services.LlamaService;
+import unlu.sip.pga.services.GeminiService;
 import com.google.genai.Client;
 import com.google.genai.types.GenerateContentResponse;
 
 @Service
-public class GeminiServiceImpl implements LlamaService {
+public class GeminiServiceImpl implements GeminiService {
     private final RestTemplate rest = new RestTemplate();
 
     @Override

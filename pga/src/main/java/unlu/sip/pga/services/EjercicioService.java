@@ -12,4 +12,5 @@ public interface EjercicioService {
     List<Ejercicio> listarEjerciciosPorModulo(Integer moduloId);
     Ejercicio actualizarEjercicio(Ejercicio ejercicio);
     void eliminarEjercicio(Integer id);
+    String obtenerTestsPorEjercicioId(Integer idEjercicio) throws Exception;
 }

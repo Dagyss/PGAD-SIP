@@ -5,6 +5,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import unlu.sip.pga.dto.UsuarioDTO;
+import unlu.sip.pga.entities.Usuario;
 import unlu.sip.pga.mappers.UsuarioMapper;
 import unlu.sip.pga.services.UsuarioService;
 
@@ -54,14 +55,24 @@ public class UsuarioController {
     }
 
     @GetMapping("/sincronizar")
-    public ResponseEntity<?> sincronizarUsuarios() {
+    public ResponseEntity<?> sincronizarUsuarios(@RequestParam(required = false) String auth0Id) {
         try {
-            usuarioService.syncAllUsuarios();
-            return ResponseEntity.ok("Sincronización completada");
-        } catch (Exception e) {
+            if (auth0Id != null && !auth0Id.isEmpty()) {
+                Usuario u = usuarioService.syncUsuarioPorId(auth0Id);
+                UsuarioDTO dto = usuarioMapper.toDto(u);
+                return ResponseEntity.ok(dto);
+            } else {
+                usuarioService.syncAllUsuarios();
+                return ResponseEntity.ok("Sincronización completada");
+            }
+        } catch (RuntimeException ex) {
+            String msg = ex.getMessage();
+            if (msg != null && msg.toLowerCase().contains("404")) {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                        .body("Usuario Auth0 no encontrado: " + auth0Id);
+            }
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body("Error sincronizando usuarios: " + e.getMessage());
+                    .body("Error sincronizando usuario(s): " + ex.getMessage());
         }
     }
-
 }
