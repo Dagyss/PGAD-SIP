@@ -9,7 +9,7 @@ import unlu.sip.pga.dto.*;
 import unlu.sip.pga.entities.Ejercicio;
 import unlu.sip.pga.entities.Evaluacion;
 import unlu.sip.pga.entities.Modulo;
-import unlu.sip.pga.entities.TestEjercicio;
+import unlu.sip.pga.entities.TestEvaluacion;
 import unlu.sip.pga.mappers.*;
 import unlu.sip.pga.repositories.CursoRepository;
 import unlu.sip.pga.services.*;
@@ -108,16 +108,14 @@ public class EvaluacionServiceImpl implements EvaluacionService {
                 node.get("tests").toString(),
                 new TypeReference<List<TestEjercicioDTO>>() {}
         );
-        Set<TestEjercicio> testEntities = tests.stream()
-                .map(dto -> {
-                    TestEjercicio test = TestEjercicio.builder()
-                            .entrada(dto.getEntrada())
-                            .salidaEsperada(dto.getSalidaEsperada())
-                            .build();
-                    test.setEjercicio(ev);
-                    return test;
-                }).collect(Collectors.toSet());
-        ev.setTests(testEntities);
+        Set<TestEvaluacion> testEntities = tests.stream()
+                .map(dto -> TestEvaluacion.builder()
+                        .entrada(dto.getEntrada())
+                        .salidaEsperada(dto.getSalidaEsperada())
+                        .evaluacion(ev)
+                        .build())
+                .collect(Collectors.toSet());
+        ev.setEvaluacionTests(testEntities);
 
         Evaluacion saved = evaluacionRepository.save(ev);
 
@@ -125,7 +123,24 @@ public class EvaluacionServiceImpl implements EvaluacionService {
     }
 
     public Optional<Evaluacion> obtenerEvaluacionPorId(Integer idEvaluacion) { return evaluacionRepository.findById(idEvaluacion); }
-    public List<Evaluacion> listarEvaluacionesPorCurso(Integer idCurso) { return evaluacionRepository.findByCursoId(idCurso); }
+    public List<Evaluacion> listarEvaluacionesPorCurso(Integer idCurso) { return evaluacionRepository.findByCursoIdWithTests(idCurso); }
     public Evaluacion actualizarEvaluacion(Evaluacion ev) { return evaluacionRepository.save(ev); }
     public void eliminarEvaluacion(Integer id) { evaluacionRepository.deleteById(id); }
+    public String obtenerTestsPorEvaluacionId(Integer idEvaluacion) throws Exception {
+        Evaluacion evaluacion = evaluacionRepository.findById(idEvaluacion)
+                .orElseThrow(() -> new IllegalArgumentException("Evaluacion no encontrada con ID: " + idEvaluacion));
+
+        Set<TestEvaluacion> tests = evaluacion.getEvaluacionTests();
+        if (tests.isEmpty()) {
+            throw new IllegalArgumentException("No hay tests asociados a la evaluacion con ID: " + idEvaluacion);
+        }
+
+        // Convertir a DTOs planos
+        List<TestEjercicioDTO> testDtos = tests.stream()
+                .map(TestEjercicioDTO::new)
+                .toList();
+
+        ObjectMapper mapper = new ObjectMapper();
+        return mapper.writeValueAsString(testDtos);
+    }
 }

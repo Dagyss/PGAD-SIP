@@ -30,7 +30,7 @@ public class CursoServiceImpl implements CursoService {
     private final ObjectMapper mapper = new ObjectMapper();
     @Override
     @Transactional
-    public Curso crearCurso(Curso curso) throws Exception {
+    public CursoDTO crearCurso(Curso curso) throws Exception {
         // 1. Guardar curso base
         Curso cursoGuardado = cursoRepository.save(curso);
 
@@ -93,13 +93,16 @@ public class CursoServiceImpl implements CursoService {
         GenerateEvaluacionRequestDTO evalReq =
                 new GenerateEvaluacionRequestDTO(cursoGuardado.getId(), cursoGuardado.getNivel());
         EvaluacionDTO evalDto = evaluacionService.crearEvaluacion(evalReq);
-
         Evaluacion ev = EvaluacionMapper.INSTANCE.toEntity(evalDto);
         ev.setCurso(cursoGuardado);
+
         cursoGuardado.getEvaluaciones().add(ev);
 
-        return cursoGuardado;
+        Curso merged = cursoRepository.save(cursoGuardado);
+
+        return cursoMapper.toDto(merged);
     }
+
 
 
 
@@ -108,14 +111,14 @@ public class CursoServiceImpl implements CursoService {
     @Override
     @Transactional(readOnly = true)
     public Optional<CursoDTO> obtenerCursoPorId(Integer id) {
-        return cursoRepository.findByIdWithModulesAndExercises(id)
+        return cursoRepository.findByIdWithAll(id)
                 .map(cursoMapper::toDto);
     }
 
     @Override
     @Transactional(readOnly = true)
     public List<CursoDTO> listarCursos() {
-        return cursoRepository.findAllWithModulesAndExercises().stream()
+        return cursoRepository.findAllWithAll().stream()
                 .map(cursoMapper::toDto)
                 .collect(Collectors.toList());
     }
