@@ -28,8 +28,8 @@ public class Ejercicio {
     @EqualsAndHashCode.Include
     private Integer id;
 
-    @ManyToOne
-    @JoinColumn(name = "idModulo", nullable = false)
+    @ManyToOne(fetch = FetchType.LAZY, optional = true)
+    @JoinColumn(name = "idModulo", nullable = true)
     private Modulo modulo;
 
     @Column(length = 100, nullable = false)

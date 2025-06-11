@@ -7,9 +7,9 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+
 import java.util.Date;
+import java.util.HashSet;
 import java.util.Set;
 
 @Getter @Setter
@@ -28,7 +28,7 @@ public class Curso {
     @Column(length = 100, nullable = false)
     private String titulo;
 
-    @Column(length = 200)
+    @Column(length = 500)
     private String descripcion;
 
     @Column(length = 50)
@@ -44,8 +44,9 @@ public class Curso {
     @Column
     private Float calificacion;
 
-    @OneToMany(mappedBy = "curso", cascade = CascadeType.ALL)
-    private Set<Modulo> modulos;
+    @OneToMany(mappedBy = "curso", cascade = CascadeType.ALL, orphanRemoval = true)
+    @Builder.Default
+    private Set<Modulo> modulos = new HashSet<>();
 
     @ManyToMany(cascade = { CascadeType.MERGE })
     @JoinTable(
@@ -53,8 +54,12 @@ public class Curso {
             joinColumns = @JoinColumn(name = "curso_id"),
             inverseJoinColumns = @JoinColumn(name = "categoria_id")
     )
-    private Set<Categoria> categorias;
+    @Builder.Default
+    private Set<Categoria> categorias = new HashSet<>();
 
-    @OneToMany(mappedBy = "curso", cascade = CascadeType.ALL, orphanRemoval = true)
-    private Set<Evaluacion> evaluaciones;
+    @OneToMany(mappedBy = "curso",
+            cascade = { CascadeType.MERGE, CascadeType.REMOVE },
+            orphanRemoval = true)
+    @Builder.Default
+    private Set<Evaluacion> evaluaciones = new HashSet<>();
 }

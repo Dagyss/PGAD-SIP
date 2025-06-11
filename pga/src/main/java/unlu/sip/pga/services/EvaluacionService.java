@@ -12,4 +12,5 @@ public interface EvaluacionService {
     List<Evaluacion> listarEvaluacionesPorCurso(Integer cursoId);
     Evaluacion actualizarEvaluacion(Evaluacion evaluacion);
     void eliminarEvaluacion(Integer id);
+    String obtenerTestsPorEvaluacionId(Integer idEvaluacion) throws Exception;
 }

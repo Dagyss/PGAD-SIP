@@ -30,8 +30,8 @@ public class CursoController {
     @PostMapping
     @PreAuthorize("hasAuthority('create:course')")
     public ResponseEntity<CursoDTO> crear(@RequestBody CursoDTO dto) throws Exception {
-        CursoDTO curso = cursoMapper.toDto(
-                cursoService.crearCurso(cursoMapper.toEntity(dto)));
+        CursoDTO curso =
+                cursoService.crearCurso(cursoMapper.toEntity(dto));
         return ResponseEntity.ok(curso);
     }
 

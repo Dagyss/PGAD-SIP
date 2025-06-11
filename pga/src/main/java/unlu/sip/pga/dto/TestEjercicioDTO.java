@@ -6,6 +6,7 @@ import lombok.NoArgsConstructor;
 import lombok.AllArgsConstructor;
 import com.fasterxml.jackson.annotation.JsonAlias;
 import unlu.sip.pga.entities.TestEjercicio;
+import unlu.sip.pga.entities.TestEvaluacion;
 
 @Getter @Setter
 @NoArgsConstructor
@@ -20,5 +21,10 @@ public class TestEjercicioDTO {
     public TestEjercicioDTO(TestEjercicio test) {
         this.entrada = test.getEntrada();
         this.salidaEsperada = test.getSalidaEsperada(); 
+    }
+
+    public TestEjercicioDTO(TestEvaluacion testEvaluacion) {
+        this.entrada = testEvaluacion.getEntrada();
+        this.salidaEsperada = testEvaluacion.getSalidaEsperada();
     }
 }
