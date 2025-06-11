@@ -45,4 +45,3 @@ terraform/*
 pgdata/
 
 .last_jar_hash
-secrets/
