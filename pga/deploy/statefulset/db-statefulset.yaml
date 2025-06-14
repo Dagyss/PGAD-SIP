@@ -27,7 +27,7 @@ spec:
               value: /var/lib/postgresql/data/pgdata
           envFrom:
             - secretRef:
-                name: pga-secrets
+                name: pga-secrets-db
   volumeClaimTemplates:
     - metadata:
         name: postgres-data

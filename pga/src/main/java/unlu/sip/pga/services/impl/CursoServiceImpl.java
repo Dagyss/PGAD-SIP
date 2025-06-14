@@ -12,6 +12,7 @@ import unlu.sip.pga.entities.Evaluacion;
 import unlu.sip.pga.entities.Modulo;
 import unlu.sip.pga.mappers.CursoMapper;
 import unlu.sip.pga.mappers.EvaluacionMapper;
+import unlu.sip.pga.repositories.CategoriaRepository;
 import unlu.sip.pga.repositories.EvaluacionRepository;
 import unlu.sip.pga.services.*;
 
@@ -30,6 +31,7 @@ public class CursoServiceImpl implements CursoService {
     @Autowired private CursoMapper cursoMapper;
     @Autowired private EvaluacionService evaluacionService;
     @Autowired private EvaluacionRepository evaluacionRepository;
+    @Autowired private CategoriaRepository categoriaRepo;
     private final ObjectMapper mapper = new ObjectMapper();
     @Override
     @Transactional
@@ -109,6 +111,12 @@ public class CursoServiceImpl implements CursoService {
             cursoGuardado.setEvaluaciones(new HashSet<>());
         }
         cursoGuardado.getEvaluaciones().add(evPersistida);
+
+        Set<Categoria> categoriasGestionadas = curso.getCategorias().stream()
+                .map(cat -> categoriaRepo.getReferenceById(cat.getId()))
+                .collect(Collectors.toSet());
+        curso.setCategorias(categoriasGestionadas);
+
         Curso merged = cursoRepository.save(cursoGuardado);
 
         return cursoMapper.toDto(merged);

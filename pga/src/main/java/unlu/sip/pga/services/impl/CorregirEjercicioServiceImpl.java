@@ -12,13 +12,14 @@ import unlu.sip.pga.entities.Ejercicio;
 import unlu.sip.pga.services.CorregirEjercicioService;
 import unlu.sip.pga.services.EjercicioService;
 import redis.clients.jedis.Jedis;
+import unlu.sip.pga.services.GeminiService;
 
 import java.util.UUID;
 import java.util.Map;
 
 @Service
 public class CorregirEjercicioServiceImpl implements CorregirEjercicioService {
-
+    @Autowired private GeminiService gemini;
     @Autowired
     private EjercicioService ejercicioService;
 
@@ -79,6 +80,13 @@ public class CorregirEjercicioServiceImpl implements CorregirEjercicioService {
                 String result = jedis.get(taskId);
                 System.out.println("[7." + i + "] Resultado obtenido: " + result);
                 if (result != null && !result.equalsIgnoreCase("running")) {
+                    result = gemini.generarTextoEjercicio(String.format(
+                            "Eres un corrector de ejercicios formativos para una plataforma educativa." +
+                                    "**IMPORTANTE**: Responde única y exclusivamente con un String válido y nada más. "+
+                            "Indica cuales son los errores y como mejorar el siguiente fragmento de codigo: %s"+
+                                    ", que provoca este error %s y que busca resolver la siguiente consigna %s",request.getCodigo()
+                            , result,ejercicio.getDescripcion()));
+
                     return result;
                 }
                 Thread.sleep(1000);
