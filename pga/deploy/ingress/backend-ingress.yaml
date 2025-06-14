@@ -1,0 +1,24 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: pga-backend-ingress
+  namespace: pga-backend
+  annotations:
+    cert-manager.io/cluster-issuer: "letsencrypt-prod"  # si usás cert-manager
+spec:
+  ingressClassName: nginx
+  rules:
+  - host: 34.10.220.212.nip.io
+    http:
+      paths:
+      - path: /api
+        pathType: Prefix
+        backend:
+          service:
+            name: pga-backend
+            port:
+              number: 6060
+  tls:
+  - hosts:
+    - 34.10.220.212.nip.io
+    secretName: backend-tls

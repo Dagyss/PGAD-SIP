@@ -1,0 +1,13 @@
+  apiVersion: cert-manager.io/v1
+  kind: Certificate
+  metadata:
+    name: frontend-tls
+    namespace: pga-app
+  spec:
+    secretName: frontend-tls
+    issuerRef:
+      name: letsencrypt-prod
+      kind: ClusterIssuer
+    commonName: 34.10.144.139.nip.io
+    dnsNames:
+      - 34.10.144.139.nip.io
