@@ -14,6 +14,9 @@ spec:
     spec:
       containers:
       - name: frontend
-        image: marcos1as/pga-frontend:v1.0.0
+        image: marcos1as/pga-frontend:v1.1.0
         ports:
         - containerPort: 80
+        envFrom:
+        - secretRef:
+            name: pga-secrets-front
