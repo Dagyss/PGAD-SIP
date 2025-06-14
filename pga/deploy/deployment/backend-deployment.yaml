@@ -18,7 +18,7 @@ spec:
       serviceAccountName: pga-sa
       containers:
         - name: pga-backend
-          image: dagyss/pga-backend:v1.3.3
+          image: dagyss/pga-backend:v1.4.4
           ports:
             - containerPort: 6060
           envFrom:

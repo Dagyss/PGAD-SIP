@@ -1,5 +1,6 @@
 package unlu.sip.pga.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import lombok.*;
 import java.util.Date;
@@ -35,6 +36,14 @@ public class Evaluacion {
     @Column(nullable = false)
     @Temporal(TemporalType.TIMESTAMP)
     private Date fechaCreacion;
+
+    @ManyToMany(cascade = { CascadeType.MERGE })
+    @JoinTable(
+            name = "evaluacion_categoria",
+            joinColumns = @JoinColumn(name = "evaluacion_id"),
+            inverseJoinColumns = @JoinColumn(name = "categoria_id")
+    )
+    private Set<Categoria> categorias;
 
     @OneToMany(
             mappedBy = "evaluacion",

@@ -5,6 +5,7 @@ import java.util.Set;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.AllArgsConstructor;
+import unlu.sip.pga.entities.Evaluacion;
 
 @Data @NoArgsConstructor @AllArgsConstructor
 public class CursoDTO {
@@ -17,4 +18,5 @@ public class CursoDTO {
     private Float calificacion;
     private Set<ModuloDTO> modulos;
     private Set<CategoriaDTO> categorias;
+    private Set<EvaluacionDTO> evaluaciones;
 }

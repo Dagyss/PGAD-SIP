@@ -1,17 +1,10 @@
 package unlu.sip.pga.config.security;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-import java.util.stream.Collectors;
-
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.oauth2.core.DelegatingOAuth2TokenValidator;
 import org.springframework.security.oauth2.core.OAuth2TokenValidator;
 import org.springframework.security.oauth2.jwt.Jwt;
@@ -22,6 +15,7 @@ import org.springframework.security.oauth2.jwt.NimbusJwtDecoder;
 import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationConverter;
 import org.springframework.security.oauth2.server.resource.authentication.JwtGrantedAuthoritiesConverter;
 import org.springframework.security.web.SecurityFilterChain;
+
 import lombok.RequiredArgsConstructor;
 
 @Configuration
@@ -49,41 +43,22 @@ public class SecurityConfig {
         grantedAuthoritiesConverter.setAuthorityPrefix("");
         grantedAuthoritiesConverter.setAuthoritiesClaimName("permissions");
 
-        JwtGrantedAuthoritiesConverter rolesConverter = new JwtGrantedAuthoritiesConverter();
-        rolesConverter.setAuthorityPrefix("ROLE_");
-        rolesConverter.setAuthoritiesClaimName("https://pga.ejemplo.com/roles");
+        JwtAuthenticationConverter jwtAuthConverter = new JwtAuthenticationConverter();
+        jwtAuthConverter.setJwtGrantedAuthoritiesConverter(grantedAuthoritiesConverter);
 
-        return new JwtAuthenticationConverter() {{
-            setJwtGrantedAuthoritiesConverter(jwt -> {
-                Collection<GrantedAuthority> roles = rolesConverter.convert(jwt);
-                Collection<GrantedAuthority> permissions = grantedAuthoritiesConverter.convert(jwt);
-
-                List<GrantedAuthority> combined = new ArrayList<>();
-                if (roles!=null) combined.addAll(roles);
-                if(permissions!=null) combined.addAll(permissions);
-                return combined;
-            });
-            }
-
-        };
+        return jwtAuthConverter;
     }
 
     @Bean
-    JwtDecoder jwtDecoder(
-        @Value("${spring.security.oauth2.resourceserver.jwt.issuer-uri}") String issuerUri,
-        @Value("${spring.security.oauth2.resourceserver.jwt.audiences[0]}") String audience) {
-        
-        try {            
-            NimbusJwtDecoder jwtDecoder = (NimbusJwtDecoder) JwtDecoders.fromIssuerLocation(issuerUri);
-            OAuth2TokenValidator<Jwt> withAudience = new AudienceValidator(audience);
-            OAuth2TokenValidator<Jwt> withIssuer = JwtValidators.createDefaultWithIssuer(issuerUri);
-            OAuth2TokenValidator<Jwt> validator = new DelegatingOAuth2TokenValidator<>(withIssuer, withAudience);
-    
-            jwtDecoder.setJwtValidator(validator);
-            return jwtDecoder;
-        } catch (Exception e) {
-            e.printStackTrace();
-            throw e;
-        }
+    JwtDecoder jwtDecoder() {
+        NimbusJwtDecoder jwtDecoder = (NimbusJwtDecoder)
+                JwtDecoders.fromIssuerLocation("https://dev-ymy386h280ssuqwp.us.auth0.com/");
+
+        OAuth2TokenValidator<Jwt> withAudience = new AudienceValidator("https://PGAD-SIP.unlu.com");
+        OAuth2TokenValidator<Jwt> withIssuer = JwtValidators.createDefaultWithIssuer("https://dev-ymy386h280ssuqwp.us.auth0.com/");
+        OAuth2TokenValidator<Jwt> validator = new DelegatingOAuth2TokenValidator<>(withIssuer, withAudience);
+
+        jwtDecoder.setJwtValidator(validator);
+        return jwtDecoder;
     }
 }

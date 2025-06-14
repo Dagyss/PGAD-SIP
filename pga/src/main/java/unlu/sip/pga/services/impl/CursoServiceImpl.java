@@ -2,6 +2,7 @@ package unlu.sip.pga.services.impl;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import jakarta.persistence.EntityNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import unlu.sip.pga.dto.*;
@@ -11,6 +12,7 @@ import unlu.sip.pga.entities.Evaluacion;
 import unlu.sip.pga.entities.Modulo;
 import unlu.sip.pga.mappers.CursoMapper;
 import unlu.sip.pga.mappers.EvaluacionMapper;
+import unlu.sip.pga.repositories.EvaluacionRepository;
 import unlu.sip.pga.services.*;
 
 import java.util.*;
@@ -27,6 +29,7 @@ public class CursoServiceImpl implements CursoService {
     @Autowired private GeminiService gemini;
     @Autowired private CursoMapper cursoMapper;
     @Autowired private EvaluacionService evaluacionService;
+    @Autowired private EvaluacionRepository evaluacionRepository;
     private final ObjectMapper mapper = new ObjectMapper();
     @Override
     @Transactional
@@ -91,13 +94,21 @@ public class CursoServiceImpl implements CursoService {
         }
 
         GenerateEvaluacionRequestDTO evalReq =
-                new GenerateEvaluacionRequestDTO(cursoGuardado.getId(), cursoGuardado.getNivel());
+                new GenerateEvaluacionRequestDTO(cursoGuardado.getId(), cursoGuardado.getNivel(),Optional.ofNullable(cursoGuardado.getCategorias())
+                        .stream()
+                        .flatMap(java.util.Collection::stream)
+                        .map(cat -> cat.getId())
+                        .toList());
         EvaluacionDTO evalDto = evaluacionService.crearEvaluacion(evalReq);
-        Evaluacion ev = EvaluacionMapper.INSTANCE.toEntity(evalDto);
-        ev.setCurso(cursoGuardado);
 
-        cursoGuardado.getEvaluaciones().add(ev);
+        Evaluacion evPersistida = evaluacionRepository.findById(evalDto.getId())
+                .orElseThrow(() -> new EntityNotFoundException(
+                        "Evaluación no encontrada: " + evalDto.getId()));
 
+        if (cursoGuardado.getEvaluaciones() == null) {
+            cursoGuardado.setEvaluaciones(new HashSet<>());
+        }
+        cursoGuardado.getEvaluaciones().add(evPersistida);
         Curso merged = cursoRepository.save(cursoGuardado);
 
         return cursoMapper.toDto(merged);

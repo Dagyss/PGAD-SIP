@@ -15,5 +15,6 @@ public class EvaluacionDTO {
     private String descripcion;
     private String dificultad;
     private Date fechaCreacion;
+    private Set<CategoriaDTO> categorias;
     private Set<TestEjercicioDTO> tests;
 }

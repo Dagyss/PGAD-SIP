@@ -6,11 +6,9 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import lombok.RequiredArgsConstructor;
 import org.springframework.transaction.annotation.Transactional;
 import unlu.sip.pga.dto.*;
-import unlu.sip.pga.entities.Ejercicio;
-import unlu.sip.pga.entities.Evaluacion;
-import unlu.sip.pga.entities.Modulo;
-import unlu.sip.pga.entities.TestEvaluacion;
+import unlu.sip.pga.entities.*;
 import unlu.sip.pga.mappers.*;
+import unlu.sip.pga.repositories.CategoriaRepository;
 import unlu.sip.pga.repositories.CursoRepository;
 import unlu.sip.pga.services.*;
 import unlu.sip.pga.repositories.EvaluacionRepository;
@@ -31,6 +29,8 @@ public class EvaluacionServiceImpl implements EvaluacionService {
     @Autowired private EjercicioService ejercicioService;
     @Autowired private GeminiService gemini;
     @Autowired private CursoRepository cursoRepository;
+    @Autowired private EvaluacionMapper evaluacionMapper;
+    @Autowired private CategoriaRepository categoriaRepo;
     private final ObjectMapper mapper = new ObjectMapper();
 
     @Transactional
@@ -66,11 +66,14 @@ public class EvaluacionServiceImpl implements EvaluacionService {
                         "  - \"titulo\" (String)\n" +
                         "  - \"descripcion\" (String)\n" +
                         "  - \"tests\" (Array de objetos con {\"entrada\":String, \"salidaEsperada\":String}).\n" +
-                        "Cada test debe tener entre 3 y 5 casos.\n\n" +
+                        "Cada objeto en \"tests\" debe:\n" +
+                        "  • Tener entre 3 y 5 casos de prueba.\n" +
+                        "  • Si la función espera múltiplos números como entrada, sepáralos con comas (ej: \"3,5\" o \"10,-2,7\").\n" +
+                        "  • Si la entrada es un arreglo (lista), exprésalo como array válido de Python (ej: \"[1, 2, 3]\").\n" +
                         "Títulos de módulos ya existentes:\n%s\n" +
                         "Títulos de ejercicios ya existentes:\n%s\n" +
-                        "Ahora, genera UNA sola evaluación integradora de dificultad \"%s\" para el curso con ID %d.\n" +
-                        "Asegúrate de que el título y la descripción **no coincidan ni sean muy parecidos**\n" +
+                        "Ahora, genera UN solo ejercicio integrador de dificultad \"%s\" para el curso con ID %d.\n" +
+                        "Asegúrate de que el ejercicio en cuestion este relacionado con los anteriores, pero **no coincida ni sea muy parecido**\n" +
                         "a ninguno de los ya listados. Máximo 1500 caracteres en descripción.\n",
                 // inserción de títulos de módulos
                 titulosModulos.stream()
@@ -80,28 +83,36 @@ public class EvaluacionServiceImpl implements EvaluacionService {
                 req.getDificultad(),
                 req.getCursoId()
         );
-
+        System.out.println("Prompt enviado: «" + prompt + "»");
         // 4. Llamada a la IA
-        String raw = gemini.generarTextoEjercicio(prompt).trim();
+        String respuestaRaw = gemini.generarTextoEjercicio(prompt).trim();
+        System.out.println("RAW IA response: «" + respuestaRaw + "»");
+
         // Limpiar posibles code fences
-        if (raw.startsWith("```")) {
-            raw = raw.substring(raw.indexOf('\n') + 1, raw.lastIndexOf("```")).trim();
+        String raw = respuestaRaw.trim();
+        int start = raw.indexOf('{');
+        int end   = raw.lastIndexOf('}');
+        if (start < 0 || end < 0 || start > end) {
+            throw new RuntimeException("Respuesta de IA no contiene un objeto JSON válido: «" + raw + "»");
         }
-        // Extraer objeto JSON
-        int start = raw.indexOf('{'), end = raw.lastIndexOf('}');
-        if (start < 0 || end < 0) {
-            throw new RuntimeException("Respuesta IA sin JSON válido:\n" + raw);
-        }
-        String json = raw.substring(start, end+1);
+        String json = raw.substring(start, end + 1);
+
+
+        Set<Categoria> cats = req.getCategoriaIds().stream()
+                .map(id -> categoriaRepo.findById(id)
+                        .orElseThrow(() -> new IllegalArgumentException("Categoría no encontrada: " + id)))
+                .collect(Collectors.toSet());
 
         // 5. Parsear y guardar
         JsonNode node = mapper.readTree(json);
-        Evaluacion ev = new Evaluacion();
-        ev.setCurso(cursoRepository.getReferenceById(req.getCursoId()));
-        ev.setTitulo(node.get("titulo").asText());
-        ev.setDescripcion(node.get("descripcion").asText());
-        ev.setDificultad(req.getDificultad());
-        ev.setFechaCreacion(new Date());
+        Evaluacion ev = Evaluacion.builder()
+                .curso(cursoRepository.getReferenceById(req.getCursoId()))
+                .titulo(node.get("titulo").asText())
+                .descripcion(node.get("descripcion").asText())
+                .fechaCreacion(new Date())
+                .dificultad(req.getDificultad())
+                .categorias(cats)
+                .build();
 
         // Tests
         List<TestEjercicioDTO> tests = mapper.readValue(
@@ -109,17 +120,24 @@ public class EvaluacionServiceImpl implements EvaluacionService {
                 new TypeReference<List<TestEjercicioDTO>>() {}
         );
         Set<TestEvaluacion> testEntities = tests.stream()
-                .map(dto -> TestEvaluacion.builder()
-                        .entrada(dto.getEntrada())
-                        .salidaEsperada(dto.getSalidaEsperada())
-                        .evaluacion(ev)
-                        .build())
+                .map(dto -> {
+                    TestEvaluacion test = TestEvaluacion.builder()
+                            .entrada(dto.getEntrada())
+                            .salidaEsperada(dto.getSalidaEsperada())
+                            .build();
+                    test.setEvaluacion(ev); // aseguramos que apunte a la evaluacion
+                    return test;
+                })
                 .collect(Collectors.toSet());
         ev.setEvaluacionTests(testEntities);
 
+
+        System.out.println("Cantidad de tests a guardar: " + ev.getEvaluacionTests().size());
+        ev.getEvaluacionTests().forEach(t -> System.out.println(t.getEntrada() + " -> " + t.getSalidaEsperada()));
+
         Evaluacion saved = evaluacionRepository.save(ev);
 
-        return EvaluacionMapper.INSTANCE.toDto(saved);
+        return evaluacionMapper.toDto(saved);
     }
 
     public Optional<Evaluacion> obtenerEvaluacionPorId(Integer idEvaluacion) { return evaluacionRepository.findById(idEvaluacion); }

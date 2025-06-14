@@ -10,6 +10,7 @@ import unlu.sip.pga.mappers.UsuarioMapper;
 import unlu.sip.pga.services.UsuarioService;
 
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 @RestController
@@ -54,25 +55,29 @@ public class UsuarioController {
         return ResponseEntity.noContent().build();
     }
 
-    @GetMapping("/sincronizar")
-    public ResponseEntity<?> sincronizarUsuarios(@RequestParam(required = false) String auth0Id) {
+    @PostMapping("/sincronizar")
+    public ResponseEntity<?> sincronizarUsuarios(@RequestBody(required = false) Map<String, String> payload) {
         try {
-            if (auth0Id != null && !auth0Id.isEmpty()) {
+            String auth0Id = (payload != null) ? payload.get("auth0Id") : null;
+
+            if (auth0Id != null && !auth0Id.isBlank()) {
                 Usuario u = usuarioService.syncUsuarioPorId(auth0Id);
                 UsuarioDTO dto = usuarioMapper.toDto(u);
                 return ResponseEntity.ok(dto);
             } else {
                 usuarioService.syncAllUsuarios();
-                return ResponseEntity.ok("Sincronización completada");
+                return ResponseEntity.ok(Map.of("message", "Sincronización completada"));
             }
         } catch (RuntimeException ex) {
-            String msg = ex.getMessage();
-            if (msg != null && msg.toLowerCase().contains("404")) {
+            String msg = ex.getMessage() != null ? ex.getMessage().toLowerCase() : "";
+            if (msg.contains("404")) {
                 return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                        .body("Usuario Auth0 no encontrado: " + auth0Id);
+                        .body("Usuario Auth0 no encontrado: " + (payload != null ? payload.get("auth0Id") : null));
             }
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                     .body("Error sincronizando usuario(s): " + ex.getMessage());
         }
     }
+
+
 }
