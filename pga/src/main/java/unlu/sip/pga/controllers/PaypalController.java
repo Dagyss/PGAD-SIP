@@ -34,6 +34,7 @@ public class PaypalController {
     @PreAuthorize("hasAuthority('capture:order')")
     @PostMapping("/orders/{orderID}/capture")
     public ResponseEntity<Order> captureOrder(@PathVariable String orderID) {
+        System.out.println("Intentando capturar orden: " + orderID);
         try {
             Order order = paypalService.captureOrders(orderID);
             return ResponseEntity.ok(order);
