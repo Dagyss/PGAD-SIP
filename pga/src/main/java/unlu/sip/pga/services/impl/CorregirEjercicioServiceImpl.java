@@ -1,5 +1,6 @@
 package unlu.sip.pga.services.impl;
 
+import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.rabbitmq.client.Channel;
 import com.rabbitmq.client.Connection;
@@ -80,13 +81,20 @@ public class CorregirEjercicioServiceImpl implements CorregirEjercicioService {
                 String result = jedis.get(taskId);
                 System.out.println("[7." + i + "] Resultado obtenido: " + result);
                 if (result != null && !result.equalsIgnoreCase("running")) {
-                    result = gemini.generarTextoEjercicio(String.format(
-                            "Eres un corrector de ejercicios formativos para una plataforma educativa." +
-                                    "**IMPORTANTE**: Responde única y exclusivamente con un String válido y nada más. "+
-                            "Indica cuales son los errores y como mejorar el siguiente fragmento de codigo: %s"+
-                                    ", que provoca este error %s y que busca resolver la siguiente consigna %s",request.getCodigo()
-                            , result,ejercicio.getDescripcion()));
-
+                    JsonNode root = mapper.readTree(result);
+                    boolean success = root.path("success").asBoolean(false);
+                    if (!success) {
+                        String errorMsg = root.path("error").asText();
+                        result = gemini.generarTextoEjercicio(String.format(
+                                "Eres un corrector de ejercicios formativos para una plataforma educativa. " +
+                                        "**IMPORTANTE**: Responde única y exclusivamente con un String válido y nada más. " +
+                                        "Indica cuáles son los errores y cómo mejorar el siguiente fragmento de código: %s, " +
+                                        "que provoca este error %s y que busca resolver la siguiente consigna %s",
+                                request.getCodigo(),
+                                errorMsg,
+                                ejercicio.getDescripcion()
+                        ));
+                    }
                     return result;
                 }
                 Thread.sleep(1000);
