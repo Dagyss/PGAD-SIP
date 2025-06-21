@@ -154,15 +154,11 @@ public class UsuarioServiceImpl implements UsuarioService {
         if (userMap == null || userMap.isEmpty()) {
             throw new RuntimeException("Auth0 devolvió un body vacío");
         }
-
-        Auth0UserDTO auth0dto = objectMapper.convertValue(userMap, Auth0UserDTO.class);
-        Usuario u = usuarioMapper.fromAuth0(auth0dto);
-        Usuario guardado = usuarioRepository.save(u);
-
         // 3) Obtengo el ID del rol "user" y se lo asigno en Auth0
         String roleId = obtenerUserRoleId(token);
         asignarRolEnAuth0(auth0Id, roleId, token);
-
-        return guardado;
+        Auth0UserDTO auth0dto = objectMapper.convertValue(userMap, Auth0UserDTO.class);
+        Usuario u = usuarioMapper.fromAuth0(auth0dto);
+        return usuarioRepository.save(u);
     }
 }
