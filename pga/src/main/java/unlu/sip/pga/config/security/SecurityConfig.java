@@ -13,6 +13,11 @@ import org.springframework.security.oauth2.jwt.*;
 import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationConverter;
 import org.springframework.security.oauth2.server.resource.authentication.JwtGrantedAuthoritiesConverter;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+import org.springframework.web.cors.CorsConfigurationSource;
+
+import java.util.List;
 
 @Configuration
 @RequiredArgsConstructor
@@ -24,40 +29,57 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain httpSecurity(final HttpSecurity http) throws Exception {
         http
+                .cors(Customizer.withDefaults())
                 .authorizeHttpRequests(authz -> authz
-                        .requestMatchers(HttpMethod.POST, "/api/cursos").hasAuthority("create:course")
-                        .requestMatchers("/api/messages/protected", "/api/messages/admin").authenticated()
+                        .requestMatchers(HttpMethod.POST, "/api/cursos")
+                        .hasAuthority("create:course")
+                        .requestMatchers("/api/messages/protected", "/api/messages/admin")
+                        .authenticated()
                         .anyRequest().permitAll()
                 )
-                .cors(Customizer.withDefaults())
                 .oauth2ResourceServer(oauth2 -> oauth2
                         .jwt(jwt -> jwt.jwtAuthenticationConverter(makePermissionsConverter()))
                         .authenticationEntryPoint(authenticationErrorHandler)
                 );
+
         return http.build();
     }
 
     private JwtAuthenticationConverter makePermissionsConverter() {
-        JwtGrantedAuthoritiesConverter grantedAuthoritiesConverter = new JwtGrantedAuthoritiesConverter();
-        // sacamos cualquier prefijo y leemos el claim "permissions"
-        grantedAuthoritiesConverter.setAuthorityPrefix("");
-        grantedAuthoritiesConverter.setAuthoritiesClaimName("permissions");
+        JwtGrantedAuthoritiesConverter gac = new JwtGrantedAuthoritiesConverter();
+        gac.setAuthorityPrefix("");
+        gac.setAuthoritiesClaimName("permissions");
 
-        JwtAuthenticationConverter jwtAuthConverter = new JwtAuthenticationConverter();
-        jwtAuthConverter.setJwtGrantedAuthoritiesConverter(grantedAuthoritiesConverter);
-        return jwtAuthConverter;
+        JwtAuthenticationConverter jac = new JwtAuthenticationConverter();
+        jac.setJwtGrantedAuthoritiesConverter(gac);
+        return jac;
     }
 
     @Bean
     JwtDecoder jwtDecoder() {
-        NimbusJwtDecoder jwtDecoder = (NimbusJwtDecoder)
+        NimbusJwtDecoder decoder = (NimbusJwtDecoder)
                 JwtDecoders.fromIssuerLocation("https://dev-ymy386h280ssuqwp.us.auth0.com/");
 
-        OAuth2TokenValidator<Jwt> withAudience = new AudienceValidator("https://PGAD-SIP.unlu.com");
-        OAuth2TokenValidator<Jwt> withIssuer = JwtValidators.createDefaultWithIssuer("https://dev-ymy386h280ssuqwp.us.auth0.com/");
-        OAuth2TokenValidator<Jwt> validator = new DelegatingOAuth2TokenValidator<>(withIssuer, withAudience);
+        OAuth2TokenValidator<Jwt> audienceValidator =
+                new AudienceValidator("https://PGAD-SIP.unlu.com");
+        OAuth2TokenValidator<Jwt> issuerValidator =
+                JwtValidators.createDefaultWithIssuer("https://dev-ymy386h280ssuqwp.us.auth0.com/");
+        decoder.setJwtValidator(
+                new DelegatingOAuth2TokenValidator<>(issuerValidator, audienceValidator)
+        );
+        return decoder;
+    }
 
-        jwtDecoder.setJwtValidator(validator);
-        return jwtDecoder;
+    @Bean
+    CorsConfigurationSource corsConfigurationSource() {
+        CorsConfiguration cfg = new CorsConfiguration();
+        cfg.setAllowedOrigins(List.of("*"));               // o poner tu dominio concreto
+        cfg.setAllowedMethods(List.of("GET","POST","PUT","DELETE","OPTIONS"));
+        cfg.setAllowedHeaders(List.of("Authorization","Content-Type"));
+        cfg.setAllowCredentials(true);
+
+        UrlBasedCorsConfigurationSource src = new UrlBasedCorsConfigurationSource();
+        src.registerCorsConfiguration("/**", cfg);
+        return src;
     }
 }
