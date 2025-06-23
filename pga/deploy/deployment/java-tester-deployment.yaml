@@ -4,7 +4,7 @@ metadata:
   name: java-tester
   namespace: pga-backend
 spec:
-  replicas: 1
+  replicas: 0
   selector:
     matchLabels:
       app: java-tester
@@ -15,7 +15,7 @@ spec:
     spec:
       containers:
       - name: java-tester
-        image: bautista222221/java-tester:1.5
+        image: bautista222221/java-tester:1.6
         env:
           - name: RABBITMQ_HOST
             value: "rabbitmq"  # nombre del servicio RabbitMQ

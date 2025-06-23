@@ -21,11 +21,11 @@ public class TestEjercicio {
     @JoinColumn(name = "ejercicio_id", nullable = false)
     private Ejercicio ejercicio;
 
-    @Column(nullable = false, length = 200)
+    @Column(nullable = false, length = 1000)
     @EqualsAndHashCode.Include
     private String entrada;
 
-    @Column(nullable = false, length = 200)
+    @Column(nullable = false, length = 1000)
     @EqualsAndHashCode.Include
     private String salidaEsperada;
 }

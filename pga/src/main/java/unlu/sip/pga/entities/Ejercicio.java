@@ -8,25 +8,28 @@ import lombok.NoArgsConstructor;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Setter;
+import lombok.experimental.SuperBuilder;
 
 import java.util.Date;
 import java.util.Set;
 
+
 @Getter @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@Builder
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
 @Entity
 @Table(name = "ejercicio")
+@Inheritance(strategy = InheritanceType.JOINED)
+@SuperBuilder
 public class Ejercicio {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @EqualsAndHashCode.Include
     private Integer id;
 
-    @ManyToOne
-    @JoinColumn(name = "idModulo", nullable = false)
+    @ManyToOne(fetch = FetchType.LAZY, optional = true)
+    @JoinColumn(name = "idModulo", nullable = true)
     private Modulo modulo;
 
     @Column(length = 100, nullable = false)

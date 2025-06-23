@@ -1,7 +1,8 @@
 spring:
-  redis:
-    host: redis
-    port: 6379
+  data:
+    redis:
+      host: redis
+      port: 6379
   application:
     name: pga
   web:
@@ -58,6 +59,9 @@ okta:
 logging:
   file:
     name: logs/app.log
+  level:
+    "[org.springframework.security]": DEBUG
+    '[org.springframework.boot.autoconfigure.security]': DEBUG
 
 gemini:
   apiKey: ${GEMINI_API_KEY}

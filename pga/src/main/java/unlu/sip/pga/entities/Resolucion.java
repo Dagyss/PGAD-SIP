@@ -34,7 +34,8 @@ public class Resolucion {
     @Column(nullable = false)
     private LocalDate fechaResolucion;
 
-    @Column(length = 200)
+    @Lob
+    @Column(nullable = false)
     private String resolucion;
 
     @Enumerated(EnumType.STRING)

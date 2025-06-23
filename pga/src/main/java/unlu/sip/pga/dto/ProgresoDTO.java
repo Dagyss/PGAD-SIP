@@ -9,7 +9,7 @@ import lombok.AllArgsConstructor;
 public class ProgresoDTO {
     private Integer id;
     private CursoDTO curso;
-    private UsuarioDTO Usuario;
+    private UsuarioDTO usuario;
     private Float porcentajeCompletado;
     private Date fechaActualizacion;
 }

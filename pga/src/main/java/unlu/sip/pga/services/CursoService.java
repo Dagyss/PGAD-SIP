@@ -6,7 +6,7 @@ import java.util.List;
 import java.util.Optional;
 
 public interface CursoService {
-    Curso crearCurso(Curso curso) throws Exception;
+    CursoDTO crearCurso(Curso curso) throws Exception;
     Optional<CursoDTO> obtenerCursoPorId(Integer id);
     List<CursoDTO> listarCursos();
     Curso actualizarCurso(Curso curso);

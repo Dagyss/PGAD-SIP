@@ -18,12 +18,12 @@ spec:
       serviceAccountName: pga-sa
       containers:
         - name: pga-backend
-          image: dagyss/pga-backend:v1.1.8
+          image: dagyss/pga-backend:v1.5.2
           ports:
             - containerPort: 6060
           envFrom:
             - secretRef:
-                name: pga-secrets
+                name: pga-secrets-back
             - configMapRef:
                 name: genai-config
           env:

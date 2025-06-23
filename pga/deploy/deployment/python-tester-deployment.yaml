@@ -4,7 +4,7 @@ metadata:
   name: python-tester
   namespace: pga-backend
 spec:
-  replicas: 1
+  replicas: 0
   selector:
     matchLabels:
       app: python-tester
@@ -15,7 +15,7 @@ spec:
     spec:
       containers:
       - name: python-tester
-        image: bautista222221/python-tester:1.6
+        image: bautista222221/python-tester:2.2
         env:
           - name: RABBITMQ_HOST
             value: "rabbitmq"  # nombre del servicio RabbitMQ

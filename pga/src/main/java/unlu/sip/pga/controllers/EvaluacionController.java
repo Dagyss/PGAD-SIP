@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import unlu.sip.pga.dto.EvaluacionDTO;
+import unlu.sip.pga.dto.GenerateEvaluacionRequestDTO;
 import unlu.sip.pga.mappers.EvaluacionMapper;
 import unlu.sip.pga.services.EvaluacionService;
 
@@ -33,11 +34,12 @@ public class EvaluacionController {
     }
 
     @PostMapping
-    public ResponseEntity<EvaluacionDTO> crear(@RequestBody EvaluacionDTO dto) {
-        EvaluacionDTO creado = evaluacionMapper.toDto(
-                evaluacionService.crearEvaluacion(evaluacionMapper.toEntity(dto)));
-        return ResponseEntity.ok(creado);
+    public ResponseEntity<EvaluacionDTO> crear(@RequestBody GenerateEvaluacionRequestDTO req) throws Exception {
+        EvaluacionDTO generadoDto = evaluacionService.crearEvaluacion(req);
+        return ResponseEntity.ok(generadoDto);
     }
+
+    
 
     @PutMapping("/{id}")
     public ResponseEntity<EvaluacionDTO> actualizar(@PathVariable Integer id, @RequestBody EvaluacionDTO dto) {

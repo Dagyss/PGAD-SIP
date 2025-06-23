@@ -16,7 +16,7 @@ import unlu.sip.pga.mappers.TipoSuscripcionMapper;
 import unlu.sip.pga.services.TipoSuscripcionService;
 
 @RestController
-@RequestMapping("/api/tiposSuscripcion")
+@RequestMapping("/api/tipos-suscripcion")
 public class TipoSuscripcionController {
 
     @Autowired

@@ -8,6 +8,7 @@ import java.net.http.HttpResponse;
 import java.util.Map;
 
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -25,6 +26,7 @@ public class LlamaController {
     private final ObjectMapper objectMapper = new ObjectMapper();
 
     @PostMapping
+    @PreAuthorize("hasRole('user')")
     public ResponseEntity<String> askModel(@RequestBody Map<String, String> body)
                             throws IOException, InterruptedException {
         String prompt = body.get("prompt");
@@ -33,17 +35,20 @@ public class LlamaController {
         }
         
         String jsonRequest = objectMapper.writeValueAsString(Map.of(
+            "model", "tinyllama",
+            //"model", "mistral:7b-instruct",
             "prompt", prompt,
             "n_predict", 128
         ));
 
         HttpRequest req = HttpRequest.newBuilder()
-            .uri(URI.create("http://localhost:11434/completion"))
+            .uri(URI.create("http://ollama:11434/api/generate"))
             .header("Content-Type", "application/json")
             .POST(HttpRequest.BodyPublishers.ofString(jsonRequest))
             .build();
 
         HttpResponse<String> resp = client.send(req, HttpResponse.BodyHandlers.ofString());
+        System.out.println("respuesta del modelo: " + resp.body() );
         JsonNode json = objectMapper.readTree(resp.body());
         String content = json.get("content").asText();
         

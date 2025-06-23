@@ -9,12 +9,6 @@ import java.util.List;
 import java.util.Optional;
 
 public interface CursoRepository extends JpaRepository<Curso, Integer> {
-    @Query("SELECT c FROM Curso c " +
-            "LEFT JOIN FETCH c.categorias " +
-            "LEFT JOIN FETCH c.modulos m " +
-            "LEFT JOIN FETCH m.ejercicios " +
-            "WHERE c.id = :id")
-    Optional<Curso> findByIdWithModulesAndExercises(@Param("id") Integer id);
 
     @Query("""
         SELECT DISTINCT c
@@ -22,6 +16,20 @@ public interface CursoRepository extends JpaRepository<Curso, Integer> {
         LEFT JOIN FETCH c.categorias
         LEFT JOIN FETCH c.modulos m
         LEFT JOIN FETCH m.ejercicios
+        LEFT JOIN FETCH c.evaluaciones ev
+        LEFT JOIN FETCH ev.evaluacionTests tet
+        WHERE c.id = :id
     """)
-    List<Curso> findAllWithModulesAndExercises();
+    Optional<Curso> findByIdWithAll(@Param("id") Integer id);
+
+    @Query("""
+        SELECT DISTINCT c
+        FROM Curso c
+        LEFT JOIN FETCH c.categorias
+        LEFT JOIN FETCH c.modulos m
+        LEFT JOIN FETCH m.ejercicios
+        LEFT JOIN FETCH c.evaluaciones ev
+        LEFT JOIN FETCH ev.evaluacionTests tet
+    """)
+    List<Curso> findAllWithAll();
 }

@@ -6,3 +6,7 @@ kubectl apply -f deploy/configmaps/
 kubectl apply -f deploy/services/
 kubectl apply -f deploy/statefulset/
 kubectl apply -f deploy/deployment/
+kubectl apply -f deploy/ingress/
+kubectl apply -f deploy/clusterIssuer/
+kubectl apply -f deploy/certificate/
+kubectl apply -f deploy/scaledObject/
