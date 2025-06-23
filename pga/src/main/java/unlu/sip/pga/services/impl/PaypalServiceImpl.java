@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 
 import unlu.sip.pga.entities.Pago;
 import unlu.sip.pga.entities.TipoSuscripcion;
+import unlu.sip.pga.entities.TransactionDetails;
 import unlu.sip.pga.entities.Usuario;
 import unlu.sip.pga.repositories.PagoRepository;
 import unlu.sip.pga.repositories.TipoSuscripcionRepository;
@@ -21,6 +22,7 @@ import unlu.sip.pga.repositories.UsuarioRepository;
 import unlu.sip.pga.services.PaypalService;
 
 import java.io.IOException;
+import java.math.BigDecimal;
 import java.time.Instant;
 import java.util.Arrays;
 import java.util.Map;
@@ -93,6 +95,7 @@ public class PaypalServiceImpl implements PaypalService {
      ).build();
    OrdersController ordersController = paypalClient.getOrdersController();
    ApiResponse<Order> apiResponse = ordersController.createOrder(createOrderInput);
+   System.out.println(">>> Order creada: " + apiResponse.getResult().getId());
    return apiResponse.getResult();
 }
 
@@ -136,6 +139,30 @@ public class PaypalServiceImpl implements PaypalService {
         
         Usuario user = usuarioRepo.findById(userId)
         .orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
+
+        String netValueStr = capture.getSellerReceivableBreakdown().getNetAmount().getValue();
+        String totalPaidStr = capture.getSellerReceivableBreakdown().getGrossAmount().getValue();
+
+        BigDecimal netAmount;
+        BigDecimal totalPaidAmount;
+
+        try {
+            netAmount = new BigDecimal(netValueStr);
+            totalPaidAmount = new BigDecimal(totalPaidStr);
+        } catch (NumberFormatException e) {
+            throw new RuntimeException("Error al parsear valores monetarios: net=" + netValueStr + ", total=" + totalPaidStr, e);
+        }
+
+        System.out.println("Valor bruto: " + capture.getSellerReceivableBreakdown().getNetAmount().getValue());
+        System.out.println("netAmount: " + netAmount);
+        System.out.println("totalPaidAmount: " + totalPaidAmount);
+
+
+
+        TransactionDetails transactionDetails = TransactionDetails.builder()
+        .netReceivedAmount(netAmount)
+        .totalPaidAmount(totalPaidAmount)
+        .build();
         
         Pago pago = Pago.builder()
         .id(paymentId)
@@ -145,6 +172,7 @@ public class PaypalServiceImpl implements PaypalService {
         .moneyReleaseDate(null)
         .statusDetail(capture.getStatusDetails() != null ?
         capture.getStatusDetails().getReason().name() : null)
+        .transactionDetails(transactionDetails)
         .usuario(user)
         .build();
         

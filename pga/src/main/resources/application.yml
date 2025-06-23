@@ -57,8 +57,6 @@ okta:
     audience: ${OKTA_OAUTH2_AUDIENCE}
 
 logging:
-  file:
-    name: logs/app.log
   level:
     "[org.springframework.security]": DEBUG
     '[org.springframework.boot.autoconfigure.security]': DEBUG

@@ -45,3 +45,4 @@ terraform/*
 pgdata/
 
 .last_jar_hash
+buildAndDeploy.sh

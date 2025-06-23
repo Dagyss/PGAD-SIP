@@ -1,5 +1,7 @@
 package unlu.sip.pga.entities;
 
+import java.math.BigDecimal;
+
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -19,8 +21,8 @@ public class TransactionDetails {
     private Integer id;
 
     @Column(name = "net_received_amount", nullable = false)
-    private Integer netReceivedAmount;
+    private BigDecimal netReceivedAmount;
 
     @Column(name = "total_paid_amount", nullable = false)
-    private Integer totalPaidAmount;
+    private BigDecimal totalPaidAmount;
 }
