@@ -1,18 +1,34 @@
 package unlu.sip.pga.controllers;
 
+import com.mercadopago.client.payment.PaymentClient;
 import com.mercadopago.exceptions.MPApiException;
 import com.mercadopago.exceptions.MPException;
+import com.mercadopago.resources.payment.Payment;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.web.bind.annotation.*;
 import unlu.sip.pga.dto.BacksUrlDTO;
 import unlu.sip.pga.dto.MpNotifyDTO;
+import unlu.sip.pga.entities.Pago;
+import unlu.sip.pga.entities.TransactionDetails;
+import unlu.sip.pga.entities.Usuario;
+import unlu.sip.pga.repositories.PagoRepository;
 import unlu.sip.pga.services.MercadoPagoService;
+import unlu.sip.pga.services.UsuarioService;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.util.Date;
+import java.util.HashMap;
 import java.util.Map;
 
 @CrossOrigin(origins = "http://localhost:5173") 
@@ -22,6 +38,15 @@ public class MercadoPagoController {
 
     @Autowired
     private MercadoPagoService mercadoPagoService;
+
+    @Autowired
+    private UsuarioService usuarioService;
+
+    @Autowired
+    private PagoRepository pagoRepository;
+
+    @Value("${application.client-origin-url}")
+    private String frontendUrl;
 
     // @PostMapping("/process")
     // public void processPayment(@RequestBody Map<String, Object> cardFormData) {
@@ -51,42 +76,43 @@ public class MercadoPagoController {
 
 
     @PostMapping("/preference")
-    public ResponseEntity<String> getIdPreference(@RequestBody Map<String, Object> cardFormData) {
-        // Crear una instancia del logger
-        Logger logger = LoggerFactory.getLogger(this.getClass());
-        logger.info("Datos recibidos: {}", cardFormData);
-        String preferenceId = "1234";
-        String titulo = "curso";
+    public ResponseEntity<Map<String, String>> getIdPreference(@RequestBody Map<String, Object> data) {
+        String titulo = "Suscripción";
         int cantidad = 1;
-        BigDecimal precio = new BigDecimal("1000");
         String currency = "ARS";
+        BigDecimal precio = new BigDecimal(String.valueOf(data.get("transaction_amount")));
 
         try {
             BacksUrlDTO backsUrl = new BacksUrlDTO();
-            backsUrl.setSuccess("https://localhost:5173/success");
-            backsUrl.setPending("https://localhost:5173/pending");
-            backsUrl.setFailure("https://localhost:5173/failed");
+            backsUrl.setSuccess("https://34.10.220.212.nip.io/success");
+            backsUrl.setPending("https://34.10.220.212.nip.io/pending");
+            backsUrl.setFailure("https://34.10.220.212.nip.io/failed");
 
             // Llamada al servicio de MercadoPago para crear una preferencia de pago
-            preferenceId = this.mercadoPagoService.createPreference(
-                titulo, cantidad,currency,
-                    precio, backsUrl,
-                    "https://localhost:6060/api/v1/mercadopago/notify");
+            String initPoint = this.mercadoPagoService.createPreference(
+                titulo, cantidad,currency, precio, backsUrl,
+                "/api/v1/mercadopago/notify");
+            
+            Map<String, String> response = new HashMap<>();
+            response.put("init_point", initPoint);
+                
 
             //Dentro de este metodo podemos recibir información para pasarle por params al controlador de notify una vew que se haya realizado el pago, ej:el username del usuario,
 
             // Si se crea la preferencia correctamente, retornamos el ID
-            return ResponseEntity.ok(preferenceId);
+            return ResponseEntity.ok(response);
         } catch (MPException | MPApiException e) {
+            Map<String, String> error = new HashMap<>();
+            error.put("error", "Error creando preferencia: " + e.getMessage());
             // Capturamos excepciones específicas de MercadoPago
-            logger.error("Error creando preferencia de pago en MercadoPago", e);
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body("Error creando preferencia de pago en MercadoPago: " + e.getMessage());
+            .body(error);
         } catch (Exception e) {
+            Map<String, String> error = new HashMap<>();
+            error.put("error", "Error inesperado: " + e.getMessage());
             // Capturamos cualquier otra excepción
-            logger.error("Error inesperado creando preferencia de pago", e);
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body("Error inesperado creando preferencia de pago: " + e.getMessage());
+                    .body(error);
         }
 
     }
@@ -105,6 +131,42 @@ public class MercadoPagoController {
         // Podemos realizar cualquier acción necesaria con esta información,
         // como guardar los detalles del pago en la base de datos,
         // actualizar el estado de una orden, enviar notificaciones a los usuarios, etc.
+        String paymentId = mpNotify.getData().getId();
+        try {
+            PaymentClient client = new PaymentClient();
+            Payment payment = client.get(Long.parseLong(paymentId));
+            Pago pago = new Pago();
+            pago.setId(payment.getId().toString());
+            pago.setDateCreated(Date.from(payment.getDateCreated().toInstant()));
+            pago.setDateApproved(Date.from(payment.getDateApproved().toInstant()));
+            pago.setStatus(payment.getStatus());
+            pago.setStatusDetail(payment.getStatusDetail());
+            
+            TransactionDetails transactionDetails = new TransactionDetails();
+            transactionDetails.setNetReceivedAmount(payment.getTransactionDetails().getNetReceivedAmount());
+            transactionDetails.setTotalPaidAmount(payment.getTransactionDetails().getTotalPaidAmount());
+            pago.setTransactionDetails(transactionDetails);
+
+
+            Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+            String userId = null;
+            if (auth.getPrincipal() instanceof Jwt jwt) {
+                userId = jwt.getSubject();
+            }
+
+            if (userId==null) {
+                throw new RuntimeException("No se pudo obtener el ID de usuario del contexto de seguridad");
+            }
+
+            Usuario user = usuarioService.obtenerUsuarioPorId(userId)
+                .orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
+
+            pago.setUsuario(user);
+
+            pagoRepository.save(pago);
+        } catch (MPException | MPApiException e) {
+            logger.error("error al consultar el pago ", e);
+        }
     }
 
 }

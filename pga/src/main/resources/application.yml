@@ -56,10 +56,10 @@ okta:
     issuer: ${OKTA_OAUTH2_ISSUER}
     audience: ${OKTA_OAUTH2_AUDIENCE}
 
-logging:
-  level:
-    "[org.springframework.security]": DEBUG
-    '[org.springframework.boot.autoconfigure.security]': DEBUG
+# logging:
+  # level:
+  #   "[org.springframework.security]": DEBUG
+  #   '[org.springframework.boot.autoconfigure.security]': DEBUG
 
 gemini:
   apiKey: ${GEMINI_API_KEY}

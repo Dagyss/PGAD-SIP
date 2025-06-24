@@ -79,7 +79,6 @@ public class UsuarioServiceImpl implements UsuarioService {
         HttpEntity<Map<String,String>> request = new HttpEntity<>(req, h);
         ResponseEntity<Map> resp = restTemplate.postForEntity(
                 "https://" + auth0Domain + "/oauth/token", request, Map.class);
-        @SuppressWarnings("unchecked")
         String token = (String) resp.getBody().get("access_token");
         return token;
     }

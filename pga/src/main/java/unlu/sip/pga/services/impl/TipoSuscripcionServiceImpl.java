@@ -1,6 +1,8 @@
 package unlu.sip.pga.services.impl;
 
 import java.util.List;
+import java.util.Optional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import unlu.sip.pga.entities.TipoSuscripcion;
@@ -19,6 +21,10 @@ public class TipoSuscripcionServiceImpl implements TipoSuscripcionService {
     @Override
     public TipoSuscripcion createTipoSuscripcion(TipoSuscripcion tipoSuscripcion) {
         return repo.save(tipoSuscripcion);
+    }
+
+    public Optional<TipoSuscripcion> getTipoSuscripcion(Integer id) {
+        return repo.findById(id);
     }
     
 }
