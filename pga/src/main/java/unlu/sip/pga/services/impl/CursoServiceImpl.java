@@ -39,11 +39,36 @@ public class CursoServiceImpl implements CursoService {
         // 1. Guardar curso base
         Curso cursoGuardado = cursoRepository.save(curso);
 
-        // 2. Generar 5 módulos vía IA
+        // Map de módulos por duración
+        Map<String, Integer> modulosPorDuracion = Map.of(
+                "1 semana", 1,
+                "2 semanas", 1,
+                "4 semanas", 2,
+                "1 mes",     2,
+                "3 meses",   3,
+                "6 meses",   6
+        );
+
+        // Map de ejercicios por módulo según dificultad/duración
+        Map<String, Integer> ejerciciosPorDuracion = Map.of(
+                "1 semana", 2,
+                "2 semanas", 4,
+                "4 semanas", 3,
+                "1 mes",     3,
+                "3 meses",   4,
+                "6 meses",   4
+        );
+
+        String duracion = cursoGuardado.getDuracion();
+        int cantidadModulos = modulosPorDuracion.getOrDefault(duracion, 1);
+        int ejerciciosPorModulo = ejerciciosPorDuracion.getOrDefault(duracion, 3);
+
+        // 2. Generar módulos vía IA
         String prompt = String.format(
                 "**IMPORTANTE**: Responde única y exclusivamente con un objeto JSON válido y nada más. " +
                         "El objeto JSON debe tener exactamente dos campos por módulo: \"titulo\" (50 caracteres max) y \"descripcion\" (150 caracteres max). " +
-                        "Genera una serie de 3 titulos de módulos de dificultad %s que aumente progresivamente y no se repitan para el curso %s y las categorías %s. y una minima descripcion",
+                        "Genera una serie de %d titulos de módulos de dificultad %s que aumente progresivamente y no se repitan para el curso %s y las categorías %s. y una minima descripcion",
+                cantidadModulos,
                 curso.getNivel(), cursoGuardado.getTitulo(),
                 Optional.ofNullable(cursoGuardado.getCategorias())
                         .map(cats -> cats.stream().map(Categoria::getNombre).toList())
@@ -68,7 +93,7 @@ public class CursoServiceImpl implements CursoService {
         String jsonArray = trimmed.substring(startArr, endArr + 1);
 
         JsonNode modulesNode = mapper.readTree(jsonArray);
-        // iterar sobre los 3 módulos
+        // iterar sobre los módulos
         for (int idx = 0; idx < modulesNode.size(); idx++) {
             JsonNode modNode = modulesNode.get(idx);
             ModuloDTO modDto = new ModuloDTO();
@@ -81,8 +106,8 @@ public class CursoServiceImpl implements CursoService {
 
             Modulo modulo = moduloService.crearModulo(modDto);
 
-            // 3. Para cada módulo, generar 3 ejercicios sencillos
-            for (int j = 1; j <= 3; j++) {
+            // 3. Para cada módulo, generar ejercicios
+            for (int j = 1; j <= ejerciciosPorModulo; j++) {
                 GenerateEjercicioRequestDTO req = new GenerateEjercicioRequestDTO(
                         modulo.getId(), cursoGuardado.getNivel(),
                         Optional.ofNullable(cursoGuardado.getCategorias())
