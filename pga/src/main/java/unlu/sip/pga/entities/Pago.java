@@ -19,7 +19,7 @@ public class Pago {
     @Column(name = "payment_id", length = 100, nullable = false, unique = true)
     private String id;
 
-    @Column(name = "date_created", nullable = false)
+    @Column(name = "date_created")
     @Temporal(TemporalType.TIMESTAMP)
     private Date dateCreated;
 
