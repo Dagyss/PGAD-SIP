@@ -4,7 +4,7 @@ metadata:
   name: java-tester
   namespace: pga-backend
 spec:
-  replicas: 0
+  replicas: 1
   selector:
     matchLabels:
       app: java-tester

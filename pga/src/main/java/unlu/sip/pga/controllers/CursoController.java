@@ -1,4 +1,5 @@
 package unlu.sip.pga.controllers;
+import org.springframework.security.core.Authentication;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -27,11 +28,11 @@ public class CursoController {
                 .orElse(ResponseEntity.notFound().build());
     }
 
+    @PreAuthorize("@limitServiceImpl.canCreateCourse(authentication)")
     @PostMapping
-    @PreAuthorize("hasAuthority('create:course')")
-    public ResponseEntity<CursoDTO> crear(@RequestBody CursoDTO dto) throws Exception {
+    public ResponseEntity<CursoDTO> crear(@RequestBody CursoDTO dto,  Authentication auth) throws Exception {
         CursoDTO curso =
-                cursoService.crearCurso(cursoMapper.toEntity(dto));
+                cursoService.crearCurso(cursoMapper.toEntity(dto), auth);
         return ResponseEntity.ok(curso);
     }
 

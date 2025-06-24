@@ -25,6 +25,9 @@ public class Curso {
     @EqualsAndHashCode.Include
     private Integer id;
 
+    @Column(length = 200, nullable = false)
+    private String createdBy;
+
     @Column(length = 100, nullable = false)
     private String titulo;
 

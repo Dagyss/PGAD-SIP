@@ -104,7 +104,7 @@ public class UsuarioServiceImpl implements UsuarioService {
 
         List<Map<String,Object>> roles = resp.getBody();
         if (roles == null || roles.isEmpty()) {
-            throw new RuntimeException("No se encontró el rol 'user' en Auth0");
+            throw new RuntimeException(String.format("No se encontró el rol 'user' en Auth0"));
         }
         String roleId = (String) roles.get(0).get("id");
         cachedUserRoleId = roleId;

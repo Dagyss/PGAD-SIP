@@ -1,5 +1,6 @@
 package unlu.sip.pga.services.impl;
 
+import org.springframework.security.core.Authentication;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.persistence.EntityNotFoundException;
@@ -16,6 +17,7 @@ import unlu.sip.pga.repositories.CategoriaRepository;
 import unlu.sip.pga.repositories.EvaluacionRepository;
 import unlu.sip.pga.services.*;
 
+import java.nio.file.AccessDeniedException;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -32,11 +34,14 @@ public class CursoServiceImpl implements CursoService {
     @Autowired private EvaluacionService evaluacionService;
     @Autowired private EvaluacionRepository evaluacionRepository;
     @Autowired private CategoriaRepository categoriaRepo;
+    @Autowired private LimitService limitService;
     private final ObjectMapper mapper = new ObjectMapper();
     @Override
     @Transactional
-    public CursoDTO crearCurso(Curso curso) throws Exception {
+    public CursoDTO crearCurso(Curso curso, Authentication auth) throws Exception {
         // 1. Guardar curso base
+
+        curso.setCreatedBy(auth.getName());
         Curso cursoGuardado = cursoRepository.save(curso);
 
         // Map de módulos por duración

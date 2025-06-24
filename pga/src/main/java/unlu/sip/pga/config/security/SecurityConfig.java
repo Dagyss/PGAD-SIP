@@ -30,10 +30,9 @@ public class SecurityConfig {
     public SecurityFilterChain httpSecurity(final HttpSecurity http) throws Exception {
         http
                 .cors(Customizer.withDefaults())
+
                 .authorizeHttpRequests(authz -> authz
                         .requestMatchers(HttpMethod.POST, "/api/cursos")
-                        .hasAuthority("create:course")
-                        .requestMatchers("/api/messages/protected", "/api/messages/admin")
                         .authenticated()
                         .anyRequest().permitAll()
                 )
@@ -73,7 +72,7 @@ public class SecurityConfig {
     @Bean
     CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration cfg = new CorsConfiguration();
-        cfg.setAllowedOrigins(List.of("*"));               // o poner tu dominio concreto
+        cfg.setAllowedOriginPatterns(List.of("*"));
         cfg.setAllowedMethods(List.of("GET","POST","PUT","DELETE","OPTIONS"));
         cfg.setAllowedHeaders(List.of("Authorization","Content-Type"));
         cfg.setAllowCredentials(true);

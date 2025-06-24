@@ -32,4 +32,6 @@ public interface CursoRepository extends JpaRepository<Curso, Integer> {
         LEFT JOIN FETCH ev.evaluacionTests tet
     """)
     List<Curso> findAllWithAll();
+
+    long countByCreatedBy(String createdBy);
 }
