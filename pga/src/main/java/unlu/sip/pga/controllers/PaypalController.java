@@ -9,7 +9,7 @@ import unlu.sip.pga.services.PaypalService;
 
 import java.util.Map;
 
-@CrossOrigin(origins = "http://localhost:5173")
+@CrossOrigin(origins = "http://34.10.220.212.nip.io:5173")
 @RestController
 @RequestMapping("/api/paypal")
 public class PaypalController {
