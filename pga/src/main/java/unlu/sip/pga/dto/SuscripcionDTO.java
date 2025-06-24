@@ -9,7 +9,7 @@ import lombok.AllArgsConstructor;
 public class SuscripcionDTO {
     private Integer id;
     private UsuarioDTO usuario;
-    private String tipoSuscripcion;
+    private TipoSuscripcionDTO suscripcion;
     private Date fechaInicio;
     private Date fechaFin;
 }

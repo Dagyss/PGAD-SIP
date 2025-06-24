@@ -15,7 +15,7 @@ spec:
     spec:
       containers:
       - name: frontend
-        image: marcos1as/pga-frontend:v1.1.4
+        image: marcos1as/pga-frontend:v1.2.2
         ports:
         - containerPort: 80
         envFrom:
