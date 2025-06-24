@@ -13,10 +13,12 @@ import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.stereotype.Service;
 
 import unlu.sip.pga.entities.Pago;
+import unlu.sip.pga.entities.Suscripcion;
 import unlu.sip.pga.entities.TipoSuscripcion;
 import unlu.sip.pga.entities.TransactionDetails;
 import unlu.sip.pga.entities.Usuario;
 import unlu.sip.pga.repositories.PagoRepository;
+import unlu.sip.pga.repositories.SuscripcionRepository;
 import unlu.sip.pga.repositories.TipoSuscripcionRepository;
 import unlu.sip.pga.repositories.UsuarioRepository;
 import unlu.sip.pga.services.PaypalService;
@@ -24,15 +26,19 @@ import unlu.sip.pga.services.PaypalService;
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.time.Instant;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.Arrays;
 import java.util.Map;
 import java.util.Date;
+import java.util.List;
 
 @Service
 public class PaypalServiceImpl implements PaypalService {
     private final PaypalServerSdkClient paypalClient;
     private final ObjectMapper objectMapper;
     private final TipoSuscripcionRepository suscripcionRepo;
+    private final SuscripcionRepository suscripcionesRepo;
     private final UsuarioRepository usuarioRepo;
     private final PagoRepository pagoRepo;
 
@@ -41,12 +47,14 @@ public class PaypalServiceImpl implements PaypalService {
         ObjectMapper objectMapper,
         TipoSuscripcionRepository suscripcionRepo,
         UsuarioRepository usuarioRepo,
-        PagoRepository pagoRepo) {
+        PagoRepository pagoRepo,
+        SuscripcionRepository suscripcionesRepo) {
         this.paypalClient = paypalClient;
         this.objectMapper = objectMapper;
         this.suscripcionRepo = suscripcionRepo;
         this.usuarioRepo = usuarioRepo;
         this.pagoRepo = pagoRepo;
+        this.suscripcionesRepo = suscripcionesRepo;
     }
 
     public Order createOrder(Map<String, Object> request) throws IOException, ApiException {
@@ -54,7 +62,7 @@ public class PaypalServiceImpl implements PaypalService {
 
         TipoSuscripcion tipo = suscripcionRepo.findById(suscripcionId)
             .orElseThrow(() -> new IllegalArgumentException("Tipo de suscripción no encontrado")); 
-        
+                
         String precio = String.format("%.2f", tipo.getPrecio());
         
         CreateOrderInput createOrderInput = new CreateOrderInput.Builder(
@@ -178,10 +186,36 @@ public class PaypalServiceImpl implements PaypalService {
         
         pagoRepo.save(pago);
 
-        Pago saved = pagoRepo.findById(paymentId).orElseThrow();
-        System.out.println(">> Pago guardado: " + saved);
+        // Pago saved = pagoRepo.findById(paymentId).orElseThrow();
+        // System.out.println(">> Pago guardado: " + saved);
 
         System.out.println("Order creada con ID: " + order.getId());
+
+        LocalDateTime localDateTime = createTime.toInstant()
+        .atZone(ZoneId.systemDefault())
+        .toLocalDateTime();
+
+        // Sumar 1 año
+        LocalDateTime fechaFinLocal = localDateTime.plusYears(1);
+
+        // Convertir de nuevo a Date
+        Date fechaFin = Date.from(fechaFinLocal.atZone(ZoneId.systemDefault()).toInstant());
+
+        List<TipoSuscripcion> tiposSuscripcion = suscripcionRepo.findAll();
+        TipoSuscripcion tipoSuscripcion = tiposSuscripcion.isEmpty() ?
+            null : tiposSuscripcion.get(0);
+
+        System.out.println(">>> Tipo de suscripción: " + tipoSuscripcion);
+
+        Suscripcion suscripcion = Suscripcion.builder()
+        .usuario(user)
+        .suscripcion(tipoSuscripcion)
+        .fechaInicio(createTime)
+        .fechaFin(fechaFin)
+        .build();
+        
+        suscripcionesRepo.save(suscripcion);
+
         return order;
     }
 

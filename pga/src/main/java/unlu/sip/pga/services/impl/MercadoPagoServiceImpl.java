@@ -80,9 +80,6 @@ public class MercadoPagoServiceImpl implements MercadoPagoService {
             e.printStackTrace();
             throw e;
         }
-
-
-
     }
 
     public PagoDTO getPago(String id_payment) {

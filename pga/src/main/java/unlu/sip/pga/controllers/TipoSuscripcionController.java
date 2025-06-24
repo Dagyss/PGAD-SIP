@@ -7,9 +7,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-
 import unlu.sip.pga.dto.TipoSuscripcionDTO;
 import unlu.sip.pga.entities.TipoSuscripcion;
 import unlu.sip.pga.mappers.TipoSuscripcionMapper;
@@ -39,6 +39,13 @@ public class TipoSuscripcionController {
 
         return ResponseEntity.ok(dtos); 
     }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<TipoSuscripcionDTO> getTipoSuscripcion(@PathVariable Integer id) {
+        return service.getTipoSuscripcion(id).map(mapper::toDto).map(ResponseEntity::ok)
+        .orElse(ResponseEntity.notFound().build());
+    }
+    
 
     @PostMapping()
     public ResponseEntity<TipoSuscripcionDTO> createTipoSuscripcion(@RequestBody TipoSuscripcionDTO tipoSuscripcionDTO) {
