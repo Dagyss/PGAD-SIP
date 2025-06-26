@@ -18,4 +18,6 @@ public interface UsuarioService {
     String obtenerTokenManagementApi();
     Usuario mapearUsuarioAuth0aEntidad(Map userMap);
     Usuario syncUsuarioPorId(String auth0Id) throws RuntimeException;
+    void asignarRolEnAuth0(String auth0UserId, String roleId, String token);
+    String obtenerRoleId(String token, String roleName);
 }

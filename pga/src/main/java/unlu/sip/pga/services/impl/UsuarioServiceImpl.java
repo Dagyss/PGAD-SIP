@@ -34,7 +34,6 @@ public class UsuarioServiceImpl implements UsuarioService {
     @Value("${auth0.clientSecret}")
     private String auth0ClientSecret;
     private RestTemplate restTemplate = new RestTemplate();
-    private String cachedUserRoleId = null;
     public Usuario crearUsuario(Usuario usuario) { return usuarioRepository.save(usuario); }
     public Optional<Usuario> obtenerUsuarioPorId(String id) { return usuarioRepository.findById(id); }
     public List<Usuario> listarUsuarios() { return usuarioRepository.findAll(); }
@@ -89,29 +88,25 @@ public class UsuarioServiceImpl implements UsuarioService {
         return usuarioMapper.fromAuth0(auth0dto);
     }
 
-    private String obtenerUserRoleId(String token) {
-        if (cachedUserRoleId != null) {
-            return cachedUserRoleId;
-        }
+    public String obtenerRoleId(String token, String roleName) {
         HttpHeaders headers = new HttpHeaders();
         headers.setBearerAuth(token);
         HttpEntity<Void> entity = new HttpEntity<>(headers);
 
-        String url = String.format("https://%s/api/v2/roles?name_filter=user", auth0Domain);
+        String url = String.format("https://%s/api/v2/roles?name_filter=%s", auth0Domain, roleName);
         ResponseEntity<List> resp = restTemplate.exchange(
                 url, HttpMethod.GET, entity, List.class);
 
         List<Map<String,Object>> roles = resp.getBody();
         if (roles == null || roles.isEmpty()) {
-            throw new RuntimeException(String.format("No se encontró el rol 'user' en Auth0"));
+            throw new RuntimeException(String.format("No se encontró el rol '%s' en Auth0",roleName));
         }
         String roleId = (String) roles.get(0).get("id");
-        cachedUserRoleId = roleId;
         return roleId;
     }
 
     /** Asigna el rol dado a un usuario de Auth0 */
-    private void asignarRolEnAuth0(String auth0UserId, String roleId, String token) {
+    public void asignarRolEnAuth0(String auth0UserId, String roleId, String token) {
         HttpHeaders headers = new HttpHeaders();
         headers.setBearerAuth(token);
         headers.setContentType(MediaType.APPLICATION_JSON);
@@ -132,6 +127,9 @@ public class UsuarioServiceImpl implements UsuarioService {
 
     @Override
     public Usuario syncUsuarioPorId(String auth0Id) {
+        if (usuarioRepository.existsById(auth0Id)){
+            return usuarioRepository.getReferenceById(auth0Id);
+        }
         // 1) Obtengo token
         String token = obtenerTokenManagementApi();
 
@@ -154,7 +152,7 @@ public class UsuarioServiceImpl implements UsuarioService {
             throw new RuntimeException("Auth0 devolvió un body vacío");
         }
         // 3) Obtengo el ID del rol "user" y se lo asigno en Auth0
-        String roleId = obtenerUserRoleId(token);
+        String roleId = obtenerRoleId(token, "user");
         asignarRolEnAuth0(auth0Id, roleId, token);
         Auth0UserDTO auth0dto = objectMapper.convertValue(userMap, Auth0UserDTO.class);
         Usuario u = usuarioMapper.fromAuth0(auth0dto);

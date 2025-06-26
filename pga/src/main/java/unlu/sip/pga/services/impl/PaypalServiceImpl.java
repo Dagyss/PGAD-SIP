@@ -22,16 +22,14 @@ import unlu.sip.pga.repositories.SuscripcionRepository;
 import unlu.sip.pga.repositories.TipoSuscripcionRepository;
 import unlu.sip.pga.repositories.UsuarioRepository;
 import unlu.sip.pga.services.PaypalService;
+import unlu.sip.pga.services.UsuarioService;
 
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
-import java.util.Arrays;
-import java.util.Map;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 @Service
 public class PaypalServiceImpl implements PaypalService {
@@ -41,15 +39,18 @@ public class PaypalServiceImpl implements PaypalService {
     private final SuscripcionRepository suscripcionesRepo;
     private final UsuarioRepository usuarioRepo;
     private final PagoRepository pagoRepo;
+    private final UsuarioService usuarioService;
 
     public PaypalServiceImpl(
         PaypalServerSdkClient paypalClient,
+        UsuarioService usuarioService,
         ObjectMapper objectMapper,
         TipoSuscripcionRepository suscripcionRepo,
         UsuarioRepository usuarioRepo,
         PagoRepository pagoRepo,
         SuscripcionRepository suscripcionesRepo) {
         this.paypalClient = paypalClient;
+        this.usuarioService = usuarioService;
         this.objectMapper = objectMapper;
         this.suscripcionRepo = suscripcionRepo;
         this.usuarioRepo = usuarioRepo;
@@ -215,7 +216,9 @@ public class PaypalServiceImpl implements PaypalService {
         .build();
         
         suscripcionesRepo.save(suscripcion);
-
+        String token = usuarioService.obtenerTokenManagementApi();
+        String roleId = usuarioService.obtenerRoleId(token,"premiumUser");
+        usuarioService.asignarRolEnAuth0(userId, roleId, token);
         return order;
     }
 
