@@ -164,6 +164,9 @@ public class MercadoPagoController {
             pago.setUsuario(user);
 
             pagoRepository.save(pago);
+            String token = usuarioService.obtenerTokenManagementApi();
+            String roleId = usuarioService.obtenerRoleId(token, "premiumUser");
+            usuarioService.asignarRolEnAuth0(userId,roleId,token);
         } catch (MPException | MPApiException e) {
             logger.error("error al consultar el pago ", e);
         }

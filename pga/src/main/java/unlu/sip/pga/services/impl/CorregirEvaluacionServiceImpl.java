@@ -10,19 +10,28 @@ import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Service;
 import unlu.sip.pga.dto.CodigoUsuarioDTO;
 import unlu.sip.pga.dto.CodigoUsuarioEvaluacionDTO;
+import unlu.sip.pga.entities.Certificacion;
 import unlu.sip.pga.entities.Ejercicio;
 import unlu.sip.pga.entities.Evaluacion;
+import unlu.sip.pga.entities.Usuario;
 import unlu.sip.pga.services.*;
 import redis.clients.jedis.Jedis;
 
 import java.util.UUID;
 import java.util.Map;
+import java.util.Date;
 
 @Service
 public class CorregirEvaluacionServiceImpl implements CorregirEvaluacionService {
     @Autowired private GeminiService gemini;
     @Autowired
     private EvaluacionService evaluacionService;
+
+    @Autowired
+    private CertificacionService certificacionService;
+
+    @Autowired
+    private UsuarioService usuarioService;
 
     private final ObjectMapper mapper = new ObjectMapper();
 
@@ -94,6 +103,18 @@ public class CorregirEvaluacionServiceImpl implements CorregirEvaluacionService 
                                 errorMsg,
                                 evaluacion.getDescripcion()
                         ));
+                    }
+                    if (success) {
+                        Usuario usuario = usuarioService.obtenerUsuarioPorId(request.getIdUsuario())
+                                .orElseThrow(() -> new IllegalArgumentException("Usuario no encontrado"));
+
+                        Certificacion certificacion = Certificacion.builder()
+                                .usuario(usuario)
+                                .curso(evaluacion.getCurso())
+                                .fechaEmision(new Date())
+                                .build();
+
+                        certificacionService.crearCertificacion(certificacion);
                     }
                     return result;
                 }
