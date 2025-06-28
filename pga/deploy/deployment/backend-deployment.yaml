@@ -18,7 +18,7 @@ spec:
       serviceAccountName: pga-sa
       containers:
         - name: pga-backend
-          image: bautista222221/pga-backend:2.0
+          image: marcos1as/pga-backend:v1.5.0
           ports:
             - containerPort: 6060
           envFrom:
