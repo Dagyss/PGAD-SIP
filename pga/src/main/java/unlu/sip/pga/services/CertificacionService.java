@@ -10,4 +10,5 @@ public interface CertificacionService  {
     List<Certificacion> listarCertificacionesPorUsuario(String idUsuario);
     Certificacion actualizarCertificacion(Certificacion certificacion);
     void eliminarCertificacion(Integer id);
+    byte[] generarPdf(Certificacion certificacion);
 }

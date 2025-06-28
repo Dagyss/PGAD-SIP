@@ -8,4 +8,5 @@ import lombok.*;
 public class CodigoUsuarioEvaluacionDTO {
     private Integer idEvaluacion;
     private String codigo;
+    private String idUsuario;
 }
