@@ -9,4 +9,5 @@ public interface TipoSuscripcionService {
     List<TipoSuscripcion> listarTiposSuscripcion();
     TipoSuscripcion createTipoSuscripcion(TipoSuscripcion tipoSuscripcion);
     Optional<TipoSuscripcion> getTipoSuscripcion(Integer id);
+    boolean deleteTipoSuscripcion(Integer id);
 }

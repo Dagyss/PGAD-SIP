@@ -26,5 +26,14 @@ public class TipoSuscripcionServiceImpl implements TipoSuscripcionService {
     public Optional<TipoSuscripcion> getTipoSuscripcion(Integer id) {
         return repo.findById(id);
     }
+
+    @Override
+    public boolean deleteTipoSuscripcion(Integer id) {
+        if (repo.existsById(id)) {
+            repo.deleteById(id);
+            return true;
+        }
+        return false;
+    }
     
 }
