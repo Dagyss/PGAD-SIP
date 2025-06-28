@@ -38,6 +38,7 @@ logs/
 
 deploy/secrets/secrets-backend.yaml
 deploy/secrets/secrets-db.yaml
+deploy/secrets/secrets-frontend.yaml
 terraform/*
 !terraform/main.tf
 !terraform/terraform.tfvars
