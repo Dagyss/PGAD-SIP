@@ -108,7 +108,7 @@ public class PaypalServiceImpl implements PaypalService {
    return apiResponse.getResult();
 }
 
-    public Order captureOrders(String orderID) throws IOException, ApiException {
+    public Order captureOrders(String orderID, Integer suscripcionId) throws IOException, ApiException {
         System.out.println(">>> Entró a captureOrders con ID: " + orderID);
         OrdersController ordersController = paypalClient.getOrdersController();
 
@@ -192,21 +192,33 @@ public class PaypalServiceImpl implements PaypalService {
 
         System.out.println("Order creada con ID: " + order.getId());
 
+        TipoSuscripcion tipoSuscripcion = suscripcionRepo.findById(suscripcionId)
+        .orElseThrow(() -> new RuntimeException("Tipo de suscripción no encontrado"));
+
+        System.out.println(">>> Tipo de suscripción: " + tipoSuscripcion);
+
         LocalDateTime localDateTime = createTime.toInstant()
         .atZone(ZoneId.systemDefault())
         .toLocalDateTime();
 
-        // Sumar 1 año
-        LocalDateTime fechaFinLocal = localDateTime.plusYears(1);
+        LocalDateTime fechaFinLocal;
+        switch (tipoSuscripcion.getTipoSuscripcion().toLowerCase()) {
+            case "mensual":
+                fechaFinLocal = localDateTime.plusMonths(1);
+                break;
+            case "semestral":
+                fechaFinLocal = localDateTime.plusMonths(6);
+                break;
+            case "anual":
+                fechaFinLocal = localDateTime.plusYears(1);
+                break;
+            default:
+                throw new RuntimeException("Tipo de suscripción no reconocido: " + tipoSuscripcion.getTipoSuscripcion());
+        }
 
         // Convertir de nuevo a Date
         Date fechaFin = Date.from(fechaFinLocal.atZone(ZoneId.systemDefault()).toInstant());
 
-        List<TipoSuscripcion> tiposSuscripcion = suscripcionRepo.findAll();
-        TipoSuscripcion tipoSuscripcion = tiposSuscripcion.isEmpty() ?
-            null : tiposSuscripcion.get(0);
-
-        System.out.println(">>> Tipo de suscripción: " + tipoSuscripcion);
 
         Suscripcion suscripcion = Suscripcion.builder()
         .usuario(user)

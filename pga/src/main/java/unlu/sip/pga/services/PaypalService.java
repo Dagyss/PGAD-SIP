@@ -11,6 +11,6 @@ public interface PaypalService {
             throws IOException, ApiException;
 
 
-    Order captureOrders(String orderID)
+    Order captureOrders(String orderID, Integer suscripcionId)
             throws IOException, ApiException;
 }
